@@ -1,0 +1,219 @@
+{
+ "kingdoms": [
+  {
+   "kingdom": "วุย (魏) ◆",
+   "ui_hex": "#BC1A3C",
+   "text_on_hex": "#FFF4E0",
+   "pixel_ramp": [
+    "#710626",
+    "#BC1A3C",
+    "#E3575F",
+    "#F19D9B"
+   ],
+   "map_fill_hex": "#710626",
+   "portrait_accent": "Accent colour: deep lac crimson (#BC1A3C), on the inner collar, cuffs or banner edge only, with gold (#C9A04A) edging; never the orange-red vermilion of the UI buttons. Prompt wording: 'with deep lac-crimson inner collar and cuffs ... Accent colour: deep lac crimson (#BC1A3C).'",
+   "name_th": "แดงครั่ง"
+  },
+  {
+   "kingdom": "จ๊ก (蜀) ●",
+   "ui_hex": "#4DA469",
+   "text_on_hex": "#120E0C",
+   "pixel_ramp": [
+    "#266546",
+    "#4DA469",
+    "#83C97E",
+    "#D0E5A8"
+   ],
+   "map_fill_hex": "#83C97E",
+   "portrait_accent": "Accent colour: emerald green (#4DA469) on the headband, armour cords or robe lining. Any large green robe uses the dark pine-green secondary (#2E5A45) so it is not counted as accent. Prompt wording: 'a plain emerald-green cloth headband ... emerald-green cords over a dark pine-green war robe (#2E5A45). Accent colour: emerald green (#4DA469).'",
+   "name_th": "เขียวมรกต"
+  },
+  {
+   "kingdom": "ง่อ (吳) ▲",
+   "ui_hex": "#3BC1FA",
+   "text_on_hex": "#120E0C",
+   "pixel_ramp": [
+    "#0F7EB6",
+    "#3BC1FA",
+    "#90DCFD",
+    "#D8F2FB"
+   ],
+   "map_fill_hex": "#1E90D8",
+   "portrait_accent": "Accent colour: clear sky blue (#3BC1FA) on the armour edging, over dark navy cloth (#1F3A5C) with silver trim (#C8CDD2). No red trim. The 赤綬 ribbon is orange-vermilion #B8562E, not crimson. Prompt wording: 'armour edged in clear sky blue over dark navy cloth (#1F3A5C) with silver trim (#C8CDD2). Accent colour: clear sky blue (#3BC1FA).'",
+   "name_th": "ฟ้าใส"
+  }
+ ],
+ "semantic_changes": [
+  {
+   "name": "danger (enemy, damage taken)",
+   "old_hex": "#E0523F",
+   "new_hex": "#F0685D",
+   "why": "Old danger was only ΔE00 16.3 from Wei (tritan 11.4). The new coral red is lighter and yellower: ΔE00 21.1 from Wei (CVD 17.2–21.5) and 5.8:1 on lacquer-800 (was 4.7:1). danger-text #F58B78 stays (28.4 from Wei). The enemy marker changes from a spiked diamond to a spiked cross ✖, because the diamond is Wei's ◆."
+  },
+  {
+   "name": "jade-400 (success, heal, party, EXP bar, auto-on, heal number +)",
+   "old_hex": "#5FB39A",
+   "new_hex": "#A8E6C4",
+   "why": "Old was ΔE00 10.9 from Shu green (tritan 5.8). Pale mint is 20.3 from Shu (CVD 19.4–20.6) and 12.6:1 on lacquer-800. It still reads as heal or success. The token name is kept so other references stay valid."
+  },
+  {
+   "name": "info (ally)",
+   "old_hex": "#4F9BE0",
+   "new_hex": "#8F96F5",
+   "why": "Old was ΔE00 12.7 from Wu sky blue (CVD 8.9–10). The periwinkle / violet-blue is 23.1 from Wu and 6.7:1 on lacquer-800. In colour-blind mode, ally switches to #EEF0FF."
+  },
+  {
+   "name": "info-text (ally text on translucent panel)",
+   "old_hex": "#6FB2F0",
+   "new_hex": "#A9AEFA",
+   "why": "Old was only ΔE00 8.5 from Wu (deutan 1.9). New is 22.4 from Wu and 6.3:1 on the panel reference."
+  },
+  {
+   "name": "shu-text → kingdom text tokens wei-text / shu-text / wu-text",
+   "old_hex": "#F2826F",
+   "new_hex": "#FF8FA8 / #5DBE7A / #8FE0FF",
+   "why": "The old Shu-only red text token now reads as Wei. Wei #BC1A3C (2.1:1) and Shu #4DA469 (4.2:1) fail as text on the panel. The three text tokens reach 6.0 / 5.6 / 8.8:1."
+  },
+  {
+   "name": "kingdom text colours (semantic table row)",
+   "old_hex": "#D8B24A / #E0645A / #3FB3A8",
+   "new_hex": "#FF8FA8 / #5DBE7A / #8FE0FF",
+   "why": "Follows the new kingdom hues and keeps ≥4.5:1 on the panel. Wei and Shu text differ by only ΔE00 8.7 under deuteranopia, so the ◆/● glyph must always come first."
+  },
+  {
+   "name": "army signal colours (silhouette outline, troop disc, capture bar)",
+   "old_hex": "#D8B24A / #E0645A / #3FB3A8",
+   "new_hex": "#D02A45 / #5DBE7A / #8FE0FF",
+   "why": "Brighter versions for 1 px outlines on dark occluders (3.75 / 8.3 / 13.1:1 on lacquer-900). The L* ladder is kept: Wei–Shu deutan 16.0, Shu–Wu tritan 12.8. Wei signal to enemy text is 22.8."
+  },
+  {
+   "name": "status bleed",
+   "old_hex": "#C0392B",
+   "new_hex": "#F06A78",
+   "why": "Old was the old Shu base and sat ΔE00 10.1 from Wei (tritan 3.3). New blood-pink is 21.1 from Wei and 16.7 from burn #FF6A3D, and the drop icon stays."
+  },
+  {
+   "name": "status launch (icon ▲ → ⇑)",
+   "old_hex": "#7CC8FF",
+   "new_hex": "#E6EEF5",
+   "why": "Wu's ▲ mark in sky blue (ΔE00 6.0 from Wu) would read as a Wu marker. Cloud white is 23.2 from Wu, and the icon becomes a double up-arrow."
+  },
+  {
+   "name": "status root",
+   "old_hex": "#5FA88A",
+   "new_hex": "#7FA0A0",
+   "why": "Old was ΔE00 7.9 from Shu. The grey stone-green is 20.0 from Shu and 19.3 from Wu. It stays close to armour-break grey under CVD (2–3), so the two statuses rely on their icons (pin vs cracked shield)."
+  },
+  {
+   "name": "damage number pierce",
+   "old_hex": "#6FB7FF",
+   "new_hex": "#A9BCD3",
+   "why": "Old was ΔE00 8.9 from Wu (deutan 1.0). Steel silver is 15.5 from Wu and 16.8 from the white slash number."
+  },
+  {
+   "name": "damage number ranged",
+   "old_hex": "#6BD68A",
+   "new_hex": "#C9DC6A",
+   "why": "Old was ΔE00 13.6 from Shu. Lime yellow is 24.2 from Shu and 19.6 from the mint heal number."
+  },
+  {
+   "name": "colour-blind mode ally",
+   "old_hex": "#4A90E2",
+   "new_hex": "#EEF0FF",
+   "why": "Old blue was 12.2–16.8 from Wu. Near-white lavender is 17.8–28 from Wu under every CVD simulation and 34–41 from the CVD enemy orange #F28C28 (kept)."
+  },
+  {
+   "name": "rank sash chip 綠綬 (UI)",
+   "old_hex": "#6DB356",
+   "new_hex": "#A8B070",
+   "why": "Old was ΔE00 8.8 from Shu. The olive yellow-green (說文 defines 綠 as 帛青黃色) is 16.8 from Shu. The chip keeps its ribbon shape."
+  },
+  {
+   "name": "rank sash chip 青綬 (UI)",
+   "old_hex": "#4E9FB3",
+   "new_hex": "#6A8FA0",
+   "why": "Old was ΔE00 13.4 from Wu. Slate is 17.5 from Wu (CVD 16.9–18.5) and 5.2:1 on lacquer-800."
+  },
+  {
+   "name": "rank sash 綠綬 on sprites",
+   "old_hex": "#2E7D4F",
+   "new_hex": "#556B3A",
+   "why": "Old was ΔE00 13.9 from Shu. Olive is 21.3."
+  },
+  {
+   "name": "rank sash 赤綬 on sprites (also in 黃赤綬)",
+   "old_hex": "#B3261E",
+   "new_hex": "#B8562E",
+   "why": "Old was ΔE00 9.5 from Wei (tritan 1.9) and hangs on Sun Quan. Orange vermilion is 18.0 from Wei. The 赤 hue family stays."
+  }
+ ],
+ "rules_th": "กติกาสีประจำก๊ก (ผู้ใช้เลือกแล้ว: วุยแดง จ๊กเขียว ง่อฟ้า)\n1) สีก๊กบอกแค่ว่าเป็นของใครหรือสังกัดไหน ใช้ได้เฉพาะ:\n- ธงแซ่ ธงแม่ทัพ และธงหลัง\n- ผ้า ผ้าโพก ผ้าคลุมอาน และพู่ม้าในสงคราม (สลับด้วยแถว remap; ทหาร ≥15% ฮีโร่ ≥8% ของพิกเซลทึบ)\n- พื้นที่ครองบนแผนที่ผ้าไหม (35% + ลายพื้น)\n- ตราก๊กขนาด 12 native บนป้ายชื่อและการ์ดนาม\n- แถบยึดธง แผ่นรองพื้นกอง และเงาโครงร่างหลังสิ่งบัง\nห้ามใช้กับปุ่ม ตัวเลขดาเมจ ป้ายสถานะ ระดับของ อาวุธ ชื่อ แถบเลือด และจุดคนบนมินิแมป\n\n2) ฝ่ายเราหรือศัตรูบอกด้วยสีความสัมพันธ์คู่รูปทรง ไม่ใช้สีก๊ก เพราะพันธมิตรในก๊กเดียวกันสู้กันได้\n- ตัวเรา: ทอง #E2BC62 + วงใต้เท้าทึบ\n- ปาร์ตี้: มิ้นต์ #A8E6C4 + เลขช่องปาร์ตี้\n- พันธมิตร: ม่วงคราม #8F96F5 (ตัวอักษร #A9AEFA)\n- ศัตรู: แดงปะการัง #F0685D (ตัวอักษร #F58B78) + กากบาทหนาม ✖\n- เป็นกลาง: #BFB19A\nทุกสีนี้ห่างสีก๊กทุกตัว ΔE00 ≥20\n\n3) รูปทรง ◆ ● ▲ ■ สงวนไว้เป็นตราก๊กและตราขุนศึกอิสระเท่านั้น\n- ศัตรูเลิกใช้เพชรมีหนาม (ชน ◆ ของวุย)\n- ตัวบอกได้เปรียบค่ายกลใช้ ↑ = ↓ แทน ▲ ● ▼\n- สถานะลอยใช้ ⇑ แทน ▲\n\n4) สีก๊กต้องมาคู่กับของต่อไปนี้เสมอ ห้ามใช้สีบอกอย่างเดียว:\n- รูปตรา ◆ วุย / ● จ๊ก / ▲ ง่อ\n- อักษร 魏/蜀/吳\n- ลายพื้น เส้นทแยง / จุด / คลื่น\nชื่อก๊กที่เป็นตัวอักษรใช้ wei-text #FF8FA8 / shu-text #5DBE7A / wu-text #8FE0FF และมีรูปตรานำหน้าทุกครั้ง\n\n5) ลำดับความสว่างต้องเป็นวุยเข้มสุด (L* 41) < จ๊ก (61) < ง่อสว่างสุด (74) ห้ามปรับจนลำดับนี้เปลี่ยน\n- ลำดับนี้คือสิ่งที่ทำให้แยกวุยกับจ๊กได้ในตาบอดสีเขียว (ΔE 14.8) และแยกจ๊กกับง่อได้ในตาบอดสีน้ำเงิน (ΔE 14.2)\n- ภาพขาวดำก็ยังแยกสามก๊กออก\n\n6) วุยบนพื้นรักดำได้แค่ 3.1:1 จึงต้องมีขอบหรือขลิบทอง #C9A04A ใน UI เสมอ\n- ธงแดงครั่งขลิบทอง เกราะลงรักดำ\n- เงาโครงร่างและแผ่นรองพื้นใช้สีสัญญาณ #D02A45\n\n7) ปุ่มชาด (vermilion) เป็นสีของ UI ไม่ใช่สีวุย\n- ห่างวุยแค่ ΔE 8.3 จึงห้ามมีรูปตราหรืออักษรก๊กบนปุ่มชาด\n- ห้ามใช้ชาดในโลกพิกเซลหรือบนแผนที่\n\n8) คุมสีฉากให้ห่างสีก๊ก:\n- พื้นผืนใหญ่ C* ≤18 hue 60–100 (ทุกก๊กห่าง ≥19.6)\n- หญ้า hue 95–115 C* ≤18 (จ๊กห่าง ≥15.7)\n- น้ำ hue 245–285 และ L* ≤50 (ง่อห่าง ≥20) ห้ามน้ำฟ้าสว่างหรือเขียวคราม\n- ผาแดงเป็นสีสนิม hue 50–65 C* ≤25 (วุยห่าง ≥18.8)\n- ไฟขอบส้ม hue ≥50 ห้ามแดงชาด\n- ทัพ NPC ห้ามใช้แดง เขียว ฟ้า\n- สีระดับของบนสไปรต์ลงได้แค่ขอบโลหะหรืออัญมณี ≤5% ห้ามลงผ้า\n- ชื่อของในแชตอยู่ใน 「」 เสมอ\n\n9) โหมดตาบอดสี 3 แบบ: พันธมิตรเป็น #EEF0FF ศัตรูเป็นส้ม #F28C28 ส่วนสีก๊กคงเดิม เพราะแยกด้วยความสว่างและรูปตราอยู่แล้ว\n\n10) สคริปต์ตรวจก่อนรับงาน:\n- สีก๊กด้วยกันห่าง ΔE00 ≥20 ในตาปกติ และ ≥12 ในจำลองตาบอดสีทั้ง 3 แบบ (Machado 2009)\n- base สีก๊กห่างดัชนีฉากที่กินพื้นที่ ≥10% อย่างน้อย 15 ในทุกแถวเวลา",
+ "checks": "SCRIPT: C:\\Users\\RON168\\AppData\\Local\\Temp\\claude\\D--game3k\\6a29ed45-9653-4232-a698-c66ecc4d9dce\\scratchpad\\kingdom_check.py, which imports colorlib.py and lchtool.py from the same folder. Run with Python 3.11 and the standard library only. The explore*.py search helpers used numpy for the grid search over LCh candidates.\n\nMethod:\n- sRGB → XYZ (D65) → CIELAB.\n- CIEDE2000 per Sharma 2005, with kL = kC = kH = 1.\n- WCAG 2.x relative luminance and contrast.\n- CVD simulation uses the Machado, Oliveira & Fernandes 2009 matrices at severity 1.0, applied in linear sRGB, then clipped and re-encoded.\n\nValidation against the doc:\n- The script reproduces the doc's old ΔE table exactly: Wei #C8A032 gives 12.3 / 16.9 / 26.0 / 41.1 / 55.1 / 18.4, and old Wu #2E8B84 vs teal water gives 7.4.\n- #FFF4E0 on #B8322A gives 5.46; the doc says 5.5.\n- The token-table contrast column is measured on lacquer-800 #1C1612. The doc's 7.2 / 6.1 / 4.7 match.\n- 'panel-ref' is #313131 (Y 0.0307). I back-solved it from the doc's own translucent-panel figures: danger-text 5.5, info-text 5.8 and #E0645A 3.8.\n- Two old notes do not reproduce with Machado 2009:\n  - old Wei/Shu under deuteranopia is 18.6 here, not about 25;\n  - old Wei vs gilt-500 is 3.3 here, not 10.\n\n1) CONTRAST (lacquer-900 / lacquer-800 / panel-ref / rice #D6CDBB / sand #D8C29A):\n- Wei #BC1A3C: 3.06 / 2.86 / 2.08 / 3.97 / 3.61. Label #FFF4E0 on it: 5.75.\n- Shu #4DA469: 6.24 / 5.82 / 4.23 / 1.95 / 1.77. Label #120E0C on it: 6.24.\n- Wu #3BC1FA: 9.32 / 8.69 / 6.32 / 1.31 / 1.19. Label #120E0C on it: 9.32.\n- Signals on lacquer-900: #D02A45 3.75, #5DBE7A 8.33, #8FE0FF 13.05.\n- Kingdom text on panel-ref: #FF8FA8 6.04, #5DBE7A 5.64, #8FE0FF 8.84.\n- Relationship text on panel-ref: self 7.19, party #A8E6C4 9.16, ally #A9AEFA 6.27, enemy #F58B78 5.48, neutral 6.18.\n- New tokens on lacquer-800: danger #F0685D 5.83 (was 4.65), jade-400 12.60, info 6.69.\n\n2) KINGDOM vs KINGDOM ΔE00 (normal / protan / deutan / tritan):\n\n| Pair | Base | Signal | Text |\n|---|---|---|---|\n| Wei–Shu | 69.4 / 31.9 / **14.8** / 62.8 | 72.4 / 34.9 / 16.0 / 66.4 | 64.2 / 22.7 / **8.7** / 58.3 |\n| Shu–Wu | 40.5 / 41.8 / 40.0 / **14.2** | 35.2 / 36.0 / 36.0 / 12.8 | same as signal (same hexes) |\n| Wei–Wu | 66.0 / 52.3 / 49.9 / 68.3 | 65.5 / 49.4 / 46.6 / 69.5 | 52.0 / 18.1 / 27.4 / 68.4 |\n\n- The greyscale L* ladder is Wei 40.8 < Shu 60.9 < Wu 73.5.\n- All base pairs pass: ≥20 normal and ≥12 under every CVD simulation.\n- Shortfall 1: Wei-text vs Shu-text under deuteranopia is 8.7. Text needs L* ≥63 for 4.5:1, so it cannot use lightness to separate. The rule is that the ◆/● glyph and 魏/蜀 always come first.\n- Shortfall 2: the ramp light and highlight steps fall below 12 in CVD: Wei–Shu deutan 11.1 / 9.6, Shu–Wu tritan 10.6 / 9.7. The base step carries identity (≥15% of pixels), with the banner mark on top.\n\n3) vs WORLD TILES ΔE00 (ground C25 #BCA27A | ground C15 #B4A48C | grass #6E7A56 | teal water #2F7F86 | indigo water #3A5A8C | fire #F08A3A):\n- Wei: 40.6 | 39.2 | 45.2 | 58.1 | 39.0 | 36.1\n- Shu: 27.1 | 25.3 | **17.4** | 25.1 | 45.5 | 47.3\n- Wu: 40.5 | 34.9 | 42.8 | 25.5 | 36.9 | 51.3\n\nSweeps (worst case in each band):\n\n| Band | Worst result |\n|---|---|\n| Ground L*45–72, C*≤18, h60–100 | Wei 23.0, Shu 19.6, Wu 22.1 |\n| Grass h95–115, C*≤18 | Shu 15.7 (15.4 at C*≤22; 11.9 if C* is allowed to 25) |\n| Water h245–285, L*≤50 | Wu 20.3 (16.1 at L*≤55, C*≤30; only 7.1 at L*65, C*35) |\n| Red cliff h50–65, C*≤25 | Wei 18.8 (14.6 if the hue drops to 35) |\n| Fire rim at vermilion hue 35–45 | Wei 9.2, hence the no-vermilion fire rule |\n\n- Ramp dark steps: Shu #266546 vs grass 15.7; Wu #0F7EB6 vs indigo water 15.4.\n\n4) KINGDOM vs SEMANTIC ΔE00, minimum over the three kingdoms, normal (CVD min in brackets). Old → new:\n\n| Token | Old | New |\n|---|---|---|\n| danger vs Wei | 16.3 (11.4) | 21.1 (17.2) |\n| jade-400 vs Shu | 10.9 (5.8) | 20.3 (19.4) |\n| info vs Wu | 12.7 (8.9) | 23.1 (5.9 deutan) |\n| info-text vs Wu | 8.5 (1.9) | 22.4 (1.6 deutan) |\n| bleed vs Wei | 10.1 (3.3) | 21.1 (18.8) |\n| launch vs Wu | 6.0 (1.8) | 23.2 (19.5) |\n| root vs Shu | 7.9 (2.9) | 19.3 (9.6 tritan) |\n| pierce vs Wu | 8.9 (1.0) | 15.5 (10.2) |\n| ranged vs Shu | 13.6 (13.4) | 24.2 (18.9) |\n| CVD-mode ally vs Wu | 16.8 (12.2) | 28.0 (17.8) |\n| sash 綠 UI vs Shu | 8.8 | 16.8 |\n| sash 青 UI vs Wu | 13.4 | 17.5 |\n| sash 綠 sprite vs Shu | 13.9 | 21.3 |\n| sash 赤 sprite vs Wei | 9.5 | 18.0 |\n\n- For info and info-text, the low deuteranopia figure is why colour-blind mode swaps ally to #EEF0FF.\n\nKept, with their numbers:\n- danger-text #F58B78 vs Wei: 28.4.\n- gilt-500 vs Wei: 46.2 (the old Wei–gilt clash is gone).\n- self gilt-400: ≥31.7 from all kingdoms.\n- CVD enemy #F28C28: ≥22.4 from Wei.\n- 赤綬 UI chip #E0645A vs Wei: 18.1.\n- vermilion-500 #B8322A vs Wei: **8.3** (CVD 2.6–9.1). Kept as UI chrome under a rule: no mark or glyph on the button, never used in the world.\n- rarity green #6FBF73 vs Shu 8.8, rarity blue #4FA3E0 vs Wu 9.5, rarity red #E0523F vs Wei 16.3. Kept as genre convention: item frames only, always with corner-ornament counts, and ≤5% metal/gem pixels on sprites.\n\n5) RELATIONSHIP COLOURS among themselves (normal / P / D / T):\n\n| Pair | ΔE00 |\n|---|---|\n| self–party | 28.4 / 17.1 / 18.7 / 42.1 |\n| self–enemy | 29.5 / 14.8 / **8.3** / 13.0 |\n| party–enemy | 48.9 / 17.8 / 15.7 / 53.2 |\n| ally–enemy | 35.8 / 39.1 / 43.9 / 43.0 |\n| enemy–neutral | 22.6 / 7.8 / 9.1 / 19.1 |\n\n- In colour-blind mode, ally #EEF0FF vs enemy #F28C28 is 38.1 / 41.1 / 38.6 / 34.4.\n- Kingdom signal vs relationship colour minimums:\n  - Shu vs enemy text is 5.1 under deuteranopia; the ✖ vs ● shape covers it.\n  - Wu vs party is 7.1 under tritanopia; the shapes cover it.\n  - Wei vs enemy text is ≥18.0 in every mode.\n\n6) RAMPS: L* per step and ΔL between steps:\n- Wei: 23 / 41 / 56 / 73 (ΔL 18, 15, 17)\n- Shu: 38 / 61 / 75 / 88 (ΔL 23, 14, 13)\n- Wu: 50 / 74 / 84 / 94 (ΔL 24, 11, 10)\n- Dark steps vs ink #120E0C: 26.3 / 33.5 / 41.1.\n- Same-step normal ΔE00 across kingdoms is ≥24.\n\n7) MAP FILL at 35% over silk (sRGB blend; fill hexes Wei #710626, Shu #83C97E, Wu #1E90D8):\n- On slip-100 #E8D9B5:\n  - Wei–Shu 32.4 / 17.8 / 13.4 / 30.3\n  - Shu–Wu 19.0 / 19.9 / 21.5 / 12.7\n  - Wei–Wu 31.7 / 16.4 / 18.6 / 39.6\n- On silk-50 #F4EEDF: Shu–Wu tritan drops to 11.0.\n- The base hexes at 35% gave Wei–Shu deutan only 2.6, which is why the map uses the dark Wei and light Shu fills.\n- Independent warlords get no fill, only the ■ hatch. A grey fill landed ≤6 from Shu under CVD.\n\n8) Secondary and trim distance from base: Wei 37.1 / 46.2, Shu 27.7 / 29.3, Wu 51.9 / 20.9.\n\nCORE CODE (colorlib.py, trimmed):\n```python\ndef lin(v): return v/12.92 if v<=0.04045 else ((v+0.055)/1.055)**2.4\ndef luminance(h): r,g,b=(lin(v) for v in hex2rgb(h)); return 0.2126*r+0.7152*g+0.0722*b\ndef contrast(a,b): la,lb=luminance(a),luminance(b); return (max(la,lb)+0.05)/(min(la,lb)+0.05)\ndef lab(h):  # linear sRGB -> XYZ (D65, M = 0.4124564 ...) -> Lab, Xn,Yn,Zn = .95047, 1, 1.08883\n    ...\ndef de2000(l1, l2):  # Sharma 2005:\n    # G, a', C', h', dL', dC', dH', T, dtheta=30exp(-((h-275)/25)^2),\n    # Rc, Sl=1+.015(L-50)^2/sqrt(20+(L-50)^2), Sc=1+.045C, Sh=1+.015CT, Rt=-sin(2dtheta)Rc\n    ...\nMACHADO = {\n    'protan': ((0.152286, 1.052583, -0.204868), (0.114503, 0.786281, 0.099216), (-0.003882, -0.048116, 1.051998)),\n    'deutan': ((0.367322, 0.860646, -0.227968), (0.280085, 0.672501, 0.047413), (-0.011820, 0.042940, 0.968881)),\n    'tritan': ((1.255528, -0.076749, -0.178779), (-0.078411, 0.930809, 0.147602), (0.004733, 0.691367, 0.303900)),\n}\ndef simulate(h, kind):  # linear RGB x matrix, clip [0,1], re-encode to 8-bit hex\n    ...\ndef de(h1, h2, kind='normal'):\n    return de2000(lab(simulate(h1, kind)), lab(simulate(h2, kind)))\ndef over(fg, bg, a):  # sRGB-space alpha composite, used for the 35% map fill\n    ...\n```\nkingdom_check.py defines K, RAMP, SIGNAL, TEXT, ON, MAPFILL, SECOND, TRIM, BG, WORLD, SEM_OLD and SEM_NEW with the hexes above. It prints sections 1–10, including the tile sweeps built with lchtool.lch2hex.",
+ "review": {
+  "approve": false,
+  "problems": [
+   "NUMBERS: I wrote my own script from scratch (rv_color.py: sRGB to Lab D65, CIEDE2000 per Sharma, Machado 2009 at severity 1.0, WCAG 2.x). It reproduces the doc's old ΔE table exactly (12.3/16.9/26.0/41.1/55.1/18.4 and 7.4). All new figures match to within ±0.1, with these exceptions. (a) The ground sweep worst case is 19.5, not 19.6: Shu against L*59 C*17 h100. (b) A vermilion fire rim (hue 35–45) gets within 8.2 of Wei, not 9.2. An orange rim at hue ≥50 stays ≥19.4, not ≥26 as the 'why' claimed. Both are corrected in the edits.",
+   "MISSING EDITS: (1) m19ey5s49dk.401872, the accessibility list, still says 'ศัตรูมีรูปเพชร'. (2) m19ey5s49dk.352032, in the same row as 351993, still defines '▲ = เราได้เปรียบ ▼ = เราเสียเปรียบ'. (3) m19ey5s49dk.309799 marks the damage-number multiplier with ▲/▼, which breaks the rule that ▲ is reserved for Wu. (4) m19ey5s49dk.390231: the fallback for war nameplates is a colour-only 4×4 kingdom chip. That breaks the 'colour always with mark' rule, and Wei vs Shu signal is only 16.0 under deutan. (5) m19ey5s49dk.306302 and m19ey5s49dk.306325: the 五德 row still names 五德 as the model and 'ประวัติศาสตร์ + แต่งใหม่' as its data layer after the evidence cell was rewritten. All of these are added.",
+   "EDIT BROKE MEANING: the m19ey5s49dk.287659 parenthetical banned the น้ำเงินคราม world ramp from covering ≥10% of the map. The doc makes indigo the required water colour (#3A5A8C), and water covers large map areas such as Red Cliffs. Rewritten so the ≥10% cap applies only to the ชาด and เขียวหยก ramps, and indigo water is limited to steps with L* ≤50.",
+   "HEX REJECTED, Shu map fill #83C97E: at 35% over slip-100 it is only ΔE 11.3 from bare silk, and 3.6 under protan and deutan (13.7 / 6.1 on silk-50). Shu territory almost vanishes against unowned land and against independent warlords, which get no fill. Replaced with #5DA200, which is better on every metric: 14.7 from bare silk (10.2 CVD); pairwise ≥24.4 normal and ≥13.3 CVD (was 19.0 / 11.0); Wei–Shu deutan 13.6. The text of m19ey5s49dk.400248 is updated.",
+   "WATER BAND vs Wu RAMP: the allowed water band (hue 245–285, L* ≤50) contains Wu's own dark step #0F7EB6 (L*50 C*38 h258). A legal water tile can sit ΔE 0.3 from it. The base is still ≥20.3 away, so the gate passes. A clause is added that dark steps are fold shading only and the base carries identity. The same applies to Shu's dark step #266546 against the grass band (13.6).",
+   "CVD IN THE WORLD, not covered by the design's normal-vision-only world gate. Shu base vs ground C25: protan 3.8, deutan 8.0. Shu signal vs ground: deutan 1.1, so troop discs on yellow ground vanish for deuteranopes. Wei vs dull grass: deutan 7.6. The old set had similar gaps (old Wei vs fire: deutan 0.9). This is now stated in m19ey5s49dk.291607, which says world identity relies on the marks on unit and back banners.",
+   "CLAIM TOO BROAD: 'relationship colours are ΔE ≥20 from every kingdom colour' holds only against the base hexes in normal vision. Party mint vs Shu signal is 14.6; danger #F0685D vs Wei signal is 15.5 (tritan 12.3); wei-text #FF8FA8 vs enemy text #F58B78 is 14.2 (tritan 4.0). Ally vs Wu under deutan is 5.9 for the fill and 1.6 for the text when colour-blind mode is off. The m19ey5s49dk.328114 text is qualified. No hex change, because the candidates that improve these read as pink, not red.",
+   "ACCEPTED RISKS, kept deliberately. Wei vs vermilion-500 is 8.3 (CVD 2.6–9.1). A hue-15 crimson such as #BB1C49 would reach 12.0, but it lowers Wei–Shu deutan to 13.9 and forces a new ramp, so I kept the user's red with the no-mark-on-vermilion rule. Rarity green and blue are 8.8 and 9.5 from Shu and Wu. The Yellow Turban ramp now sits near Shu under protan (base 6.6, light step 1.5); mobs are told apart by nameplate, but it could move toward ochre later.",
+   "rules_th inconsistencies; it is not a doc edit, so fix it before posting. Rule 7 bans vermilion anywhere in the pixel world or on the map, but the palette has a ชาด ramp for pillars and seals, and edit 287659 allows small items. Rule 3 reserves ●, but the combo step pips ●●○ at m19ey5s49dk.51837, 224961 and 377901 use it; exempt small white pips. Rule 8's 19.6 should read 19.5. Rule 2's '≥20 from every kingdom colour' should say 'base, normal vision'.",
+   "Guan Yu now has a green headband, green cords and a pine-green robe. That risks the phase-0 anti-Koei 'same colour set' check (m19ey5s49dk.31365). The note in m19ey5s49dk.23847 now requires lacquer black to dominate. Check this by eye on the first render.",
+   "Meaning preserved: the kingdom-table source cells and the 五德 evidence cell now keep the historical facts (Wei earth/yellow, Han fire, Wu earth) and say the palette is the user's choice. The edits no longer delete the facts. The 'find' strings of all other edits were checked verbatim against the live doc (main rev 329, phase0 rev 13, worldmap rev 15), including edits that share a block. Block ids 306351 and 306434 are the paragraph ids; 306352 and 306435 are their text-run ids."
+  ]
+ },
+ "applied": {
+  "ok": true,
+  "applied": [
+   "main 289753: pending-confirmation note replaced with the user's choice (Wei lac red, Shu emerald green, Wu clear sky blue)",
+   "main kingdom table 289924, Wei row: 290014 primary #BC1A3C, 290048 trim gold #C9A04A, 290063 signal #D02A45, 290075 source note, 290108 data layer now แต่งใหม่",
+   "main kingdom table 289924, Shu row: 290133 primary #4DA469, 290146 secondary #2E5A45, 290179 signal #5DBE7A, 290191 source note, 290236 data layer now แต่งใหม่",
+   "main kingdom table 289924, Wu row: 290254 primary #3BC1FA (one value for UI and sprite), 290292 navy #1F3A5C, 290318 silver #C8CDD2, 290334 signal #8FE0FF, 290346 source note, 290424 data layer now แต่งใหม่",
+   "main 290586: Yellow Turban mustard reason updated",
+   "main list 290634: 290636 signal-colour scope, 290756 rarity-colour rule, 290884 colour-blind figures, 291100 Koei comparison",
+   "main 291232: ΔE00 world table replaced whole as markdown with an ifHash a752d9d2 guard. New table id m19ey5s49dk.425933; Wu sprite row removed",
+   "main list 291605: 291607, 291666, 291743, 291895, 291944 (ground, grass and water rules, one base per kingdom, Wei red plus black with a gold edge)",
+   "main ramp table 292227: all 12 Wei, Shu and Wu hexes (292308-292419), each edited inside its own cell",
+   "main 292528: NPC army hue rule appended",
+   "main 287659: world ramp caveat appended",
+   "main world-rule table 382607: 382924, 383376, 383577, 383868",
+   "main table 303302: 303546 vermilion button note, 305232 four-beast icon note",
+   "main kingdom-colour row (table 303302 row 15): 306302, 306325, 306351, 306434",
+   "main seal-ribbon hexes: 307002 #6A8FA0, 307119 #A8B070 (table 306747); 311126 #556B3A, 311199 #B8562E, 311276 #D8A21E + #B8562E (table 310459)",
+   "main token table 324711: jade-400 #A8E6C4 12.6:1, info #8F96F5 6.7:1, danger #F0685D 5.8:1 (each scoped to its cell, so the rarity-red literal elsewhere is unchanged)",
+   "main panel-text table 326345: 326437, 326471, 326480, 326487, 326508, 326518, 326527, 326534",
+   "main table 326929: 327464, 327618, 327647, 327814, 327884",
+   "main list 328112: 328114, 328292",
+   "main status table 378753: 378851, 378960, 378998",
+   "main status icon table 392459: 392715, 393020, 393097",
+   "main 402002: CVD ally colour #EEF0FF",
+   "main m5zp5ngnhqs.3187: all 3 affiliation colour words (แดงครั่ง ◆, เขียวมรกต ●, ฟ้าใส ▲)",
+   "main 223892 pierce #A9BCD3, 224111 ranged #C9DC6A",
+   "main advantage markers: 351993, 352032, 333652, 352167, 309799 (▲/▼ changed to ↑/↓)",
+   "main 361827, 389039, 401872, 390231, 256443, 399540, 400248, 407786",
+   "phase0 finds: 17060, 18540, 18746, 18884, 19115, 19284, 19501, 19876, 19992, 23847, 15795",
+   "phase0 portrait code blocks replaced whole as ```text markdown, each guarded by ifHash with all other lines kept: 22961 Guan Yu (new id m19ey5s49dk.33163), 24170 Cao Cao (new id .34051, both finds), 25203 Zhuge Liang (new id .35539 is Sun Quan; Zhuge Liang is .34872), 26133 Sun Quan",
+   "worldmap 23706: note that the diagram colours show phases, not kingdoms"
+  ],
+  "skipped": []
+ },
+ "check": {
+  "ok": true,
+  "issues": [
+   "SUMMARY: No problems found. None of the hits below still states an old kingdom colour. They are listed for information only. The main tab (rev 432) and the phase-0 tab (rev 25) both use Wei red, Shu green and Wu sky blue. The world-map tab (rev 16) defines no kingdom colours and points to section 2.2.",
+   "Search results: 'เหลืองดิน', 'ochre', 'cinnabar', 'teal' and 'รอผู้ใช้ยืนยัน' each return 0 hits in the main, world-map and phase-0 tabs. 'จ๊กชาด', 'ง่อคราม' and 'วุยเหลือง' also return 0 hits in the main tab. The world-map tab has 0 hits for every requested term.",
+   "Main 'เขียวคราม', 3 hits, all fine: (1) the ΔE table m19ey5s49dk.425933 has a column header 'น้ำเขียวคราม #2F7F86', a water colour the kingdoms are compared against; (2) list item m19ey5s49dk.291742 says water must not use teal, a terrain rule; (3) seal-ribbon table m19ey5s49dk.306747 has the row 'เขียวคราม (青綬)' #6A8FA0, a rank ribbon.",
+   "Main 'ชาด', 21 hits, all fine. They are the scene palette ramp (m19ey5s49dk.287660/.427409), the UI vermilion button (m19ey5s49dk.303547/.427733/.328293/.428609, which state that it is not Wei's colour), seal marks on icons, HP and morale bars, the orange damage-number colour #FF6A3D, the title-screen button, the history-source seal, the fire rule for Luoyang ('ห้ามแดงชาด', m19ey5s49dk.427586) and the colour-blind note that Wei is only ΔE 8.3 from vermilion-500. None of them assigns cinnabar to a kingdom.",
+   "Phase-0 hits, all fine: 'เขียวคราม' x2 (m19ey5s49dk.15611, m19ey5s49dk.26035) describe Koei's teal crown for Zhuge Liang, which we reject. 'ชาด' x1 (m19ey5s49dk.32873) is Sun Quan's seal ribbon '赤綬 #B8562E', noted as more orange than Wei's lac red.",
+   "Kingdom colour table m19ey5s49dk.289924 is correct. Wei: lac red #BC1A3C, lacquer black #15161A secondary, gold trim #C9A04A, signal #D02A45, ◆. Shu: emerald green #4DA469, dark pine #2E5A45 secondary, bronze trim #B08D57, signal #5DBE7A, ●. Wu: clear sky blue #3BC1FA, navy #1F3A5C secondary, silver trim #C8CDD2, signal #8FE0FF, ▲. Heading paragraph m19ey5s49dk.289753 reads 'วุยแดงครั่ง ◆ จ๊กเขียวมรกต ● ง่อฟ้าใส ▲' with no pending-confirmation note.",
+   "Team ramp table m19ey5s49dk.292227 is correct. Wei: #710626 / #BC1A3C / #E3575F / #F19D9B. Shu: #266546 / #4DA469 / #83C97E / #D0E5A8. Wu: #0F7EB6 / #3BC1FA / #90DCFD / #D8F2FB.",
+   "Tokens are correct. Colour table m19ey5s49dk.326929 gives kingdom colours #BC1A3C / #4DA469 / #3BC1FA and kingdom text colours #FF8FA8 / #5DBE7A / #8FE0FF. Token table m19ey5s49dk.326345 gives wei-text / shu-text / wu-text with the same hexes. The ΔE table m19ey5s49dk.425933 rows are Wei #BC1A3C, Shu #4DA469 and Wu #3BC1FA. The L* order Wei 41 < Shu 61 < Wu 74 checks out when recomputed from the hexes: about 40.8, 60.9 and 73.5.",
+   "The rest of the main tab agrees. The faction paragraph m5zp5ngnhqs.3187 reads 'วุย สีแดงครั่ง ◆ · จ๊ก สีเขียวมรกต ● · ง่อ สีฟ้าใส ▲'. Row m19ey5s49dk.306293 of the UI table ends '(ผู้ใช้เลือก)'. The war-map fills are Wei #710626, Shu #5DA200 and Wu #1E90D8. The rarity-colour, relationship-colour and Four Symbols rules all avoid red, green and sky blue. The world-map mermaid diagram labels its green and blue as phase colours, not kingdom colours (m19ey5s49dk.28208).",
+   "Phase-0 agrees. Row m19ey5s49dk.17060 gives Wei lac red #BC1A3C with gold #C9A04A, Shu emerald #4DA469 with pine #2E5A45, and Wu sky blue #3BC1FA with navy #1F3A5C and silver #C8CDD2. The Cao Cao, Guan Yu and Sun Quan prompts use accents #BC1A3C, #4DA469 and #3BC1FA.",
+   "Side note, not a kingdom-colour issue: the ribbon hexes differ between tabs. The main ribbon table uses 赤綬 #E0645A and 紫綬 #A57BD0 (labelled as on-screen hex). The phase-0 portrait prompts paint 赤綬 #B8562E and 紫綬 #6B2E83. Worth aligning or labelling one set as portrait-only if that difference is not intended."
+  ]
+ }
+}

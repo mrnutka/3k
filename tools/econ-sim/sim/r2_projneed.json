@@ -1,0 +1,49 @@
+{
+ "_note": "units per day per agent (speed 1.0) at Lv >= 75, r2_design with myopic market (trade.model r1). Used by trade.model r2 holding rule.",
+ "projNeed": {
+  "casual": {
+   "stone": 52.572,
+   "grass": 11.169,
+   "reroll": 0.877,
+   "insig": 0.298,
+   "seal": 0.045,
+   "gem": 2.567,
+   "set": 0.767,
+   "iron": 0.074,
+   "plunder": 29.95
+  },
+  "hardcore": {
+   "stone": 89.823,
+   "grass": 14.255,
+   "reroll": 1.361,
+   "insig": 0.546,
+   "seal": 0,
+   "gem": 3.862,
+   "set": 1.066,
+   "iron": 0.162,
+   "plunder": 30.557
+  },
+  "payer": {
+   "stone": 109.318,
+   "grass": 17.197,
+   "reroll": 1.587,
+   "insig": 0.606,
+   "seal": 0,
+   "gem": 4.422,
+   "set": 1.209,
+   "iron": 0.193,
+   "plunder": 31.352
+  },
+  "whale": {
+   "stone": 153.981,
+   "grass": 15.789,
+   "reroll": 2.345,
+   "insig": 0.737,
+   "seal": 0,
+   "gem": 5.342,
+   "set": 1.053,
+   "iron": 0.171,
+   "plunder": 30.333
+  }
+ }
+}

@@ -1,0 +1,168 @@
+[
+ {
+  "scenario": "r2_design_70_22_8",
+  "cumRatio": 1.035,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 7017
+ },
+ {
+  "scenario": "r2_design_70_25_5",
+  "cumRatio": 1.035,
+  "failsAsWritten": [
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 5786
+ },
+ {
+  "scenario": "r2_spine_literal_70_22_8",
+  "cumRatio": 1.12,
+  "failsAsWritten": [
+   "fs7_early",
+   "fs7",
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "fs7_early",
+   "fs7",
+   "price_index_S9"
+  ],
+  "ms_ms": 6053
+ },
+ {
+  "scenario": "r2_design_myopic_70_22_8",
+  "cumRatio": 1.029,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 4467
+ },
+ {
+  "scenario": "r2_changes_70_22_8",
+  "cumRatio": 1.034,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 5223
+ },
+ {
+  "scenario": "r2_changes_70_25_5",
+  "cumRatio": 1.034,
+  "failsAsWritten": [
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 5065
+ },
+ {
+  "scenario": "r2_changes_myopic_70_22_8",
+  "cumRatio": 1.034,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 4416
+ },
+ {
+  "scenario": "r2_changes_hold7_70_22_8",
+  "cumRatio": 1.031,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 4906
+ },
+ {
+  "scenario": "r2_changes_hold30_70_22_8",
+  "cumRatio": 1.035,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 4359
+ },
+ {
+  "scenario": "r2_changes_deposit30_70_22_8",
+  "cumRatio": 1.041,
+  "failsAsWritten": [
+   "fs7_early",
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "fs7_early",
+   "price_index_S9"
+  ],
+  "ms_ms": 4527
+ },
+ {
+  "scenario": "r2_changes_buffer1_70_22_8",
+  "cumRatio": 1.036,
+  "failsAsWritten": [
+   "fs7_early",
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "fs7_early",
+   "price_index_S9"
+  ],
+  "ms_ms": 4569
+ },
+ {
+  "scenario": "r2_changes_nos1s2_70_22_8",
+  "cumRatio": 1.115,
+  "failsAsWritten": [
+   "fs7_early",
+   "fs7",
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "fs7_early",
+   "fs7",
+   "price_index_S9"
+  ],
+  "ms_ms": 4815
+ }
+]

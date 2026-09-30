@@ -1,0 +1,2880 @@
+{
+ "meta": {
+  "file": "cash.md",
+  "date": "2026-09-29",
+  "module": "cash (ทอง ทองผูก ร้านทอง กระดานแลกทอง)",
+  "binding": "spine.md / spine.json",
+  "calc": "design/cash_calc.py -> cash_calc_out.json",
+  "builder": "design/make_cash_json.py",
+  "tags": [
+   "spine",
+   "เอกสาร",
+   "ข้อเสนอ",
+   "เกมอื่น",
+   "สูตร",
+   "แต่งใหม่"
+  ],
+  "spine_numbers_changed": 3,
+  "revision": "r1 · balance_r1.md 4.6 C1–C5 และ 4.1 S6–S7",
+  "calc_r1": "design/cash_r1_calc.py -> cash_r1_calc_out.json",
+  "patch_r1": "design/cash_r1_patch_json.py",
+  "spine_numbers_changed_note": "ข้อ 15 #10–#12: เพดานผู้ขาย 30 × S · ราคาเปิดด้วยประมูลรวม · เส้นคาด KPI 5 ปรับตามสัดส่วนผู้เติมเงิน (เสนอให้ spine รับ S6 S7)",
+  "revision_r2": "r2 · balance_r2.md 4.6 C6–C7 (F43 F44) · เอกสารอย่างเดียว ไม่เปลี่ยนกติกาและค่าที่ sim.js อ่าน",
+  "calc_r2": "design/cash_r2_calc.py -> cash_r2_calc_out.json (อ่าน design/sim/out r2_changes / r2_design)",
+  "patch_r2": "design/cash_r2_patch_json.py",
+  "spine_deviation_r2_note": "ข้อ 15 #13: ค่าผู้เติมเงินของ spine (5.5 ขายทองได้ · 10.3 ขั้น 12 วันที่ 45) = เซิร์ฟผู้เติมเงิน 5% · ไม่เปลี่ยนตัวเลข spine (balance_r2 S12)"
+ },
+ "summary_th": [
+  "1 บาท = 10 ทอง · โบนัสทุกชนิดเป็นทองผูก · ทองที่ลงกระดานได้ = บาทที่รับจริง × 10",
+  "ทองย้ายระหว่างผู้เล่นได้ทางเดียวคือกระดานแลกทอง ครั้งเดียว ผู้ซื้อได้ทองผูก",
+  "ของจากร้านทองผูกตัวทุกชิ้น · ทองผูกซื้อได้ทุกอย่าง ยกเว้นสินค้าที่ให้ทอง ทองผูก หรือแต้ม VIP",
+  "บัตรผ่านซีซันไม่มีทองผูกในรางวัลสายจ่าย ทองผูกจึงซื้อได้ = ทางของคนฟรี",
+  "กระดาน: สมุดคำสั่ง จับคู่รอบละ 60 วินาที ค่าธรรมเนียม 6% ต่อฝั่ง เปิดวันที่ 4 ด้วยประมูลรวมรอบแรก (ราคาสำรอง 150 × 0.05 ÷ สัดส่วนผู้เติมเงิน = 150 ที่ 5% · 94 ที่ 8%) กรอบ ±15% ราคากลางขยับ ±5% ต่อวัน",
+  "เพดานผู้ขายทอง 10 × S ต่อวัน 30 × S ต่อสัปดาห์ = 447 / 1,340 ทอง · ช่องว่างวาฬ 1.57",
+  "ของช่วยตีบวกในร้านทองมีแค่ยันต์กันถอยขั้น 6 ทอง (10 ใบ 60) ≤ 30 ใบต่อสัปดาห์ · ไม่มีหินกันแตก (เกมไม่มีของแตก)",
+  "ทองผูกฟรีของคนฟรี: ตั้งแต่ตี +13 30% ซื้อยันต์ 70% ไปสุ่มขุนพล (ตรงกับ upgrade 21.4)",
+  "ผู้เยาว์ = อายุต่ำกว่า 20 ปี",
+  "รายได้กระดานของผู้เติมเงินขึ้นกับสัดส่วนผู้เติมเงิน: 5% ได้ 24,300–27,600 ตำลึงต่อวัน (ราคา 143–196) ซื้อบรรดาศักดิ์ขั้น 12 วันที่ 48 · 8% ได้ 14,400–16,500 (ราคา 91–116) ขั้น 12 วันที่ 54 · spine 10.3 = 45 (รอบ 2 C6)",
+  "บัตรรายเดือนซื้อด้วยทองผูกหรือผ่านกระดานไม่ได้ (คงกติกา 7.3) · ทางเทียบเท่าเมื่อผู้เติมเงิน 8%: ทองผูกจากกระดาน 1,490 ฟรีขยันวันที่ 69 · ทองผูกพอบัตรผ่านซีซัน 2,990 ฟรีเล่นน้อยวันที่ 75 ฟรีขยันวันที่ 54 (รอบ 2 C7)"
+ ],
+ "units": {
+  "gold_paid": {
+   "name_th": "ทอง",
+   "source": "เติมบาทเท่านั้น",
+   "board": "ขายได้ครั้งเดียวหลังช่วงรอ",
+   "vip": true,
+   "wallet_cap": 99999999
+  },
+  "gold_bound": {
+   "name_th": "ทองผูก",
+   "source": [
+    "โบนัสแพ็ก",
+    "เติมครั้งแรกต่อแพ็ก",
+    "บัตรรายเดือนรายวัน",
+    "ทองผูกฟรี (นับเพดาน)",
+    "ซื้อจากกระดาน",
+    "ชดเชยทีมงาน"
+   ],
+   "tradable": false,
+   "vip": false,
+   "not_usable_for": [
+    "แพ็กเติม",
+    "บัตรรายเดือน",
+    "บัตรตลอดชีพ",
+    "ลงกระดาน"
+   ],
+   "model_use_free_players": "ก่อนตี +13 ไปสุ่มขุนพลทั้งหมด · ตั้งแต่ตี +13 30% ซื้อยันต์กันถอยขั้น 70% ไปสุ่ม (รอบ 1 C5)"
+  },
+  "spend_order": [
+   "ทองผูก",
+   "ทองก้อนที่ติดช่วงรอ",
+   "ทองก้อนพร้อมขาย (ก้อนใหม่ก่อน)"
+  ],
+  "board_lot_order": "ก้อนพร้อมขาย ก้อนเก่าก่อน",
+  "negative_allowed": "เฉพาะคืนเงินและ chargeback",
+  "scope": "บัญชีต่อเซิร์ฟ ตัวละครทุกตัวใช้กระเป๋าเดียว"
+ },
+ "closed_paths": [
+  "ซื้อของให้คนอื่น",
+  "ของร้านทองลงตลาดหรือแลกของ",
+  "ขุนพลสุ่มขายต่อ",
+  "ปันผลพันธมิตรเป็นทองผูก",
+  "ค่าหัวหรือวาร์ปด้วยทอง",
+  "ตลาดกลางรับทอง",
+  "ของแต่งขายต่อได้ครั้งเดียว",
+  "ใช้ทองในห้องข้ามเซิร์ฟ"
+ ],
+ "baht_to_gold": 10,
+ "vat_included": true,
+ "topup_packs": [
+  {
+   "baht": 29,
+   "gold": 290,
+   "bound_bonus": 0,
+   "bonus_pct": 0,
+   "first_time_bound": 290,
+   "gold_per_baht_repeat": 10.0
+  },
+  {
+   "baht": 99,
+   "gold": 990,
+   "bound_bonus": 0,
+   "bonus_pct": 0,
+   "first_time_bound": 990,
+   "gold_per_baht_repeat": 10.0
+  },
+  {
+   "baht": 299,
+   "gold": 2990,
+   "bound_bonus": 90,
+   "bonus_pct": 3,
+   "first_time_bound": 2990,
+   "gold_per_baht_repeat": 10.3
+  },
+  {
+   "baht": 599,
+   "gold": 5990,
+   "bound_bonus": 300,
+   "bonus_pct": 5,
+   "first_time_bound": 5990,
+   "gold_per_baht_repeat": 10.5
+  },
+  {
+   "baht": 1499,
+   "gold": 14990,
+   "bound_bonus": 1200,
+   "bonus_pct": 8,
+   "first_time_bound": 14990,
+   "gold_per_baht_repeat": 10.8
+  },
+  {
+   "baht": 2999,
+   "gold": 29990,
+   "bound_bonus": 3000,
+   "bonus_pct": 10,
+   "first_time_bound": 29990,
+   "gold_per_baht_repeat": 11.0
+  },
+  {
+   "baht": 5999,
+   "gold": 59990,
+   "bound_bonus": 6000,
+   "bonus_pct": 10,
+   "first_time_bound": 59990,
+   "gold_per_baht_repeat": 11.0
+  }
+ ],
+ "first_topup_gift": {
+  "any_pack": true,
+  "gives": [
+   "อาวุธม่วง 1 (เลเวลของ = เลเวลตัวละครปัดลงหลักสิบ)",
+   "ขุนพล SR 1"
+  ],
+  "bound": true,
+  "target_first_topup_3d_pct": [
+   5,
+   10
+  ]
+ },
+ "cards": {
+  "monthly": {
+   "baht": 149,
+   "gold_now": 1490,
+   "bound_per_day": 60,
+   "days": 30,
+   "bound_total": 1800,
+   "claim": "ต้องกดรับรายวัน ไม่ทบ",
+   "offline_hours": 12,
+   "total_value": 3290,
+   "value_x": 2.2,
+   "stack_max_days": 180,
+   "vip_points": 1490,
+   "buy_with": "บาทเท่านั้น"
+  },
+  "lifetime": {
+   "baht": 699,
+   "gold_now": 6990,
+   "perks": [
+    "ช่องตั้งค่าออโต้ +2",
+    "ข้ามฉาก",
+    "รับรางวัลออฟไลน์ปุ่มเดียวทุกตัวละคร",
+    "กรอบชื่อ"
+   ],
+   "no": [
+    "ชั่วโมงออฟไลน์",
+    "EXP",
+    "ตำลึง",
+    "ดรอป"
+   ],
+   "vip_points": 6990,
+   "buy_with": "บาทเท่านั้น"
+  }
+ },
+ "payment_holds_hours": {
+  "promptpay_truemoney_bank_rabbit": 72,
+  "card": 168,
+  "account_younger_than_7_days": 168,
+  "minor_13_19": 168,
+  "binding_changed_lt_72h": "ปิดกระดานจนครบ 72 ชม.",
+  "applies_to": "ลงกระดานเท่านั้น ใช้ในร้านทองได้ทันที"
+ },
+ "not_at_launch": [
+  "กองทุนเติบโต 199 บาท",
+  "ลดภาษีตลาดให้คนมีบัตร",
+  "ขายตำลึงจากระบบ",
+  "ของแต่งขายต่อได้ครั้งเดียว",
+  "โปรเติม ×2 วันที่ 10 และ 25"
+ ],
+ "bound_free": {
+  "cap_rolling_30d": 1500,
+  "reason": "ต่ำกว่าทองผูกรายวันบัตรรายเดือน 1,800",
+  "sources": [
+   {
+    "id": "pass_free_track",
+    "amount": 500,
+    "per": "ซีซัน 28 วัน (100 ที่ขั้น 6/12/18/24/30)",
+    "per_30d": 535.7
+   },
+   {
+    "id": "weekly_chest",
+    "amount": 150,
+    "per": "สัปดาห์",
+    "per_30d": 642.9
+   },
+   {
+    "id": "login_calendar",
+    "amount": 300,
+    "per": "เดือน (100 ที่วันเข้าเกมที่ 7/14/21)",
+    "per_30d": 300
+   }
+  ],
+  "total_per_30d": 1478.6,
+  "model_uptake": {
+   "casual": 1330,
+   "hardcore": 1479,
+   "payer": 1479
+  },
+  "festival_events": "ให้ของผูกตัว ไม่ให้ทองผูก",
+  "model_use": {
+   "rule": "ข้อสมมติพฤติกรรม ใช้ตรงกันกับ upgrade 21.4 · ไม่ใช่กติกาบังคับ",
+   "before_plus13": {
+    "gacha_share": 1.0
+   },
+   "from_plus13": {
+    "charm_share": 0.3,
+    "gacha_share": 0.7,
+    "starts_when": "ขั้นสูงสุด ≥ +12 (เริ่มตี +13)"
+   },
+   "board_bound": "ไปสุ่มขุนพลทั้งหมด",
+   "hardcore": {
+    "charm_bound_30d": 443.7,
+    "charms_30d": 73.95,
+    "charms_week": 17.25,
+    "charms_28d": 69.0,
+    "tael_saved_day": 2465,
+    "gacha_bound_30d": 1412.1,
+    "pulls_30d": 4.71,
+    "pulls_30d_before_13": 6.19
+   },
+   "casual": {
+    "charm_bound_30d": 399.0,
+    "charms_30d": 66.5,
+    "charms_week": 15.52,
+    "charms_28d": 62.1,
+    "tael_saved_day": 2217,
+    "gacha_bound_30d": 1099.0,
+    "pulls_30d": 3.66,
+    "pulls_30d_before_13": 4.99
+   }
+  }
+ },
+ "shop_rules": {
+  "bound_all": true,
+  "npc_buyback": false,
+  "hold_to_buy_sec": 0.6,
+  "promo_red_dot": false,
+  "price_ladder_gold": [
+   30,
+   60,
+   100,
+   150,
+   300,
+   600,
+   980,
+   1000,
+   1480,
+   1980,
+   2980,
+   2990,
+   3000,
+   5990,
+   6990,
+   19990
+  ],
+  "sheet_cols": [
+   "shop_id",
+   "name_th",
+   "price_gold",
+   "bound_ok",
+   "limit_type",
+   "limit",
+   "unlock",
+   "bind",
+   "tag"
+  ]
+ },
+ "gacha": {
+  "price": {
+   "pull_1": 300,
+   "pull_10": 3000,
+   "pity_100": 30000,
+   "ticket_value": 300
+  },
+  "rates_pct": {
+   "UR": 0.8,
+   "SSR": 4,
+   "SR": 15,
+   "R": 35,
+   "N": 45.2
+  },
+  "sr_plus_every": 10,
+  "ur_soft_pity": {
+   "start": 76,
+   "formula": "0.8% + 4% × (n − 75) ที่ 76 ≤ n ≤ 99 · 100% ที่ n = 100",
+   "table": {
+    "75": 0.8,
+    "76": 4.8,
+    "80": 20.8,
+    "85": 40.8,
+    "90": 60.8,
+    "95": 80.8,
+    "99": 96.8,
+    "100": 100
+   }
+  },
+  "hard_pity": 100,
+  "featured": "50/50 แพ้แล้ว UR ถัดไปเป็นตัวเด่นแน่ ยกยอดข้ามตู้",
+  "expected": {
+   "pulls_per_UR": 59.73,
+   "effective_UR_pct": 1.674,
+   "P_UR_by_75": 0.4525,
+   "P_UR_by_90": 0.9992,
+   "pulls_per_featured": 89.6,
+   "gold_per_featured": 26878,
+   "worst_featured_pulls": 200
+  },
+  "free_pull": {
+   "per_day": 1,
+   "banner": "ตู้ถาวร",
+   "counts_pity": true,
+   "reset": "05:00"
+  },
+  "heroes_bound": true,
+  "duplicates": "ชิ้นส่วนขุนพลผูกตัว",
+  "horse_gacha": false,
+  "rate_change_notice_h": 24,
+  "not_adopted": "แลกตัวเด่นที่ 200 แต้ม (ซ้ำกับการันตีตัวเด่นที่ 200 ครั้ง)"
+ },
+ "battle_pass": {
+  "price": {
+   "normal": 2990,
+   "advanced": 5990
+  },
+  "season_days": 28,
+  "start": "จันทร์ 05:00",
+  "levels": 30,
+  "points_per_level": 1000,
+  "points": {
+   "daily_quests_full": 1000,
+   "weekly_tasks": [
+    500,
+    4
+   ]
+  },
+  "buy_level": {
+   "price": 150,
+   "max_per_season": 10
+  },
+  "bound_gold_in_paid_track": 0,
+  "bound_ok": true,
+  "free_track": {
+   "bound_gold": 500,
+   "exp_potion_h": 10,
+   "grass_pack": 1,
+   "value": 950
+  },
+  "normal_track": {
+   "exp_potion_h": 60,
+   "grass_pack": 4,
+   "gacha_ticket": 5,
+   "season_outfit": 1,
+   "season_back_item": 1,
+   "value": 7360,
+   "x_price": 2.46
+  },
+  "advanced_extra": {
+   "skip_levels": 10,
+   "gacha_ticket": 5,
+   "troop_banner_skin": 1,
+   "title": 1,
+   "value_extra": 5080,
+   "value_total": 12440,
+   "x_price": 2.08
+  },
+  "grass_counts_weekly_cap": false,
+  "anti_drop_items": "ไม่มี · รอบ 1 C4 ลบหินกันถอย 4/10 และหินกันแตก 2 ไม่ใส่ยันต์แทน"
+ },
+ "vip": {
+  "point_rule": "1 แต้มต่อ 1 ทองที่เติม ไม่นับทองผูก ไม่ลดตามเวลา ลดเมื่อคืนเงิน",
+  "levels": [
+   {
+    "level": 1,
+    "points_gold": 1000,
+    "baht": 100,
+    "x_prev": null,
+    "payer_month": 1,
+    "whale_month": 1,
+    "gift_box_value_gold": 100,
+    "unlock": "ข้ามฉากเนื้อเรื่อง · กรอบชื่อ VIP"
+   },
+   {
+    "level": 2,
+    "points_gold": 3000,
+    "baht": 300,
+    "x_prev": 3.0,
+    "payer_month": 1,
+    "whale_month": 1,
+    "gift_box_value_gold": 200,
+    "unlock": "ช่องตั้งค่าออโต้ชุดที่ 2"
+   },
+   {
+    "level": 3,
+    "points_gold": 6000,
+    "baht": 600,
+    "x_prev": 2.0,
+    "payer_month": 1,
+    "whale_month": 1,
+    "gift_box_value_gold": 300,
+    "unlock": "คลังส่วนตัว +1 แท็บ (30 ช่อง)"
+   },
+   {
+    "level": 4,
+    "points_gold": 10000,
+    "baht": 1000,
+    "x_prev": 1.67,
+    "payer_month": 1,
+    "whale_month": 1,
+    "gift_box_value_gold": 400,
+    "unlock": "ขายของขยะให้ NPC ได้จากทุกที่ (ราคาเท่าเดิม)"
+   },
+   {
+    "level": 5,
+    "points_gold": 20000,
+    "baht": 2000,
+    "x_prev": 2.0,
+    "payer_month": 2,
+    "whale_month": 1,
+    "gift_box_value_gold": 1000,
+    "unlock": "ช่องตั้งค่าออโต้ชุดที่ 3 · กรอบแชต · เห็นชุดของด่วน 6,990"
+   },
+   {
+    "level": 6,
+    "points_gold": 35000,
+    "baht": 3500,
+    "x_prev": 1.75,
+    "payer_month": 4,
+    "whale_month": 1,
+    "gift_box_value_gold": 1500,
+    "unlock": "ร้านลดราคาประจำสัปดาห์ +2 ช่อง"
+   },
+   {
+    "level": 7,
+    "points_gold": 60000,
+    "baht": 6000,
+    "x_prev": 1.71,
+    "payer_month": 6,
+    "whale_month": 1,
+    "gift_box_value_gold": 2500,
+    "unlock": "ฉายา VIP"
+   },
+   {
+    "level": 8,
+    "points_gold": 100000,
+    "baht": 10000,
+    "x_prev": 1.67,
+    "payer_month": 10,
+    "whale_month": 1,
+    "gift_box_value_gold": 4000,
+    "unlock": "ประกาศทั่วเซิร์ฟเมื่อขึ้นขั้น (ปิดได้ ไม่แสดงกับผู้เยาว์) · เห็นชุดของด่วน 19,990"
+   },
+   {
+    "level": 9,
+    "points_gold": 150000,
+    "baht": 15000,
+    "x_prev": 1.5,
+    "payer_month": 15,
+    "whale_month": 2,
+    "gift_box_value_gold": 5000,
+    "unlock": "รัศมีเท้า VIP"
+   },
+   {
+    "level": 10,
+    "points_gold": 250000,
+    "baht": 25000,
+    "x_prev": 1.67,
+    "payer_month": 25,
+    "whale_month": 3,
+    "gift_box_value_gold": 10000,
+    "unlock": "สกินม้า VIP"
+   },
+   {
+    "level": 11,
+    "points_gold": 400000,
+    "baht": 40000,
+    "x_prev": 1.6,
+    "payer_month": 40,
+    "whale_month": 4,
+    "gift_box_value_gold": 15000,
+    "unlock": "ของหลัง VIP"
+   },
+   {
+    "level": 12,
+    "points_gold": 600000,
+    "baht": 60000,
+    "x_prev": 1.5,
+    "payer_month": 60,
+    "whale_month": 6,
+    "gift_box_value_gold": 20000,
+    "unlock": "ชุดแฟชั่น VIP"
+   },
+   {
+    "level": 13,
+    "points_gold": 900000,
+    "baht": 90000,
+    "x_prev": 1.5,
+    "payer_month": 90,
+    "whale_month": 9,
+    "gift_box_value_gold": 30000,
+    "unlock": "สกินกองและธง VIP"
+   },
+   {
+    "level": 14,
+    "points_gold": 1400000,
+    "baht": 140000,
+    "x_prev": 1.56,
+    "payer_month": 140,
+    "whale_month": 14,
+    "gift_box_value_gold": 50000,
+    "unlock": "ลายปักสายตรา VIP"
+   },
+   {
+    "level": 15,
+    "points_gold": 2000000,
+    "baht": 200000,
+    "x_prev": 1.43,
+    "payer_month": 200,
+    "whale_month": 20,
+    "gift_box_value_gold": 60000,
+    "unlock": "ฉายาสูงสุด"
+   }
+  ],
+  "never_unlocks": [
+   "ตำลึง/ดรอป",
+   "ออฟไลน์",
+   "ออโต้เกิน 80%",
+   "เพดานกระดาน/ภาษี",
+   "รอบดันเจี้ยนเพิ่ม",
+   "ม้าเร็วฟรี",
+   "ความดีความชอบ",
+   "เสบียงศึก",
+   "ค่าพลังตรง"
+  ],
+  "gift_box_rule": "มูลค่า = 10% ของทองที่ต้องเติมเพิ่ม · ของแต่ง ยา ห่อหญ้าม้า · ไม่มีทองผูก ตั๋ว และยันต์ (รอบ 1)"
+ },
+ "popup_packs": {
+  "rules": {
+   "per_type_per_24h": 1,
+   "total_per_day": 3,
+   "min_level": 15,
+   "not_in_combat": true,
+   "minors": false,
+   "value_x": [
+    1.52,
+    1.82
+   ],
+   "value_x_hard_max": 5,
+   "no_items": [
+    "ทอง",
+    "ทองผูก",
+    "ตั๋วสุ่มขุนพล",
+    "ยันต์ (ยกเว้นชุดกู้ของ)"
+   ],
+   "value_x_exception": {
+    "rescue": 1.0,
+    "why": "ยันต์ผูกราคากับยันต์โรงช่างหลวง 1,000 ตำลึง (upgrade 3.9)"
+   },
+   "cap_rule": "ชุดกู้ของนับเพดานยันต์ 30 ใบต่อสัปดาห์ · ห่อหญ้าม้านับเพดาน 4 ห่อ · ถ้าซื้อแล้วเกิน ไม่เด้ง",
+   "can_disable": true
+  },
+  "packs": [
+   {
+    "id": "rescue",
+    "name_th": "ชุดกู้ของ",
+    "trigger": "ตีบวกพลาดที่ +13 ขึ้นไป",
+    "price": 60,
+    "items": {
+     "anti_drop_charm": 10
+    },
+    "value": 60,
+    "x": 1.0,
+    "counts_charm_cap": true,
+    "replaces": [
+     "rescue_s",
+     "rescue_l"
+    ]
+   },
+   {
+    "id": "hurry",
+    "name_th": "ชุดเร่งทาง",
+    "trigger": "Lv < 80 และเลเวลไม่ขึ้น 48 ชม.",
+    "price": 990,
+    "items": {
+     "exp_potion_h": 60
+    },
+    "value": 1800,
+    "x": 1.82
+   },
+   {
+    "id": "rematch",
+    "name_th": "ชุดแก้มือ",
+    "trigger": "แพ้อารีนาหรือสงคราม 3 ครั้งใน 24 ชม.",
+    "price": 2990,
+    "items": {
+     "outfit": 1,
+     "troop_skin": 1,
+     "foot_aura": 1,
+     "glow_title": 1
+    },
+    "value": 5040,
+    "x": 1.69
+   },
+   {
+    "id": "victory",
+    "name_th": "ชุดฉลองชัย",
+    "trigger": "พันธมิตรยึดเมืองได้ หรือได้ที่นั่งขุนพล",
+    "vip_min": 5,
+    "price": 6990,
+    "items": {
+     "outfit_exclusive": 1,
+     "horse_skin": 1,
+     "troop_skin": 1,
+     "embroidery_m": 1,
+     "title": 1,
+     "foot_aura": 1,
+     "back_item": 1,
+     "grass_pack": 4,
+     "siege_skin": 1
+    },
+    "value": 11580,
+    "x": 1.66
+   },
+   {
+    "id": "victory_xl",
+    "name_th": "ชุดฉลองชัยใหญ่",
+    "trigger": "เหมือนชุดฉลองชัย",
+    "vip_min": 8,
+    "price": 19990,
+    "items": {
+     "exclusive_cosmetics_2980": 8,
+     "embroidery_l": 1,
+     "troop_skin": 1,
+     "siege_skin": 1,
+     "grass_pack": 4
+    },
+    "value": 30400,
+    "x": 1.52,
+    "exclusive_list": [
+     "ชุดแฟชั่น",
+     "สกินม้า",
+     "เกราะม้า",
+     "ของหลัง",
+     "รัศมีเท้า",
+     "รูปลักษณ์อาวุธ",
+     "ฉายาเรืองแสง",
+     "กรอบชื่อและกรอบแชต"
+    ]
+   }
+  ]
+ },
+ "catalogue": [
+  {
+   "id": "anti_drop_charm",
+   "name_th": "ยันต์กันถอยขั้น (ผูกตัว)",
+   "price": 6,
+   "sold_as": {
+    "qty": 10,
+    "price": 60
+   },
+   "weekly_cap": 30,
+   "cap_scope": "ทองและทองผูกรวมกัน ทุกช่องทางที่ซื้อด้วยทอง รวมชุดกู้ของ",
+   "effect": "ติ๊กก่อนกด ใช้ q × g ใบเฉพาะครั้งที่พลาดที่ +13 ขึ้นไป ขั้นไม่ถอย · q = 1/2/3 (+13–15/+16–18/+19–20)",
+   "why": "1.2 × 1,000 ÷ 194 = 6.19 → 6 · ยันต์โรงช่างหลวง 1,000 ตำลึง [upgrade 3.9]",
+   "not_in": [
+    "ร้านลดราคาประจำสัปดาห์",
+    "กล่อง VIP",
+    "บัตรผ่านซีซัน",
+    "ลดราคากิจกรรม"
+   ],
+   "ledger": "G_SHOP_CHARM",
+   "source": "upgrade 3.9 · รอบ 1 C4"
+  },
+  {
+   "id": "exp_potion_15",
+   "name_th": "ยาเพิ่ม EXP ×1.5 (1 ชม.)",
+   "price": 30,
+   "max_h_per_day": 4,
+   "applies": "เล่นเองและออโต้ ไม่ใช่ออฟไลน์",
+   "exp_only": true,
+   "why": "0.5 ชม.เทียบ × 7,200 ÷ 171 = 21 ทอง × 1.4"
+  },
+  {
+   "id": "exp_potion_2",
+   "name_th": "ยาเพิ่ม EXP ×2 (1 ชม.)",
+   "price": null,
+   "source": "กิจกรรมเท่านั้น"
+  },
+  {
+   "id": "grass_pack",
+   "name_th": "ห่อหญ้าม้า (200 กำ)",
+   "price": 150,
+   "weekly_cap": 4,
+   "formula": "ปัดขึ้นหลักสิบ(1.4 × 200 × ราคากลางเริ่มต้นหญ้า ÷ 194) · หญ้า 100 → 150",
+   "vs_market_x": 1.46
+  },
+  {
+   "id": "horse_coat_skin",
+   "name_th": "สกินสีขนม้า",
+   "price": 1980
+  },
+  {
+   "id": "horse_armor_fashion",
+   "name_th": "เกราะม้าแฟชั่น",
+   "price": 1480
+  },
+  {
+   "id": "horse_tassel",
+   "name_th": "พู่ม้า",
+   "price": 300
+  },
+  {
+   "id": "embroidery_s",
+   "name_th": "ลายปักสายตรา เล็ก",
+   "price": 300
+  },
+  {
+   "id": "embroidery_m",
+   "name_th": "ลายปักสายตรา กลาง",
+   "price": 1000
+  },
+  {
+   "id": "embroidery_l",
+   "name_th": "ลายปักสายตรา ใหญ่",
+   "price": 3000
+  },
+  {
+   "id": "glow_title",
+   "name_th": "ฉายาเรืองแสง",
+   "price": 600
+  },
+  {
+   "id": "name_frame",
+   "name_th": "กรอบชื่อ กรอบแชต",
+   "price": 300
+  },
+  {
+   "id": "foot_aura",
+   "name_th": "รัศมีเท้า",
+   "price": 980
+  },
+  {
+   "id": "back_item",
+   "name_th": "ของหลัง (ธงหลัง ผ้าคลุม ปีก)",
+   "price": 1480
+  },
+  {
+   "id": "outfit",
+   "name_th": "ชุดแฟชั่น",
+   "price": 1980,
+   "festival_price": 2980
+  },
+  {
+   "id": "troop_banner_skin",
+   "name_th": "สกินกองทหารและธง",
+   "price": 1480
+  },
+  {
+   "id": "siege_skin",
+   "name_th": "สกินเครื่องตีเมืองและเสียงกลอง",
+   "price": 1480,
+   "note": "ไม่เปลี่ยนค่าเครื่องหรือราคาเสบียงศึก"
+  },
+  {
+   "id": "ur_weapon_look",
+   "name_th": "รูปลักษณ์อาวุธคู่ขุนพล UR",
+   "price": 2980,
+   "note": "ขายเดือนที่ขุนพลอยู่ตู้เด่น"
+  },
+  {
+   "id": "rename",
+   "name_th": "บัตรเปลี่ยนชื่อ",
+   "price": 1000
+  },
+  {
+   "id": "extra_dungeon_run",
+   "name_th": "รอบดันเจี้ยนทีมเพิ่ม",
+   "price": [
+    100,
+    200
+   ],
+   "max_per_day": 2,
+   "rewards": "EXP และของผูกตัว ไม่มีตำลึง ไม่มีวัตถุดิบเทรดได้"
+  },
+  {
+   "id": "weekly_discount",
+   "name_th": "ร้านลดราคาประจำสัปดาห์",
+   "slots": 6,
+   "vip6_extra": 2,
+   "discount_pct": 20,
+   "rotate": "จันทร์ 05:00"
+  }
+ ],
+ "topup_events": {
+  "accumulate_tiers_baht": [
+   300,
+   1000,
+   3000,
+   10000
+  ],
+  "reward_value_max_pct": 30,
+  "reward_kind": "ของผูกตัว ไม่มีทอง/ทองผูก",
+  "rank": {
+   "counts": "รายการจ่ายแล้วตามเวลาจ่าย",
+   "rank1_min_baht": 10000,
+   "deliver_after_h": 24,
+   "reclaim_on_refund": true,
+   "minors": false,
+   "max_per_30d": 1,
+   "rank1_prize": "สกินม้ากระต่ายแดงเพลิงถ่าน + ฉายา"
+  },
+  "server_open_day7": "วันเติมเงิน"
+ },
+ "shop_never_sells": [
+  "ตำลึง",
+  "ความดีความชอบ",
+  "เสบียงศึก",
+  "เครื่องตีเมือง",
+  "ยศ",
+  "บรรดาศักดิ์",
+  "เสบียงทหาร",
+  "วัตถุดิบที่เทรดได้",
+  "ของแดง/ตำนาน",
+  "ตัวม้า/ตราม้า",
+  "ชั่วโมงออฟไลน์นอกบัตรรายเดือน",
+  "ตำราล้างสาย/ป้ายย้ายก๊ก/ขยายกระเป๋า",
+  "ส่วนลดภาษี/เพดานกระดาน",
+  "ของช่วยตีบวกอื่นนอกจากยันต์: หินกันแตก ของเพิ่มโอกาส ล็อกบรรทัดสุ่มค่า (ตำลึงตาม upgrade 5.1)"
+ ],
+ "exchange_board": {
+  "type": "สมุดคำสั่งของผู้เล่น ระบบไม่ถือทองหรือตำลึง",
+  "match": {
+   "every_sec": 60,
+   "priority": "ราคาแล้วเวลา",
+   "edge_price_random": true,
+   "trade_price": "ราคาของคำสั่งที่วางก่อน",
+   "names_hidden": true,
+   "depth_levels_shown": 5
+  },
+  "quote": "ตำลึงต่อ 1 ทอง จำนวนเต็ม",
+  "lot": 10,
+  "order_gold": [
+   10,
+   5000
+  ],
+  "open_orders_per_side": 5,
+  "order_life_h": 48,
+  "new_orders_per_day": 20,
+  "cancel_fee": 0,
+  "fee_each_side_pct": 6,
+  "fee_range_each_side_pct": [
+   5,
+   8.5
+  ],
+  "round_trip_pct": 11.64,
+  "fee_goes": "ทำลาย",
+  "seller_gets": "ปัดลง(ราคา × จำนวน × 0.94)",
+  "buyer_gets": "ปัดลง(ทองที่จับคู่สะสมของคำสั่ง × 0.94) − ที่ให้แล้ว (ทองผูก)",
+  "open_day": 4,
+  "open_time": "05:00 ประมูลรวม · 06:00 จับคู่ต่อเนื่อง",
+  "open_price": 150,
+  "open_derivation": "ฐาน S(50) ÷ 35 = 148.6 → 150 · P0 = ปัด(150 × 0.05 ÷ สัดส่วนผู้เติมเงินวันที่ 4) (รอบ 1 C2)",
+  "ref": {
+   "update": "05:00",
+   "min_matches": 20,
+   "formula": "clamp(round(VWAP24h), ceil(old×0.95), floor(old×1.05))",
+   "band": "ceil(ref×0.85) – floor(ref×1.15)",
+   "example": {
+    "ref": 194,
+    "band": [
+     165,
+     223
+    ],
+    "vwap": 210,
+    "next": 203
+   }
+  },
+  "expected_path": {
+   "4": 150,
+   "5": 158,
+   "6": 165,
+   "7": 174,
+   "8": 182,
+   "10": 201,
+   "12": 201,
+   "14": 181,
+   "21": 171,
+   "30": 180,
+   "45": 190,
+   "60": 194,
+   "90": 196
+  },
+  "guide_after_day_21": "S(เลเวลกลาง) ÷ 42",
+  "tiers": [
+   {
+    "tier": 0,
+    "buy_gold_day": 0,
+    "sell_gold_day": 0
+   },
+   {
+    "tier": 1,
+    "gate": "Lv ≥ 30 และบัญชี ≥ 3 วัน",
+    "buy_gold_day": 1000,
+    "sell_gold_day": 1000
+   },
+   {
+    "tier": 2,
+    "gate": "Lv ≥ 40 · บัญชี ≥ 7 วัน · OTP หรือเคยเติมเกิน 7 วัน",
+    "buy_gold_day": 3000,
+    "sell_gold_day": 5000
+   },
+   {
+    "tier": "minor_13_19",
+    "buy_gold_day": 1000,
+    "sell_gold_day": 1000
+   },
+   {
+    "tier": "lock",
+    "buy_gold_day": 0,
+    "sell_gold_day": 0
+   }
+  ],
+  "limits_count": "เฉพาะที่จับคู่ · วางเกินสิทธิ์ที่เหลือไม่ได้ · รีเซ็ต 05:00",
+  "vip_changes_limits": false,
+  "seller_tael_cap": {
+   "day": "10 × S(L)",
+   "week": "30 × S(L)",
+   "L": "เลเวลสูงสุดของบัญชีในเซิร์ฟ",
+   "table": [
+    {
+     "L": 30,
+     "S": 3200,
+     "day_tael": 32000,
+     "week_tael": 96000,
+     "guide_price": 76,
+     "day_gold_at_guide": 447.9,
+     "week_gold_at_guide": 1343.8
+    },
+    {
+     "L": 40,
+     "S": 4200,
+     "day_tael": 42000,
+     "week_tael": 126000,
+     "guide_price": 100,
+     "day_gold_at_guide": 446.8,
+     "week_gold_at_guide": 1340.4
+    },
+    {
+     "L": 50,
+     "S": 5200,
+     "day_tael": 52000,
+     "week_tael": 156000,
+     "guide_price": 124,
+     "day_gold_at_guide": 446.1,
+     "week_gold_at_guide": 1338.4
+    },
+    {
+     "L": 60,
+     "S": 6200,
+     "day_tael": 62000,
+     "week_tael": 186000,
+     "guide_price": 148,
+     "day_gold_at_guide": 445.7,
+     "week_gold_at_guide": 1337.0
+    },
+    {
+     "L": 70,
+     "S": 7200,
+     "day_tael": 72000,
+     "week_tael": 216000,
+     "guide_price": 171,
+     "day_gold_at_guide": 447.9,
+     "week_gold_at_guide": 1343.8
+    },
+    {
+     "L": 80,
+     "S": 8200,
+     "day_tael": 82000,
+     "week_tael": 246000,
+     "guide_price": 195,
+     "day_gold_at_guide": 447.4,
+     "week_gold_at_guide": 1342.1
+    },
+    {
+     "L": 90,
+     "S": 9200,
+     "day_tael": 92000,
+     "week_tael": 276000,
+     "guide_price": 219,
+     "day_gold_at_guide": 446.9,
+     "week_gold_at_guide": 1340.7
+    },
+    {
+     "L": 100,
+     "S": 10200,
+     "day_tael": 102000,
+     "week_tael": 306000,
+     "guide_price": 243,
+     "day_gold_at_guide": 446.5,
+     "week_gold_at_guide": 1339.6
+    },
+    {
+     "L": 120,
+     "S": 12200,
+     "day_tael": 122000,
+     "week_tael": 366000,
+     "guide_price": 290,
+     "day_gold_at_guide": 447.5,
+     "week_gold_at_guide": 1342.6
+    }
+   ],
+   "gold_at_guide": {
+    "day": 446.8,
+    "week": 1340.4,
+    "month_30d_baht": 574,
+    "week_at_194": 1349.0,
+    "month_baht_at_194": 578,
+    "month_baht_old": 770
+   },
+   "week_old": "40 × S(L)",
+   "payer_150_per_day": {
+    "week_tael_at_194": 191478,
+    "capped": false,
+    "min_level_not_capped": {
+     "194": 62,
+     "201": 65
+    },
+    "note": "คนเข้าเซิร์ฟช้า Lv 60–64 ช่วงราคา 201 ขายได้ราว 140–150 ต่อวัน"
+   }
+  },
+  "merge": {
+   "before": "ปิด ยกเลิกคำสั่ง คืนของที่กัน ค่าธรรมเนียมไม่คืน",
+   "ref": "ถ่วงจำนวนทอง 7 วันของสองเซิร์ฟ",
+   "reopen": "05:00 วันถัดไป",
+   "gap_gt_25pct": "3 วันแรกกรอบ ±10%",
+   "holds": "นับต่อ",
+   "caps_and_tiers": "นับต่อ ไม่รีเซ็ต",
+   "cards_pass_vip": "ย้ายครบ"
+  },
+  "kill_switch": {
+   "server_seconds": 10,
+   "region": true,
+   "sell_only_off": true,
+   "triggers": [
+    "ledger ไม่ตรง",
+    "ราคานอก 0.65–1.50 ของเส้นคาดปรับอุปทาน (guide_kpi5)"
+   ]
+  },
+  "cash_out": false,
+  "open_price_note": "open_price = ฐานที่ผู้เติมเงิน 5% · ราคาจริงวันที่ 4 มาจากประมูลรวม (open_auction)",
+  "open_auction": {
+   "window": "วันที่ 4 05:00–06:00",
+   "match_at": "06:00",
+   "P0": "round(150 × 0.05 ÷ clamp(payer_share_day4, 0.025, 0.10))",
+   "payer_share_day4": "บัญชีที่มีรายการเติม 'จ่ายแล้ว' ÷ บัญชีที่เข้าเกมวันที่ 1–3 นับตอน 05:00 วันที่ 4",
+   "band": "ceil(P0 × 0.85) – floor(P0 × 1.15)",
+   "price_rule": [
+    "ทองจับคู่มากที่สุด",
+    "ทองค้างฝั่งเดียวน้อยที่สุด",
+    "ใกล้ P0 ที่สุด"
+   ],
+   "fill": "ราคาเดียว P* · ราคาดีกว่าได้ก่อน · ที่ P* พอดีสุ่มลำดับ · ผู้ซื้อได้ส่วนต่างคืน",
+   "min_matches": 20,
+   "fallback": "ไม่ถึง 20 ครั้ง ราคากลาง = P0",
+   "after": "06:00 จับคู่รอบละ 60 วินาที กรอบ ±15% ของราคากลางใหม่ · คำสั่งนอกกรอบยกเลิกคืนของ · ปรับราคากลางครั้งแรกวันที่ 5 05:00",
+   "table": [
+    {
+     "payer_share": 0.02,
+     "P0": 300,
+     "band": [
+      255,
+      345
+     ]
+    },
+    {
+     "payer_share": 0.03,
+     "P0": 250,
+     "band": [
+      213,
+      287
+     ]
+    },
+    {
+     "payer_share": 0.04,
+     "P0": 188,
+     "band": [
+      160,
+      216
+     ]
+    },
+    {
+     "payer_share": 0.05,
+     "P0": 150,
+     "band": [
+      128,
+      172
+     ]
+    },
+    {
+     "payer_share": 0.06,
+     "P0": 125,
+     "band": [
+      107,
+      143
+     ]
+    },
+    {
+     "payer_share": 0.08,
+     "P0": 94,
+     "band": [
+      80,
+      108
+     ]
+    },
+    {
+     "payer_share": 0.1,
+     "P0": 75,
+     "band": [
+      64,
+      86
+     ]
+    },
+    {
+     "payer_share": 0.12,
+     "P0": 75,
+     "band": [
+      64,
+      86
+     ]
+    }
+   ],
+   "source": "รอบ 1 C2 · [แต่งใหม่]"
+  },
+  "guide_kpi5": {
+   "formula": "guide_base × 0.05 ÷ payer_share_7d",
+   "guide_base": "วันที่ 4–20 expected_path (เส้นตรงระหว่างวัน) · วันที่ 21 ขึ้นไป S(เลเวลกลาง active 7 วัน) ÷ 42",
+   "payer_share_7d": "บัญชี active 7 วันที่มีรายการเติม 'จ่ายแล้ว' ใน 30 วัน ÷ บัญชี active 7 วัน",
+   "band_day4_20": [
+    0.8,
+    1.25
+   ],
+   "band_day21_plus": [
+    0.85,
+    1.2
+   ],
+   "yellow": "นอก 0.80–1.25 นาน 3 วัน หรือขยับ > 20% ใน 7 วัน",
+   "red": "นอก 0.65–1.50",
+   "clamp": null,
+   "guide_5pct": {
+    "4": 150,
+    "5": 158,
+    "7": 174,
+    "10": 201,
+    "14": 181,
+    "21": 169,
+    "30": 179,
+    "45": 190,
+    "60": 195,
+    "90": 195
+   },
+   "guide_8pct": {
+    "4": 94,
+    "5": 99,
+    "7": 109,
+    "10": 126,
+    "14": 113,
+    "21": 106,
+    "30": 112,
+    "45": 119,
+    "60": 122,
+    "90": 122
+   },
+   "sim_r1_8pct_price_guide": {
+    "7": [
+     101,
+     107
+    ],
+    "14": [
+     93,
+     113
+    ],
+    "30": [
+     106,
+     112
+    ],
+    "60": [
+     115,
+     122
+    ],
+    "90": [
+     110,
+     122
+    ]
+   },
+   "sim_r1_kpi5_after_day21": [
+    0.88,
+    0.97
+   ],
+   "source": "spine S7 · รอบ 1 C3"
+  }
+ },
+ "free_player_paths": {
+  "price_ref_day60": 194,
+  "hour_value": {
+   "Lv80_manual_h_gold": 42.3,
+   "baht_per_hour": 4.23,
+   "tael_per_baht_buyer": 1940
+  },
+  "goals": [
+   {
+    "goal": "สุ่ม 1 ครั้ง",
+    "bound_needed": 300,
+    "gold_to_buy": 320,
+    "bound_got": 300,
+    "tael_d4": 48000,
+    "tael_d14": 57920,
+    "tael_d30": 57600,
+    "tael_d60": 62080,
+    "tael_d90": 62720,
+    "h_manual_Lv80_d60": 7.57,
+    "days_hardcore_d60": 0.72,
+    "days_casual_d60": 1.07,
+    "pct_month_hardcore": 2.4
+   },
+   {
+    "goal": "สุ่ม 10 ครั้ง",
+    "bound_needed": 3000,
+    "gold_to_buy": 3200,
+    "bound_got": 3008,
+    "tael_d4": 480000,
+    "tael_d14": 579200,
+    "tael_d30": 576000,
+    "tael_d60": 620800,
+    "tael_d90": 627200,
+    "h_manual_Lv80_d60": 75.71,
+    "days_hardcore_d60": 7.19,
+    "days_casual_d60": 10.74,
+    "pct_month_hardcore": 24.0
+   },
+   {
+    "goal": "บัตรผ่านซีซัน",
+    "bound_needed": 2990,
+    "gold_to_buy": 3190,
+    "bound_got": 2998,
+    "tael_d4": 478500,
+    "tael_d14": 577390,
+    "tael_d30": 574200,
+    "tael_d60": 618860,
+    "tael_d90": 625240,
+    "h_manual_Lv80_d60": 75.47,
+    "days_hardcore_d60": 7.16,
+    "days_casual_d60": 10.7,
+    "pct_month_hardcore": 23.9
+   },
+   {
+    "goal": "บัตรผ่านซีซัน (มีทองผูกฟรี 1,479)",
+    "bound_needed": 1511,
+    "gold_to_buy": 1610,
+    "bound_got": 1513,
+    "tael_d4": 241500,
+    "tael_d14": 291410,
+    "tael_d30": 289800,
+    "tael_d60": 312340,
+    "tael_d90": 315560,
+    "h_manual_Lv80_d60": 38.09,
+    "days_hardcore_d60": 3.62,
+    "days_casual_d60": 5.4,
+    "pct_month_hardcore": 12.1
+   },
+   {
+    "goal": "บัตรผ่านซีซัน (มีทองผูกฟรี 70% = 1,035)",
+    "bound_needed": 1955,
+    "gold_to_buy": 2080,
+    "bound_got": 1955,
+    "tael_d4": 312000,
+    "tael_d14": 376480,
+    "tael_d30": 374400,
+    "tael_d60": 403520,
+    "tael_d90": 407680,
+    "h_manual_Lv80_d60": 49.21,
+    "days_hardcore_d60": 4.67,
+    "days_casual_d60": 6.98,
+    "pct_month_hardcore": 15.6
+   },
+   {
+    "goal": "บัตรผ่านซีซันขั้นสูง",
+    "bound_needed": 5990,
+    "gold_to_buy": 6380,
+    "bound_got": 5997,
+    "tael_d4": 957000,
+    "tael_d14": 1154780,
+    "tael_d30": 1148400,
+    "tael_d60": 1237720,
+    "tael_d90": 1250480,
+    "h_manual_Lv80_d60": 150.94,
+    "days_hardcore_d60": 14.33,
+    "days_casual_d60": 21.4,
+    "pct_month_hardcore": 47.8
+   },
+   {
+    "goal": "ยันต์กันถอยขั้น 10 ใบ",
+    "bound_needed": 60,
+    "gold_to_buy": 70,
+    "bound_got": 65,
+    "tael_d4": 10500,
+    "tael_d14": 12670,
+    "tael_d30": 12600,
+    "tael_d60": 13580,
+    "tael_d90": 13720,
+    "h_manual_Lv80_d60": 1.66,
+    "days_hardcore_d60": 0.16,
+    "days_casual_d60": 0.23,
+    "pct_month_hardcore": 0.5
+   },
+   {
+    "goal": "ยันต์กันถอยขั้น 30 ใบ (เต็มเพดานสัปดาห์)",
+    "bound_needed": 180,
+    "gold_to_buy": 200,
+    "bound_got": 188,
+    "tael_d4": 30000,
+    "tael_d14": 36200,
+    "tael_d30": 36000,
+    "tael_d60": 38800,
+    "tael_d90": 39200,
+    "h_manual_Lv80_d60": 4.73,
+    "days_hardcore_d60": 0.45,
+    "days_casual_d60": 0.67,
+    "pct_month_hardcore": 1.5
+   },
+   {
+    "goal": "การันตี 100 ครั้ง",
+    "bound_needed": 30000,
+    "gold_to_buy": 31920,
+    "bound_got": 30004,
+    "tael_d4": 4788000,
+    "tael_d14": 5777520,
+    "tael_d30": 5745600,
+    "tael_d60": 6192480,
+    "tael_d90": 6256320,
+    "h_manual_Lv80_d60": 755.18,
+    "days_hardcore_d60": 71.69,
+    "days_casual_d60": 107.09,
+    "pct_month_hardcore": 239.0
+   }
+  ],
+  "hardcore_30d": {
+   "income_30d": 2591520,
+   "A_spine_3pct": {
+    "tael": 77746,
+    "bound_board": 376.8,
+    "bound_free_to_gacha": 1035.3,
+    "bound_total": 1412.1,
+    "pulls": 4,
+    "left": 212.1,
+    "pulls_avg": 4.71,
+    "charms": 73.95,
+    "free_pulls": 30
+   },
+   "B_pass_monthly": {
+    "tael": 403520,
+    "pct_income": 15.6,
+    "days_income": 4.67,
+    "gold_bought": 2080,
+    "bound_board": 1955,
+    "bound_free": 1035.3,
+    "bound_total": 2990.3,
+    "charms": 73.95,
+    "gets": "บัตรผ่านซีซัน (มูลค่า 7,360) + ยันต์ 74",
+    "alt_all_free_to_pass_and_npc_charms": {
+     "tael": 386290,
+     "pct_income": 14.9
+    }
+   },
+   "C_gacha_10pct": {
+    "tael": 258020,
+    "gold_bought": 1330,
+    "bound_board": 1250,
+    "bound_free": 1035.3,
+    "bound_total": 2285.3,
+    "pulls": 7,
+    "left": 185.3,
+    "charms": 73.95
+   },
+   "months_to_featured_pity": {
+    "A": 21.2,
+    "C": 13.1
+   },
+   "standard_UR_every_months_free": 2.0,
+   "applies": "ตี +13 ขึ้นไป (ทองผูกฟรี 30% ไปยันต์) · ค่าก่อน +13 อยู่ใน before_plus13",
+   "before_plus13": {
+    "A_pulls": 6,
+    "A_bound_total": 1855.8,
+    "B_tael": 312340,
+    "B_gold": 1610,
+    "B_pct": 12.1,
+    "C_pulls": 9,
+    "C_bound_total": 2729,
+    "months_to_featured_pity": {
+     "A": 16.2,
+     "C": 11.0
+    }
+   }
+  },
+  "casual_30d": {
+   "tael_per_day": 1156,
+   "bound_board": 168.0,
+   "bound_free": 1330,
+   "bound_free_to_charms": 399.0,
+   "bound_free_to_gacha": 931.0,
+   "charms_30d": 66.5,
+   "pulls": 3.66,
+   "pulls_before_plus13": 4.99
+  },
+  "why_no_monthly_card_with_bound": {
+   "offline_extra_per_day_Lv80": 14432,
+   "if_950_free": 13710400,
+   "pct_faucet_day60": 20.6,
+   "offline_share_from_to": [
+    44.2,
+    53.7
+   ],
+   "rule_kept_r2": true
+  },
+  "if_all_hardcore_take_B_extra_gold_per_day": 13993,
+  "charm_board_vs_npc": {
+   "10_board_d60": 13580,
+   "10_npc": 10000,
+   "x": 1.36,
+   "30_board_d60": 38800
+  },
+  "if_all_hardcore_take_B_note": "250 × (2,080 − 401) ÷ 30 หักส่วน 3% ที่อยู่ในแบบจำลองแล้ว (เดิม 13,417 = 250 × 1,610 ÷ 30)",
+  "monthly_card_equivalents_r2": {
+   "source": "balance_r2 C7 F43 · sim/out r2_changes · นับวันของผู้เล่นอ้างอิง · ใช้กระดาน 2% / 3% ของรายได้ (ไม่ใช่ทาง ข.)",
+   "rule": "คงกติกา 7.3: บัตรรายเดือนซื้อด้วยทองผูกหรือผ่านกระดานไม่ได้",
+   "board_bound_1490": {
+    "counts": "ทองผูกจากกระดานสะสม ไม่ใช้สุ่ม",
+    "0.08": {
+     "casual": {
+      "day": null,
+      "note": "ไม่ถึงใน 90 วัน",
+      "reached": [
+       0,
+       700
+      ]
+     },
+     "hardcore": {
+      "day": 69,
+      "p10_p90": [
+       58,
+       81
+      ],
+      "reached": [
+       170,
+       220
+      ]
+     }
+    },
+    "0.05": {
+     "casual": {
+      "day": null,
+      "note": "ไม่ถึงใน 90 วัน",
+      "reached": [
+       0,
+       700
+      ]
+     },
+     "hardcore": {
+      "day": null,
+      "note": "ไม่ถึงใน 90 วัน",
+      "reached": [
+       0,
+       250
+      ]
+     }
+    }
+   },
+   "season_pass_2990": {
+    "counts": "ทองผูกจากกระดาน + 70% ของทองผูกฟรี สะสมไม่ใช้สุ่ม",
+    "0.08": {
+     "casual": {
+      "day": 75,
+      "p10_p90": [
+       72,
+       78
+      ],
+      "reached": [
+       700,
+       700
+      ]
+     },
+     "hardcore": {
+      "day": 54,
+      "p10_p90": [
+       50,
+       59
+      ],
+      "reached": [
+       220,
+       220
+      ]
+     }
+    },
+    "0.05": {
+     "casual": {
+      "day": 83,
+      "p10_p90": [
+       80,
+       85
+      ],
+      "reached": [
+       560,
+       700
+      ]
+     },
+     "hardcore": {
+      "day": 64,
+      "p10_p90": [
+       61,
+       68
+      ],
+      "reached": [
+       250,
+       250
+      ]
+     }
+    }
+   },
+   "bound_1490_is_not_card": "ไม่ได้ออฟไลน์ +4 ชม. และทองผูกรายวัน 1,800 · ใช้ได้ทุกอย่างที่ทองผูกซื้อได้ เช่น สุ่ม 4 ครั้ง เหลือ 290",
+   "option_B_cost": {
+    "at_194": {
+     "price": 194,
+     "gold": 2080,
+     "tael": 403520,
+     "days_income_hc": 4.67,
+     "pct_30d_hc": 15.6
+    },
+    "day60_8pct": {
+     "price": 115,
+     "gold": 2080,
+     "tael": 239200,
+     "days_income_hc": 2.77,
+     "pct_30d_hc": 9.2
+    },
+    "before_plus13_day60_8pct": {
+     "price": 115,
+     "gold": 1610,
+     "tael": 185150,
+     "days_income_hc": 2.14,
+     "pct_30d_hc": 7.1
+    }
+   },
+   "published": {
+    "hardcore_board_bound_1490_day": 69,
+    "casual_pass_day": 75,
+    "hardcore_pass_day": 54,
+    "payer_share": 0.08
+   }
+  }
+ },
+ "payer_month": {
+  "buy": [
+   {
+    "item": "บัตรรายเดือน",
+    "baht": 149,
+    "gold": 1490,
+    "bound": 1800
+   },
+   {
+    "item": "แพ็ก 599",
+    "baht": 599,
+    "gold": 5990,
+    "bound": 300,
+    "first": 5990
+   },
+   {
+    "item": "แพ็ก 99 × 2",
+    "baht": 198,
+    "gold": 1980,
+    "bound": 0,
+    "first": 990
+   },
+   {
+    "item": "แพ็ก 29 × 2",
+    "baht": 58,
+    "gold": 580,
+    "bound": 0,
+    "first": 290
+   }
+  ],
+  "baht": 1004,
+  "gold": 10040,
+  "bound_recurring": 2100,
+  "bound_free": 1479,
+  "first_month_bound": 7270,
+  "spend_gold": {
+   "board_sell": 4500,
+   "pull_10": 3000,
+   "charms_30_per_week": 771,
+   "cosmetic": 980,
+   "cosmetic_item": "รัศมีเท้า (เดิมชุดแฟชั่น 1,980)",
+   "exp_potion_18h": 540,
+   "total": 9791,
+   "left": 249
+  },
+  "spend_bound": {
+   "battle_pass": 2990,
+   "pull_1": 300,
+   "total": 3290,
+   "left": 289
+  },
+  "board_tael_per_day": 27354,
+  "board_tael_burned_per_day": 1746,
+  "pulls_30d": {
+   "bought": 16,
+   "free": 30,
+   "total": 46,
+   "first_month_extra": 24
+  },
+  "vip": {
+   "month1": 4,
+   "month10": 8
+  },
+  "charm_tael_saved_per_day": 4286,
+  "board_150_vs_week_cap": {
+   "week_tael": 191478,
+   "cap": 246000
+  },
+  "board_tael_per_day_basis": "เซิร์ฟผู้เติมเงิน 5% ราคา 194 · สัดส่วนอื่นดู board_tael_by_payer_share_r2",
+  "board_tael_by_payer_share_r2": {
+   "source": "balance_r2 C6 F44 · sim/out tables_r2_changes_70_22_8 และ _70_25_5 · ขาย 150 ทองต่อวันเท่ากัน",
+   "0.08": {
+    "price_day4_90": [
+     91,
+     116
+    ],
+    "board_tael_day_range": [
+     14400,
+     16500
+    ],
+    "phases": [
+     {
+      "phase": "Lv 41–60",
+      "days": "2–4",
+      "board_tael_day": 5551
+     },
+     {
+      "phase": "Lv 61–79",
+      "days": "5–30",
+      "board_tael_day": 14606
+     },
+     {
+      "phase": "Lv 80 ก่อนซื้อขั้น 12",
+      "days": "31–53",
+      "board_tael_day": 15278
+     },
+     {
+      "phase": "Lv 80 หลังซื้อขั้น 12",
+      "days": "54–90",
+      "board_tael_day": 16460
+     }
+    ],
+    "noble12_gate": {
+     "day": 44,
+     "p10_p90": [
+      37,
+      55
+     ],
+     "reached": [
+      79,
+      79
+     ]
+    },
+    "noble12_buy": {
+     "day": 54,
+     "p10_p90": [
+      43,
+      68
+     ],
+     "reached": [
+      79,
+      79
+     ]
+    },
+    "x_hardcore_incl_board": 1.14
+   },
+   "0.05": {
+    "price_day4_90": [
+     143,
+     196
+    ],
+    "price_max_daily": 198.6,
+    "board_tael_day_range": [
+     24300,
+     27600
+    ],
+    "phases": [
+     {
+      "phase": "Lv 41–60",
+      "days": "2–4",
+      "board_tael_day": 7935
+     },
+     {
+      "phase": "Lv 61–79",
+      "days": "5–30",
+      "board_tael_day": 24327
+     },
+     {
+      "phase": "Lv 80 ก่อนซื้อขั้น 12",
+      "days": "31–47",
+      "board_tael_day": 25920
+     },
+     {
+      "phase": "Lv 80 หลังซื้อขั้น 12",
+      "days": "48–90",
+      "board_tael_day": 27560
+     }
+    ],
+    "noble12_gate": {
+     "day": 44,
+     "p10_p90": [
+      37,
+      55
+     ],
+     "reached": [
+      49,
+      49
+     ]
+    },
+    "noble12_buy": {
+     "day": 48,
+     "p10_p90": [
+      39,
+      58
+     ],
+     "reached": [
+      49,
+      49
+     ]
+    },
+    "x_hardcore_incl_board": 1.3
+   },
+   "ratio_8_over_5_by_phase": [
+    0.7,
+    0.6,
+    0.589,
+    0.597
+   ],
+   "range_note": "ขอบล่าง 14,400 ของ 8% มาจากฉาก r2_design (14,394) · ขอบบนจาก r2_changes (16,460)",
+   "spine": {
+    "board_tael_day60": 27294,
+    "sell_gold_range_5_5": [
+     22915,
+     27652
+    ],
+    "noble12_day": 45,
+    "noble12_gate_day": 44,
+    "x_hardcore": 1.3,
+    "note": "ค่า spine = เซิร์ฟผู้เติมเงิน 5%"
+   },
+   "why": "ราคาสมดุล ≈ ตำลึงที่คนฟรีตั้งซื้อ ÷ ทองที่ผู้เติมเงินตั้งขาย · ผู้เติมเงินมากขึ้น ราคาต่ำลงราว 0.05 ÷ สัดส่วน ตำลึงต่อผู้เติมเงินลดตาม · ไม่ชดเชย",
+   "wait_for_money_days": {
+    "0.08": 10,
+    "0.05": 4,
+    "spine": 1
+   }
+  }
+ },
+ "whale_test": {
+  "baht_month": 10000,
+  "gold_month": 100000,
+  "bound_bonus_month": 10000,
+  "sell_gold_week": 1340,
+  "tael_week": 244362,
+  "tael_day": 34909,
+  "tael_day_if_plays_like_hardcore": 135725,
+  "x_hardcore": 1.57,
+  "pulls_month": 345,
+  "vip": {
+   "month1": 8,
+   "month20": 15
+  },
+  "sell_gold_week_unrounded": 1349.0,
+  "sell_gold_month": 5743,
+  "sell_baht_month_at_194": 578,
+  "card_offline_tael_day": 14432,
+  "x_hardcore_S6_formula": 1.574,
+  "x_hardcore_old_cap_with_card": 1.707,
+  "x_if_gold_charms_counted": 1.624,
+  "charm_gold_month": 771,
+  "gold_left_month": 93486
+ },
+ "rmt_signals": [
+  {
+   "id": "R1",
+   "rule": "รับตำลึงจากบัญชีระดับ 0–1 ≥ 10 บัญชีใน 24 ชม.",
+   "act": "คิวตรวจ"
+  },
+  {
+   "id": "R2",
+   "rule": "ให้มากกว่ารับ > 5 เท่าใน 7 วัน",
+   "act": "คิวตรวจ"
+  },
+  {
+   "id": "R3",
+   "rule": "ขายซ้ำคู่เดิมที่ขอบกรอบตลาด ≥ 3 ครั้งใน 7 วัน",
+   "act": "ล็อกเทรดทั้งคู่"
+  },
+  {
+   "id": "R4",
+   "rule": "แลกของห่างราคากลาง > 50%",
+   "act": "บันทึก ครั้งที่ 3 ใน 7 วันเข้าคิว"
+  },
+  {
+   "id": "R5",
+   "rule": "≥ 4 บัญชีใช้กระดานจากอุปกรณ์เดียวใน 30 วัน",
+   "act": "ปิดกระดานบัญชีที่ 4 ขึ้นไป"
+  },
+  {
+   "id": "B1",
+   "rule": "สองฝั่งจับคู่จากอุปกรณ์ IP หรือวิธีจ่ายเดียวกัน ≥ 2 ครั้งใน 7 วัน",
+   "act": "ล็อกกระดานทั้งคู่"
+  },
+  {
+   "id": "B2",
+   "rule": "ขายที่ขอบกรอบแล้วคู่ซ้ำคนเดิม ≥ 2 ครั้งใน 7 วัน",
+   "act": "คิวตรวจ"
+  },
+  {
+   "id": "B3",
+   "rule": "บัญชี < 14 วัน ขาย ≥ 80% ของที่เติมภายใน 24 ชม. หลังพ้นช่วงรอ 3 ก้อนติด",
+   "act": "ปิดขาย"
+  },
+  {
+   "id": "B4",
+   "rule": "บัตร ≥ 3 ใบใน 24 ชม. หรือประเทศบัตรไม่ตรง IP",
+   "act": "ปิดขาย บัตรเพิ่มต้อง 3DS"
+  },
+  {
+   "id": "B5",
+   "rule": "รับตำลึงจาก ≥ 5 บัญชีระดับ 0–1 แล้วซื้อทองผูกใน 24 ชม.",
+   "act": "คิวตรวจ"
+  },
+  {
+   "id": "B6",
+   "rule": "ชนเพดานตำลึงรายสัปดาห์ 3 สัปดาห์ติด และ Lv < 50",
+   "act": "คิวตรวจ"
+  },
+  {
+   "id": "B7",
+   "rule": "chargeback",
+   "act": "ล็อกทันที"
+  },
+  {
+   "id": "C1",
+   "rule": "แชตมี LINE ID เบอร์ รับเติม ขายตำลึง",
+   "act": "ซ่อนข้อความ"
+  }
+ ],
+ "penalty_ladder": [
+  "เตือน",
+  "ล็อกการซื้อขาย",
+  "ยึดของที่ได้โดยมิชอบ",
+  "ระงับบัญชี"
+ ],
+ "stolen_card": {
+  "3ds": "ทุกรายการบัตร",
+  "fail_max_10min": 3,
+  "device_accounts_day": 5,
+  "card_accounts_30d": 2,
+  "new_account_72h_baht_day": 1000,
+  "dispute_target_pct": 0.3,
+  "dispute_yellow_pct": 0.2
+ },
+ "refund": {
+  "mistake": {
+   "days": 7,
+   "unused": true,
+   "per_12_months": 1
+  },
+  "monthly_card": "7 วัน ยังไม่กดรับรายวัน และ 1,490 ยังไม่ถูกใช้",
+  "no_refund": [
+   "ทองที่ใช้แล้ว",
+   "บัตรผ่านซีซันที่รับรางวัลแล้ว",
+   "ผลสุ่ม"
+  ],
+  "service_close": "ตามกฎหมาย ประกาศ ≥ 30 วัน",
+  "on_refund": [
+   "ถอนทองของคำสั่ง",
+   "ถอนทองผูกโบนัส",
+   "ลดแต้ม VIP",
+   "สิทธิ์ครั้งแรกไม่คืน"
+  ]
+ },
+ "chargeback_steps": [
+  "ล็อกทันที",
+  "ถอนทองทั้งก้อน ติดลบได้ ถอนโบนัส ลด VIP",
+  "ดึงตำลึงจากการขายบนกระดานของก้อนนั้นใน 7 วัน ไม่พอเป็นหนี้ตำลึง",
+  "ผู้ซื้อที่ไม่เชื่อมโยงเก็บทองผูก ที่เชื่อมโยงย้อนทั้งคู่",
+  "ของที่ยังไม่เปิดใช้ใน 7 วันถอนคืน",
+  "หลักฐานอัตโนมัติ คนตรวจใน 72 ชม.",
+  "จ่ายคืนปลดล็อก หรือระงับ"
+ ],
+ "order_states": [
+  "สร้าง",
+  "รอจ่าย",
+  "จ่ายแล้ว",
+  "ส่งทองแล้ว",
+  "ล้มเหลว",
+  "คืนเงินแล้ว",
+  "ถูกโต้แย้ง",
+  "รอตรวจ"
+ ],
+ "minors": {
+  "age_under": 20,
+  "law": "ป.พ.พ. มาตรา 19, 20, 21 (ทนายต้องยืนยัน)",
+  "collect": "ปีและเดือนเกิดก่อนจ่ายครั้งแรก",
+  "limits": [
+   {
+    "age": "<13",
+    "pay": false,
+    "month_baht": 0,
+    "tx_baht": 0
+   },
+   {
+    "age": "13-15",
+    "pay": true,
+    "month_baht": 500,
+    "tx_baht": 299
+   },
+   {
+    "age": "16-19",
+    "pay": true,
+    "month_baht": 1500,
+    "tx_baht": 599
+   }
+  ],
+  "hidden": [
+   "ชุดของด่วน",
+   "อันดับเติมเงิน",
+   "ประกาศ VIP"
+  ],
+  "board": {
+   "hold_h": 168,
+   "sell_gold_day": 1000
+  },
+  "parent_block_h": 24
+ },
+ "lawyer_questions": [
+  "e-money ตาม พ.ร.บ.ระบบการชำระเงิน พ.ศ. 2560",
+  "สุ่มขุนพลกับ พ.ร.บ.การพนัน พ.ศ. 2478 และอายุ",
+  "ความยินยอมผู้ปกครองแบบติ๊ก",
+  "คืนทองคงเหลือเมื่อปิดบริการ",
+  "จังหวะรับรู้ VAT"
+ ],
+ "kpis": [
+  {
+   "id": "C1",
+   "name_th": "อัตราโต้แย้งบัตร 30 วัน",
+   "target": "< 0.2%",
+   "yellow": "≥ 0.2%",
+   "red": "≥ 0.3%"
+  },
+  {
+   "id": "C2",
+   "name_th": "ผู้จ่ายต่อผู้เล่นรายวัน",
+   "target": "3–6%",
+   "yellow": "< 2% หรือ > 8%",
+   "red": "< 1%"
+  },
+  {
+   "id": "C3",
+   "name_th": "เติมครั้งแรกใน 3 วัน",
+   "target": "5–10%",
+   "yellow": "< 4%",
+   "red": "< 2%"
+  },
+  {
+   "id": "C4",
+   "name_th": "ARPPU บาทต่อเดือน",
+   "target": "500–1,500",
+   "yellow": "นอกช่วง 2 เดือน"
+  },
+  {
+   "id": "C5",
+   "name_th": "ทองขายบนกระดาน ÷ ทองที่เติม 30 วัน",
+   "baseline": 0.45,
+   "target": "20–50%",
+   "yellow": "> 60% หรือ < 10%",
+   "red": "> 75%"
+  },
+  {
+   "id": "C6",
+   "name_th": "ราคากลางกระดาน ÷ เส้นคาดปรับอุปทาน (guide_kpi5)",
+   "target": "วันที่ 4–20: 0.80–1.25 · วันที่ 21 ขึ้นไป: 0.85–1.20",
+   "yellow": "นอก 0.80–1.25 นาน 3 วัน หรือขยับ > 20% ใน 7 วัน",
+   "red": "นอก 0.65–1.50",
+   "source": "spine KPI 5 · S7"
+  },
+  {
+   "id": "C7",
+   "name_th": "สภาพคล่องกระดาน",
+   "target": "≥ 60% หลังวันที่ 14",
+   "yellow": "< 40% นาน 7 วัน",
+   "red": "< 20%"
+  },
+  {
+   "id": "C8",
+   "name_th": "ทองผูกฟรีต่อบัญชี 30 วัน",
+   "target": "≤ 1,500",
+   "red": "> 1,500 แม้ 1 บัญชี"
+  },
+  {
+   "id": "C9",
+   "name_th": "ผู้เยาว์จ่ายเกินเพดาน",
+   "target": 0,
+   "red": "≥ 1"
+  },
+  {
+   "id": "C10",
+   "name_th": "ชุดของด่วนต่อคนต่อวัน",
+   "target": "≤ 3 · ผู้เยาว์ 0",
+   "red": "เกิน"
+  },
+  {
+   "id": "C11",
+   "name_th": "บัญชียอดทองติดลบ",
+   "target": "≤ 0.1% ของผู้จ่าย",
+   "yellow": "> 0.1%",
+   "red": "> 0.3%"
+  },
+  {
+   "id": "C12",
+   "name_th": "อัตราสุ่มจริงเทียบที่แสดง (CI 99%)",
+   "target": "ในช่วง",
+   "red": "หลุดช่วง"
+  },
+  {
+   "id": "C13",
+   "name_th": "ช่องว่างวาฬ",
+   "target": "≤ 1.6",
+   "yellow": "> 2.0",
+   "red": "> 2.5",
+   "baseline": 1.57
+  },
+  {
+   "id": "C14",
+   "name_th": "กระทบยอด บาท × 10",
+   "target": 0,
+   "red": "ต่าง 1 ทอง ปิดกระดาน"
+  },
+  {
+   "id": "C15",
+   "name_th": "ยันต์ที่ซื้อด้วยทองและทองผูกต่อบัญชีต่อ 7 วัน",
+   "target": "≤ 30",
+   "red": "> 30 แม้ 1 บัญชี",
+   "action": "บั๊ก ปิดขายยันต์"
+  },
+  {
+   "id": "C16",
+   "name_th": "ทองผูกฟรีที่ไปยันต์ ÷ ทองผูกฟรีที่ใช้ (คนฟรีตี +13 ขึ้นไป 30 วัน)",
+   "baseline": 0.3,
+   "target": "20–40%",
+   "yellow": "< 10% หรือ > 60%",
+   "action": "ข้อสมมติ C5 ผิด แจ้ง upgrade รันแบบจำลองใหม่"
+  }
+ ],
+ "ledger_codes": {
+  "gold": [
+   "C_TOPUP",
+   "C_TOPUP_BONUS",
+   "C_FIRST_BONUS",
+   "C_CARD_NOW",
+   "C_CARD_DAILY",
+   "C_FREE",
+   "C_GM",
+   "C_BOARD_ESCROW",
+   "C_BOARD_RELEASE",
+   "C_BOARD_SELL",
+   "C_BOARD_BUY",
+   "C_BOARD_FEE",
+   "C_SHOP",
+   "G_SHOP_CHARM",
+   "C_GACHA",
+   "C_PASS",
+   "C_REFUND",
+   "C_CHARGEBACK"
+  ],
+  "tael_from_spine": [
+   "T_BOARD",
+   "K_BOARD_FEE"
+  ],
+  "per_match_rows": 5,
+  "G_SHOP_CHARM": "ซื้อยันต์ในร้านทองหรือชุดกู้ของ · นับเพดาน 30 ใบต่อ 7 วัน · รหัสเดียวกับ upgrade 19 #5"
+ },
+ "sheets": [
+  "topup_packs",
+  "board_params",
+  "trust_tiers",
+  "cards",
+  "cash_catalog",
+  "gacha_rates",
+  "gacha_pity",
+  "battle_pass",
+  "vip_levels",
+  "popup_packs",
+  "payment_holds",
+  "minor_limits",
+  "free_bound_sources",
+  "rmt_rules"
+ ],
+ "deviations_from_spine": [
+  {
+   "n": 1,
+   "spine": "บัตรผ่านรางวัลเป็นของผูกตัวและทองผูกเท่านั้น",
+   "here": "สายจ่ายไม่มีทองผูก ทองผูกจึงซื้อได้"
+  },
+  {
+   "n": 2,
+   "spine": "ทองผูกฟรี ≤ 1,500 ต่อเดือน",
+   "here": "นับย้อนหลัง 30 วัน แหล่งรวม 1,478.6"
+  },
+  {
+   "n": 3,
+   "spine": "ระบบเป็นตัวจับคู่",
+   "here": "จับคู่รอบละ 60 วินาที สุ่มที่ขอบกรอบ"
+  },
+  {
+   "n": 4,
+   "spine": "ผู้ซื้อได้ จำนวน × 0.94",
+   "here": "ปัดลงจากยอดสะสมต่อคำสั่ง"
+  },
+  {
+   "n": 5,
+   "spine": "ช่วงรอ 72 ชม./7 วัน",
+   "here": "เพิ่มผู้เยาว์ 7 วัน ขาย ≤ 1,000 ต่อวัน"
+  },
+  {
+   "n": 6,
+   "spine": "บัตรตลอดชีพ บัฟถาวร",
+   "here": "บัฟ = ความสะดวก ไม่มี EXP/ตำลึง"
+  },
+  {
+   "n": 7,
+   "spine": "ย้อนการจับคู่ใน 7 วันเท่าที่ทำได้",
+   "here": "ดึงตำลึงผู้ขาย ผู้ซื้อที่ไม่เชื่อมโยงเก็บทองผูก"
+  },
+  {
+   "n": 8,
+   "spine": "กรอบ ±15%",
+   "here": "ขอบล่างปัดขึ้น ขอบบนปัดลง"
+  },
+  {
+   "n": 9,
+   "spine": "ไม่มีสุ่มฟรี",
+   "here": "สุ่มฟรีวันละ 1 ที่ตู้ถาวร นับการันตี"
+  },
+  {
+   "n": 10,
+   "spine": "เพดานผู้ขาย 40 × S ต่อสัปดาห์ · วาฬ 1.54",
+   "here": "30 × S · วาฬ 1.57 (นับออฟไลน์บัตร)",
+   "why": "balance_r1 C1 S6"
+  },
+  {
+   "n": 11,
+   "spine": "ราคาเปิด 150 ตายตัว",
+   "here": "ประมูลรวมในกรอบ ±15% ของ P0 = 150 × 0.05 ÷ สัดส่วนผู้เติมเงินวันที่ 4",
+   "why": "balance_r1 C2 F8"
+  },
+  {
+   "n": 12,
+   "spine": "KPI 5 เส้นคาดตายตัว",
+   "here": "เส้นคาด × 0.05 ÷ สัดส่วนผู้เติมเงิน active 7 วัน · วันที่ 4–20 กรอบ 0.80–1.25",
+   "why": "balance_r1 C3 S7"
+  },
+  {
+   "n": 13,
+   "spine": "ผู้เติมเงินขายทองได้ 22,915–27,652 ต่อวัน (5.5) · ขั้น 12 วันที่ 45 (10.3) ไม่ระบุสัดส่วนผู้เติมเงิน",
+   "here": "5%: 24,300–27,600 ราคา 143–196 ขั้น 12 วันที่ 48 · 8%: 14,400–16,500 ราคา 91–116 ขั้น 12 วันที่ 54 (ข้อ 8.1)",
+   "why": "balance_r2 C6 F44 S12 · เอกสารอย่างเดียว ไม่เปลี่ยนตัวเลข spine"
+  }
+ ],
+ "owner_decisions_open": [
+  "บัตรผ่านสายจ่ายไม่มีทองผูก",
+  "สุ่มฟรีนับการันตีตู้ถาวร",
+  "บัตรตลอดชีพให้ความสะดวก",
+  "เพดานผู้เยาว์และสุ่มของผู้เยาว์",
+  "คืนเงินกดผิด 7 วัน ปีละครั้ง",
+  "คงอันดับเติมเงินหรือตัด",
+  "ชื่อ VIP บนจอ",
+  "ชุดของด่วน 6,990/19,990 ตาม VIP",
+  "ตัดไอเทมไหมสายตรา",
+  "ทนายตอบ 5 คำถาม",
+  "รอบ 1: เพดานผู้ขาย 30 × S · ประมูลรวมเปิดกระดาน · เส้นคาด KPI 5 ปรับตามสัดส่วนผู้เติมเงิน",
+  "รอบ 1: ชุดของด่วนเอาหินออกใส่ของแต่ง · ชุดกู้ของ 60 ทอง"
+ ],
+ "sim": {
+  "notes": "โมดูลนี้ไม่มีก๊อกตำลึง · ตัวดูดตำลึงเดียวคือค่าธรรมเนียมกระดาน · ตำลึงบนกระดานเป็นการย้าย",
+  "faucets_tael": [],
+  "sinks_tael": [
+   {
+    "id": "K_BOARD_FEE",
+    "formula": "0.06 × ตำลึงที่ผู้ซื้อจ่าย",
+    "day60_server": 87300,
+    "pct_faucet_day60": 0.131
+   }
+  ],
+  "transfers_tael": [
+   {
+    "id": "T_BOARD",
+    "formula": "0.94 × ตำลึงที่ผู้ซื้อจ่าย ไปผู้ขาย",
+    "day60_server": 1367700
+   }
+  ],
+  "gold_flows_day60_server": {
+   "paid_in_per_day": 16733,
+   "sold_on_board": 7500,
+   "bound_created_board": 7050,
+   "gold_burned_fee": 450
+  },
+  "by_day": [
+   {
+    "day": 4,
+    "dau": 400,
+    "payers": 20,
+    "P": 150,
+    "fill_buy": 0.226,
+    "gold_sold": 3000,
+    "tael_moved": 450000,
+    "tael_burned": 27000,
+    "bound_created": 2820,
+    "gold_burned": 180,
+    "faucet": 22658434,
+    "burn_pct_faucet": 0.119
+   },
+   {
+    "day": 5,
+    "dau": 500,
+    "payers": 25,
+    "P": 158,
+    "fill_buy": 0.383,
+    "gold_sold": 3750,
+    "tael_moved": 592500,
+    "tael_burned": 35550,
+    "bound_created": 3525,
+    "gold_burned": 225,
+    "faucet": 28029671,
+    "burn_pct_faucet": 0.127
+   },
+   {
+    "day": 7,
+    "dau": 700,
+    "payers": 35,
+    "P": 174,
+    "fill_buy": 0.61,
+    "gold_sold": 5250,
+    "tael_moved": 913500,
+    "tael_burned": 54810,
+    "bound_created": 4935,
+    "gold_burned": 315,
+    "faucet": 38843120,
+    "burn_pct_faucet": 0.141
+   },
+   {
+    "day": 10,
+    "dau": 1000,
+    "payers": 50,
+    "P": 201,
+    "fill_buy": 0.869,
+    "gold_sold": 7500,
+    "tael_moved": 1507500,
+    "tael_burned": 90450,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 55917082,
+    "burn_pct_faucet": 0.162
+   },
+   {
+    "day": 14,
+    "dau": 1000,
+    "payers": 50,
+    "P": 181,
+    "fill_buy": 1.0,
+    "gold_sold": 6750,
+    "tael_moved": 1221750,
+    "tael_burned": 73305,
+    "bound_created": 6345,
+    "gold_burned": 405,
+    "faucet": 56017049,
+    "burn_pct_faucet": 0.131
+   },
+   {
+    "day": 21,
+    "dau": 1000,
+    "payers": 50,
+    "P": 171,
+    "fill_buy": 0.995,
+    "gold_sold": 7500,
+    "tael_moved": 1282500,
+    "tael_burned": 76950,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 59143694,
+    "burn_pct_faucet": 0.13
+   },
+   {
+    "day": 30,
+    "dau": 1000,
+    "payers": 50,
+    "P": 180,
+    "fill_buy": 0.994,
+    "gold_sold": 7500,
+    "tael_moved": 1350000,
+    "tael_burned": 81000,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 62176461,
+    "burn_pct_faucet": 0.13
+   },
+   {
+    "day": 45,
+    "dau": 1000,
+    "payers": 50,
+    "P": 190,
+    "fill_buy": 0.996,
+    "gold_sold": 7500,
+    "tael_moved": 1425000,
+    "tael_burned": 85500,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 65387810,
+    "burn_pct_faucet": 0.131
+   },
+   {
+    "day": 60,
+    "dau": 1000,
+    "payers": 50,
+    "P": 194,
+    "fill_buy": 1.0,
+    "gold_sold": 7500,
+    "tael_moved": 1455000,
+    "tael_burned": 87300,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 66493278,
+    "burn_pct_faucet": 0.131
+   },
+   {
+    "day": 75,
+    "dau": 1000,
+    "payers": 50,
+    "P": 195,
+    "fill_buy": 0.999,
+    "gold_sold": 7500,
+    "tael_moved": 1462500,
+    "tael_burned": 87750,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 67091128,
+    "burn_pct_faucet": 0.131
+   },
+   {
+    "day": 90,
+    "dau": 1000,
+    "payers": 50,
+    "P": 196,
+    "fill_buy": 1.0,
+    "gold_sold": 7500,
+    "tael_moved": 1470000,
+    "tael_burned": 88200,
+    "bound_created": 7050,
+    "gold_burned": 450,
+    "faucet": 67483600,
+    "burn_pct_faucet": 0.131
+   }
+  ],
+  "personas": {
+   "casual": {
+    "share_dau": 0.7,
+    "board_from": {
+     "server_day": 4,
+     "level": 30
+    },
+    "tael_to_board_share": 0.02,
+    "tael_to_board_day60": 1156,
+    "gold_bought_30d": 178.8,
+    "bound_board_30d": 168.0,
+    "bound_free_30d": 1330,
+    "pulls_30d": 3.66,
+    "free_pulls_30d": 30,
+    "tael_burned_day": 69,
+    "offline_h": 8,
+    "items_28d": {
+     "exp_potion_h": 10,
+     "grass": 200,
+     "ticket": 0,
+     "anti_drop_charm": 62.1
+    },
+    "free_bound_charm_share_from_plus13": 0.3,
+    "charms_30d": 66.5,
+    "charm_tael_saved_day": 2217,
+    "pulls_30d_before_plus13": 4.99
+   },
+   "hardcore": {
+    "share_dau": 0.25,
+    "board_from": {
+     "server_day": 4,
+     "level": 30
+    },
+    "tael_to_board_share": 0.03,
+    "tael_to_board_day60": 2592,
+    "gold_bought_30d": 400.8,
+    "bound_board_30d": 376.8,
+    "bound_free_30d": 1479,
+    "pulls_30d": 4.71,
+    "free_pulls_30d": 30,
+    "tael_burned_day": 156,
+    "offline_h": 8,
+    "option_B_pass": {
+     "tael_30d": 403520,
+     "gold_30d": 2080,
+     "before_plus13": {
+      "tael_30d": 312340,
+      "gold_30d": 1610
+     }
+    },
+    "items_28d": {
+     "exp_potion_h": 10,
+     "grass": 200,
+     "ticket": 0,
+     "anti_drop_charm": 69.0
+    },
+    "free_bound_charm_share_from_plus13": 0.3,
+    "charms_30d": 73.95,
+    "charm_tael_saved_day": 2465,
+    "pulls_30d_before_plus13": 6.19
+   },
+   "payer": {
+    "share_dau": 0.05,
+    "baht_30d": 1004,
+    "gold_in_30d": 10040,
+    "bound_in_30d": 3579,
+    "first_month_bound": 7270,
+    "sell_gold_day": 150,
+    "sell_from_day": 4,
+    "board_tael_day60": 27354,
+    "tael_burned_day": 1746,
+    "pulls_30d_bought": 16,
+    "free_pulls_30d": 30,
+    "exp_potion_use_h_per_day": 2.5,
+    "offline_h": 12,
+    "pass": "normal",
+    "items_28d": {
+     "exp_potion_h": 70,
+     "exp_potion_bought_h_30d": 18,
+     "grass": 1000,
+     "ticket": 5,
+     "cosmetic": 3,
+     "anti_drop_charm": 120
+    },
+    "charm_gold_30d": 771,
+    "charm_tael_saved_day": 4286,
+    "board_tael_day60_basis": "ผู้เติมเงิน 5% ราคา 194",
+    "board_tael_day_by_payer_share_r2": {
+     "0.05": [
+      24300,
+      27600
+     ],
+     "0.08": [
+      14400,
+      16500
+     ]
+    },
+    "noble12_day_by_payer_share_r2": {
+     "0.05": 48,
+     "0.08": 54,
+     "spine": 45
+    }
+   },
+   "whale_test": {
+    "share_dau": 0.001,
+    "baht_30d": 10000,
+    "gold_in_30d": 100000,
+    "sell_gold_week": 1340,
+    "board_tael_day": 34909,
+    "tael_burned_day": 2228,
+    "pulls_30d": 345,
+    "pass": "advanced",
+    "x_hardcore": 1.57,
+    "charm_gold_30d": 771,
+    "at_8pct_day60_r2": {
+     "price": 115,
+     "sell_gold_week": 2270,
+     "tael_week": 245387,
+     "baht_month": 973,
+     "x_hardcore": 1.57,
+     "note": "เพดานเป็นตำลึง ได้ตำลึงเท่าเดิม ขายทองมากขึ้น"
+    }
+   }
+  },
+  "by_level_band": [
+   {
+    "band": "1-20",
+    "L_mid": 10,
+    "S": 1200,
+    "guide_price": 29,
+    "board": "ปิด (Lv < 30)",
+    "seller_cap_tael_day": 12000,
+    "seller_cap_tael_week": 36000,
+    "payer_tael_per_day_selling_150": 0,
+    "tael_burned_per_payer_day": 0,
+    "casual_tael_to_board_day": 0,
+    "hardcore_tael_to_board_day": 0,
+    "casual_bound_per_day": 0,
+    "hardcore_bound_per_day": 0,
+    "tael_faucet_per_hour_from_module": 0
+   },
+   {
+    "band": "21-40",
+    "L_mid": 30,
+    "S": 3200,
+    "guide_price": 76,
+    "board": "เปิดเมื่อ Lv ≥ 30 และวันเซิร์ฟ ≥ 4",
+    "seller_cap_tael_day": 32000,
+    "seller_cap_tael_week": 96000,
+    "payer_tael_per_day_selling_150": 10716,
+    "tael_burned_per_payer_day": 684,
+    "casual_tael_to_board_day": 404,
+    "hardcore_tael_to_board_day": 924,
+    "casual_bound_per_day": 4.99,
+    "hardcore_bound_per_day": 11.39,
+    "tael_faucet_per_hour_from_module": 0,
+    "at_8pct_r2": {
+     "k": 0.625,
+     "payer_tael_per_day_selling_150": 6698,
+     "tael_burned_per_payer_day": 428,
+     "casual_bound_per_day": 7.98,
+     "hardcore_bound_per_day": 18.22
+    }
+   },
+   {
+    "band": "41-60",
+    "L_mid": 50,
+    "S": 5200,
+    "guide_price": 124,
+    "board": "เปิด (เซิร์ฟใหม่ใช้ by_day)",
+    "seller_cap_tael_day": 52000,
+    "seller_cap_tael_week": 156000,
+    "payer_tael_per_day_selling_150": 17484,
+    "tael_burned_per_payer_day": 1116,
+    "casual_tael_to_board_day": 657,
+    "hardcore_tael_to_board_day": 1501,
+    "casual_bound_per_day": 4.99,
+    "hardcore_bound_per_day": 11.39,
+    "tael_faucet_per_hour_from_module": 0,
+    "at_8pct_r2": {
+     "k": 0.625,
+     "payer_tael_per_day_selling_150": 10928,
+     "tael_burned_per_payer_day": 698,
+     "casual_bound_per_day": 7.98,
+     "hardcore_bound_per_day": 18.22
+    }
+   },
+   {
+    "band": "61-80",
+    "L_mid": 70,
+    "S": 7200,
+    "guide_price": 171,
+    "board": "เปิด",
+    "seller_cap_tael_day": 72000,
+    "seller_cap_tael_week": 216000,
+    "payer_tael_per_day_selling_150": 24111,
+    "tael_burned_per_payer_day": 1539,
+    "casual_tael_to_board_day": 910,
+    "hardcore_tael_to_board_day": 2078,
+    "casual_bound_per_day": 4.99,
+    "hardcore_bound_per_day": 11.39,
+    "tael_faucet_per_hour_from_module": 0,
+    "at_8pct_r2": {
+     "k": 0.625,
+     "payer_tael_per_day_selling_150": 15069,
+     "tael_burned_per_payer_day": 962,
+     "casual_bound_per_day": 7.98,
+     "hardcore_bound_per_day": 18.22
+    }
+   },
+   {
+    "band": "81-100",
+    "L_mid": 90,
+    "S": 9200,
+    "guide_price": 219,
+    "board": "เปิด (แพตช์)",
+    "seller_cap_tael_day": 92000,
+    "seller_cap_tael_week": 276000,
+    "payer_tael_per_day_selling_150": 30879,
+    "tael_burned_per_payer_day": 1971,
+    "casual_tael_to_board_day": 1163,
+    "hardcore_tael_to_board_day": 2655,
+    "casual_bound_per_day": 4.99,
+    "hardcore_bound_per_day": 11.39,
+    "tael_faucet_per_hour_from_module": 0,
+    "at_8pct_r2": {
+     "k": 0.625,
+     "payer_tael_per_day_selling_150": 19299,
+     "tael_burned_per_payer_day": 1232,
+     "casual_bound_per_day": 7.98,
+     "hardcore_bound_per_day": 18.22
+    }
+   },
+   {
+    "band": "101-120",
+    "L_mid": 110,
+    "S": 11200,
+    "guide_price": 267,
+    "board": "เปิด (แพตช์)",
+    "seller_cap_tael_day": 112000,
+    "seller_cap_tael_week": 336000,
+    "payer_tael_per_day_selling_150": 37647,
+    "tael_burned_per_payer_day": 2403,
+    "casual_tael_to_board_day": 1416,
+    "hardcore_tael_to_board_day": 3232,
+    "casual_bound_per_day": 4.99,
+    "hardcore_bound_per_day": 11.39,
+    "tael_faucet_per_hour_from_module": 0,
+    "at_8pct_r2": {
+     "k": 0.625,
+     "payer_tael_per_day_selling_150": 23529,
+     "tael_burned_per_payer_day": 1502,
+     "casual_bound_per_day": 7.98,
+     "hardcore_bound_per_day": 18.22
+    }
+   }
+  ],
+  "price_model": {
+   "supply_gold_day": "Σ ผู้เติมเงิน min(150, ทองพร้อมขาย, สิทธิ์ระดับ, เพดานตำลึง ÷ (ราคา × 0.94)) · เพดานตำลึง = min(10 × S, 30 × S − ที่รับ 6 วันก่อน)",
+   "demand_tael_day": "Σ ฟรีเล่นน้อย 0.02 × รายได้ + Σ ฟรีขยัน 0.03 × รายได้",
+   "eq_price": "อุปสงค์ตำลึง ÷ อุปทานทอง",
+   "next_price": "เข้าหาราคาสมดุล ≤ ±5% ต่อวัน · วันที่ 4 เริ่มที่ P0 = ปัด(150 × 0.05 ÷ สัดส่วนผู้เติมเงิน) แทนประมูลรวม (sim.js cash.openAuto)",
+   "fill_buy": "min(1, อุปทาน × ราคา ÷ อุปสงค์)",
+   "fill_sell": "min(1, อุปสงค์ ÷ (อุปทาน × ราคา))",
+   "sinks": "ตำลึง 0.06 × ที่จับคู่ · ทอง 0.06 × ที่จับคู่",
+   "check_day60": {
+    "demand_tael": 1457200,
+    "gold_at_194": 7511,
+    "supply_gold": 7500
+   },
+   "guide_kpi5": "ฐาน × 0.05 ÷ สัดส่วนผู้เติมเงินในผู้เล่น active (sim.js cash.guideSupplyAdj)",
+   "charms_to_upgrade": "ผู้เติมเงิน 30 ใบต่อสัปดาห์ · คนฟรี 0.3 × ทองผูกฟรี ÷ 6 · รวม ≤ 30 ต่อสัปดาห์ · เริ่มเมื่อขั้นสูงสุด ≥ +12",
+   "demand_option_B": "2,080 × ราคา ÷ 30 ต่อคนที่ตี +13 แล้ว (1,610 ก่อน +13)"
+  },
+  "charm_substitution": {
+   "code": "G_SHOP_CHARM",
+   "replaces": "K_ENH ยันต์โรงช่างหลวง 1,000 ตำลึงต่อใบ",
+   "tael_per_day_per_player_plus13": {
+    "payer": 4286,
+    "hardcore": 2465,
+    "casual": 2217
+   },
+   "counted_in": "upgrade 21.4 (ไม่นับซ้ำในโมดูลนี้)"
+  }
+ },
+ "revision_r1": [
+  {
+   "id": "C1",
+   "what": "เพดานตำลึงของผู้ขายทองต่อสัปดาห์",
+   "from": "40 × S(L)",
+   "to": "30 × S(L) · ต่อวันคง 10 × S(L)",
+   "sections": [
+    "6.6",
+    "8.2",
+    "17.3",
+    "17.4"
+   ],
+   "effect": {
+    "whale_gap_from": 1.7,
+    "whale_gap_to": 1.57,
+    "whale_gold_week_at_194": 1349.0,
+    "whale_baht_month_at_194": 578,
+    "whale_baht_month_old": 770,
+    "payer_150_per_day_capped": false
+   }
+  },
+  {
+   "id": "C2",
+   "what": "ราคาเปิดกระดานวันที่ 4",
+   "from": "150 ตายตัว",
+   "to": "ประมูลรวมรอบแรก กรอบ ±15% ของ P0 = ปัด(150 × 0.05 ÷ สัดส่วนผู้เติมเงินวันที่ 4) · บีบสัดส่วน 2.5–10%",
+   "sections": [
+    "6.2",
+    "6.3",
+    "6.4",
+    "6.5",
+    "17.5"
+   ],
+   "effect": {
+    "P0_at_5pct": 150,
+    "P0_at_8pct": 94
+   }
+  },
+  {
+   "id": "C3",
+   "what": "เส้นคาด KPI 5 บนแดชบอร์ด",
+   "from": "ตายตัว (expected_path และ S ÷ 42)",
+   "to": "ฐาน × (0.05 ÷ สัดส่วนผู้เติมเงินในผู้เล่น active 7 วัน) · วันที่ 4–20 กรอบ 0.80–1.25 (spine S7)",
+   "sections": [
+    "6.5",
+    "12",
+    "12.1"
+   ],
+   "effect": {
+    "kpi5_after_day21_8pct_from": [
+     0.56,
+     0.6
+    ],
+    "kpi5_after_day21_8pct_to": [
+     0.88,
+     0.97
+    ],
+    "kpi5_day10_14": [
+     0.81,
+     0.87
+    ]
+   }
+  },
+  {
+   "id": "C4",
+   "what": "ของช่วยตีบวกในร้านทอง",
+   "from": "หินกันถอย 100 (≤ 60/สัปดาห์) · หินกันแตก 300 (≤ 20) · ล็อกบรรทัดสุ่มค่า 30",
+   "to": "ยันต์กันถอยขั้น 6 ทอง (10 ใบ 60) ≤ 30 ใบต่อสัปดาห์ ตาม upgrade 3.9 · ลบหินกันแตก (ไม่มีของแตก) · ลบล็อกบรรทัด (ตำลึงตาม upgrade 5.1)",
+   "sections": [
+    "2.3",
+    "4.3",
+    "5.3",
+    "5.4",
+    "5.5",
+    "5.6",
+    "5.13",
+    "7.1",
+    "7.2",
+    "8.1",
+    "17.3"
+   ],
+   "effect": {
+    "weekly_cap_gold_from": 12000,
+    "weekly_cap_gold_to": 180,
+    "gold_30d": 771,
+    "baht_30d": 77,
+    "battle_pass_anti_drop": "ลบ ไม่ใส่ยันต์แทน",
+    "popup_rescue": "เหลือแบบเดียว 60 ทอง"
+   }
+  },
+  {
+   "id": "C5",
+   "what": "ทองผูกฟรีของคนฟรีไปไหน",
+   "from": "cash 7.2 สุ่มทั้งหมด · upgrade 21.4 30% ไปยันต์ (ขัดกัน)",
+   "to": "ก่อนตี +13 ไปสุ่มทั้งหมด · ตั้งแต่ตี +13 30% ซื้อยันต์ 70% ไปสุ่ม · ทองผูกจากกระดานไปสุ่ม (ตรงกับ upgrade 21.4 และ sim.js freeBoundCharmShare 0.3)",
+   "sections": [
+    "4.3",
+    "7.2",
+    "17.3",
+    "17.5"
+   ],
+   "effect": {
+    "hardcore_charms_30d": 73.95,
+    "hardcore_tael_saved_day": 2465,
+    "casual_charms_30d": 66.5,
+    "casual_tael_saved_day": 2217,
+    "hardcore_pulls_30d": [
+     6.19,
+     4.71
+    ],
+    "casual_pulls_30d": [
+     4.99,
+     3.66
+    ]
+   }
+  }
+ ],
+ "charm_weekly_cap": {
+  "charms": 30,
+  "gold": 180,
+  "gold_30d": 771,
+  "baht_30d": 77,
+  "reason": "upgrade 3.9 · เดิมหินกันถอยและหินกันแตก 12,000 ทองต่อสัปดาห์ ≈ 5,143 บาทต่อเดือน",
+  "tael_equiv_per_day": 4286
+ },
+ "board_params_r1_fields": {
+  "seller_cap_week_S": 30,
+  "open_auction_minutes": 60,
+  "open_auction_band": 0.15,
+  "open_ref_payer_share": 0.05,
+  "open_payer_share_clamp": [
+   0.025,
+   0.1
+  ],
+  "guide_ref_payer_share": 0.05
+ },
+ "revision_r2": [
+  {
+   "id": "C6",
+   "what": "รายได้กระดานของผู้เติมเงินขึ้นกับสัดส่วนผู้เติมเงิน",
+   "from": "ค่าเดียว 27,354 ต่อวันที่ราคา 194 (spine 27,294)",
+   "to": "8%: 14,400–16,500 (ราคา 91–116) ขั้น 12 วันที่ 54 · 5%: 24,300–27,600 (ราคา 143–196) ขั้น 12 วันที่ 48",
+   "sections": [
+    "0",
+    "8.1",
+    "15",
+    "17.2",
+    "17.3",
+    "17.4"
+   ],
+   "kind": "เอกสาร",
+   "effect": {
+    "ratio_8_over_5": 0.6,
+    "noble12_gate_day": 44,
+    "payer_x_hardcore": {
+     "0.08": 1.14,
+     "0.05": 1.3
+    },
+    "whale_x_hardcore": 1.57
+   }
+  },
+  {
+   "id": "C7",
+   "what": "บัตรรายเดือนของคนฟรี",
+   "from": "7.3 บอกเหตุผลที่ห้ามอย่างเดียว",
+   "to": "คงกติกา 7.3 · ทางเทียบเท่าที่ผู้เติมเงิน 8%: ทองผูกจากกระดาน 1,490 ฟรีขยันวันที่ 69 · บัตรผ่านซีซัน ฟรีเล่นน้อยวันที่ 75 ฟรีขยันวันที่ 54",
+   "sections": [
+    "0",
+    "7.3",
+    "17.3"
+   ],
+   "kind": "เอกสาร",
+   "effect": {
+    "casual_board_bound_1490": "ไม่ถึงใน 90 วัน",
+    "at_5pct": {
+     "board_bound_1490": "ไม่ถึงทั้งสองแบบ",
+     "pass_casual": 83,
+     "pass_hardcore": 64
+    }
+   }
+  }
+ ]
+}

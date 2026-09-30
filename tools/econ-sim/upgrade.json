@@ -1,0 +1,3660 @@
+{
+ "meta": {
+  "file": "upgrade.md",
+  "module": "upgrade",
+  "date": "2026-09-29",
+  "unit": "ตำลึง (tael) ทุกตัวเลข ยกเว้นที่เขียนว่าทอง",
+  "binding": [
+   "spine.md",
+   "spine.json"
+  ],
+  "model": [
+   "design/_upgrade_work/upg_model.py",
+   "upg_sim.py",
+   "upg_report.py",
+   "make_json.py"
+  ],
+  "note": "ตัวจีนในไฟล์นี้ไม่มี ชื่อบนจอเป็นไทยทั้งหมด",
+  "revisions": [
+   {
+    "round": 1,
+    "date": "2026-09-29",
+    "source": "balance_r1.md ข้อ 4.4 U1–U5",
+    "section": "upgrade.md ข้อ 22 แก้ตามผลจำลองรอบ 1",
+    "backup": "design/_upgrade_r1/upgrade_before.json · upgrade_before.md",
+    "script": "design/_upgrade_r1/apply_r1_json.py",
+    "check": "design/_upgrade_r1/env/sim/sim.js + r1_changes.json + u3_gem1500.json (ผสม 70/22/8)",
+    "changed_keys": [
+     "formulas.combine_fee",
+     "formulas.gem_combine",
+     "formulas.set_craft",
+     "formulas.gem_shard_combine",
+     "formulas.stone_ladder",
+     "formulas.granary",
+     "budget_share",
+     "materials",
+     "gems",
+     "set_break",
+     "sim.boss_supply_per_day",
+     "sim.capacity_Lv80",
+     "sim.map_drop_mix_value_share_note",
+     "sim.r1_check",
+     "deviations",
+     "revision_r1"
+    ],
+    "unchanged": "enhance · troops · horses · reroll · dismantle · nobility · gold_shop · whale_gap · kpi · ตัวเลขแบบจำลองเดิมใน sim.personas sim.persona_90d sim.milestones sim.materials_per_day_at_cap (แบบจำลองของโมดูลก่อนรอบ 1 · ค่ารอบ 1 อยู่ใน sim.r1_check)"
+   },
+   {
+    "round": 2,
+    "date": "2026-09-29",
+    "source": "balance_r2.md ข้อ 4.3 U6–U9",
+    "section": "upgrade.md ข้อ 23 แก้ตามผลจำลองรอบ 2",
+    "backup": "design/_upgrade_r2/upgrade_before.json · upgrade_before.md",
+    "script": "design/_upgrade_r2/apply_r2_json.py",
+    "check": "design/sim/sim.js ฉาก r2_changes (out/r2_changes_70_22_8.json · 70_25_5)",
+    "changed_keys": [
+     "materials",
+     "materials_note",
+     "formulas.granary",
+     "formulas.npc_buy_rate",
+     "formulas.set_craft",
+     "formulas.set_tiers",
+     "formulas.breakthrough",
+     "set_break",
+     "set_break_note",
+     "gems_note",
+     "horses.hay_total_note",
+     "sim.faucets.F_NPC_BUYBACK_materials",
+     "sim.map_drop_mix_value_share_note",
+     "sim.boss_supply_per_day",
+     "sim.r1_check.follow_up_r2",
+     "sim.r1_check.follow_up_r2_status",
+     "sim.r2_check",
+     "deviations",
+     "revision_r2"
+    ],
+    "unchanged": "gems (ตาราง) · enhance · troops · horses.stars_Lv80 · reroll · dismantle · nobility · gold_shop · whale_gap · kpi · budget_share · ตัวเลขแบบจำลองเดิมใน sim.personas sim.persona_90d sim.milestones · ตำลึงทุกสูตร"
+   }
+  ]
+ },
+ "formulas": {
+  "S": "100 × (L + 2)  (spine)",
+  "G": "(L + 2) ÷ 12  (spine)",
+  "g": "ปัด G(L) เป็นจำนวนเต็ม ขั้นต่ำ 1",
+  "g_table": {
+   "1": 1,
+   "10": 1,
+   "20": 2,
+   "30": 3,
+   "40": 4,
+   "50": 4,
+   "60": 5,
+   "70": 6,
+   "80": 7,
+   "90": 8,
+   "100": 9,
+   "110": 9,
+   "120": 10
+  },
+  "rounding": "ค่าธรรมเนียมทุกตัวปัดลงเป็นจำนวนเต็ม",
+  "combine_fee": "20% ของราคากลางเริ่มต้นของวัตถุดิบที่ใส่ (หิน 5 → 1 · อัญมณี 3 → 1) สำเร็จ 100% · หินต้น → กลาง 100 · กลาง → สูง 600 · อัญมณีขั้น 1 → 2 = 20% × 3 × 1,500 = 900 · รวมเศษอัญมณี 10 → อัญมณีขั้น 1 ไม่มีค่ารวม",
+  "enhance_fee": "f(t) × S(เลเวลของ) ต่อครั้งที่กด · f(t) = 0.05 t ที่ t ≤ 10 (spine) · ตารางที่ t ≥ 11",
+  "enhance_stones": "หินต้นและหินกลาง = จำนวนในตาราง × g(เลเวลของ) · หินสูง = 3 ต่อครั้ง (ของ Lv 61–90) · 4 (Lv 91–120) · +20 ใช้สองเท่า",
+  "charm": "ยันต์กันถอยขั้น = q(t) × g(เลเวลของ) ใบ ต่อครั้งที่พลาด · q = 1 (+13–+15) · 2 (+16–+18) · 3 (+19–+20) · ใช้เฉพาะเมื่อพลาด",
+  "pity": "พลาดติดกัน 10 ครั้งโดยขั้นไม่ลด ครั้งที่ 11 สำเร็จแน่",
+  "cap_by_item_level": {
+   "1-20": 10,
+   "21-40": 12,
+   "41-60": 15,
+   "61+": 20
+  },
+  "transfer": "0.3 × Σ f(1..k) × S(เลเวลของใหม่) · ย้ายขั้นและอัญมณีไปของช่องเดียวกันที่เลเวลเท่าหรือสูงกว่า",
+  "troop_level": "S(เลเวลทหารใหม่)  (spine) · เลเวลทหาร ≤ เลเวลผู้เล่น",
+  "troop_promo": "T1: 1 × S(12) · T2–T5: 3 × S(เลเวลขั้นต่ำ) + ตราเลื่อนชั้น 1/3/6/10",
+  "troop_refine": "0.5 × r² × S(L) + ตราทัพ 2r · ขั้นสูงสุด = ปัดลง((L − 30) ÷ 5) ไม่เกิน 10 · ต้องเป็น T2 ขึ้นไป",
+  "horse_star": "0.4 × s × S(L) + หญ้าม้า 30 s + ตราม้า 2 (s − 5) เมื่อ s ≥ 6 · ดาวสูงสุด = ปัดลง(L ÷ 8)",
+  "border_horse": "50,000 + ตราม้าถิ่น 20  (spine) · ตราม้า 5,000 + ตราม้าถิ่น 2 ต่อเม็ด ไม่เกิน 10 ต่อสัปดาห์",
+  "legend_horse": "ขนแผงม้ากระต่ายแดง 40 + ค่าฝึก 5 × S(L)",
+  "gem_cap": "ขั้นสูงสุด = 2 + ปัดลง(L ÷ 20) · เปิดที่ Lv 40",
+  "gem_combine": "3 เม็ดขั้น k → 1 เม็ดขั้น k + 1 · ค่าหลอม 0.6 × ราคากลางขั้น k · ราคากลางขั้น 1 = 1,500 (ตรง drops · รอบ 1 U3) ขั้น 1 → 2 = 900",
+  "gem_insert": "0.02 × k × S(L)",
+  "gem_remove": "0.1 × k × S(L) อัญมณีไม่หาย",
+  "reroll": "ต่อครั้ง: บรรทัดที่สุ่ม บรรทัดละ หินสุ่มค่า 1 + 0.05 × S(เลเวลของ) · ล็อก m บรรทัด 0.2 × m² × S(เลเวลของ)",
+  "set_craft": "ของม่วงขึ้นไปเลเวลเท่าเซ็ต + ชิ้นส่วนชุด 10 + 2 × S(เลเวลเซ็ต) · เซ็ตตอนเปิด Lv 60 · 80 แพตช์ 100 · 120 (รอบ 2 U7 ตัดเซ็ต Lv 40 · รอบ 1 U1 เดิม 5 ชิ้น)",
+  "breakthrough": "เลเวลของ +10 (ไม่เกินเลเวลผู้เล่น) · 3 × S(เลเวลใหม่) + เหล็กร้อยหลอม g(เลเวลใหม่) · ของม่วงขึ้นไป Lv 50+ · เหล็กจากบอสพันธมิตร 0.6 ก้อนต่อคนต่อวันเมื่อ Lv < 70 · 0.3 ตั้งแต่ Lv 70 (drops D15 · รอบ 2 U8 ค่าธรรมเนียมเท่าเดิม)",
+  "dismantle": "หินต้น = ราคารับซื้อ NPC ของชิ้นนั้น ÷ 100 (เศษสุ่มตามสัดส่วน) · ไม่มีค่าธรรมเนียม",
+  "nobility": "ขั้นถัดไป = 2 × ขั้นก่อน (spine) · 9 = 100,000",
+  "gem_shard_combine": "เศษอัญมณี 10 → อัญมณีขั้น 1 · ไม่มีค่ารวม · เศษ 150 × 10 = 1,500",
+  "gem_ref": "ราคากลางขั้น k = ปัดหลักสิบของ 3.6 × ราคาขั้น k − 1 · ขั้น 1 = 1,500 (เดิม 200 ทั้งตารางจึง × 7.5)",
+  "stone_ladder": "ขั้นบันไดเดียว: ต้น 100 · กลาง = 5 ต้น + 100 = 600 · สูง = 5 กลาง + 600 = 3,600 · ขั้นหินผูกกับขั้นตีบวก (+1–+10 / +11–+15 / +16–+20) ไม่ผูกกับเลเวลของ · หินจากมอนแผนที่ฟาร์มเป็นหินต้นอย่างเดียว หินกลางและสูงได้จากหลอมและบอส (รอบ 1 U4 · drops D7)",
+  "granary": "ยุ้งฉาง NPC ขายแค่หินตีบวกขั้นต้น 200 และหญ้าม้า 40 (200% ของราคากลาง ผูกตัว) · ของอื่น NPC ไม่ขาย · NPC รับซื้อ 20% (หินต้น หญ้าม้า · หินกลาง 120 หินสูง 720 ตามขั้นบันไดหินของ drops) หรือ 10% (ของอื่น) ของราคากลางเริ่มต้น · ≤ 1 × S(L) ต่อวัน (spine 7.3 · npc 3.8 · trade 5.6 · รอบ 1 U2 · รอบ 2 U6)",
+  "npc_buy_rate": {
+   "granary_and_stone_ladder": 0.2,
+   "other_tradable_materials": 0.1,
+   "daily_cap": "1 × S(L) ต่อตัวละคร",
+   "source": "trade 5.6 · 5.8 · npc N5 · drops 3.1 · รอบ 2 U6"
+  },
+  "set_tiers": {
+   "launch": [
+    60,
+    80
+   ],
+   "patch": [
+    100,
+    120
+   ],
+   "removed_r2": [
+    40
+   ],
+   "Lv40_59_world_boss_pieces": "ชิ้นส่วนเซ็ต Lv 60"
+  }
+ },
+ "materials": [
+  {
+   "name": "หินตีบวกขั้นต้น",
+   "ref": 100,
+   "npc_buy": 20,
+   "npc_sell": 200,
+   "tradable": true,
+   "source": "มอนแผนที่ฟาร์มทุกตัว (หินจากฟาร์มเป็นขั้นต้นอย่างเดียว) · บอส · ย่อยของ",
+   "use": "ตีบวก +1 ถึง +10 · หลอม 5 → ขั้นกลาง",
+   "r1": "U4: ฟาร์มดรอปหินต้นอย่างเดียว · ยุ้งฉางยังขาย 200"
+  },
+  {
+   "name": "หินตีบวกขั้นกลาง",
+   "ref": 600,
+   "npc_buy": 120,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "หลอม 5 ขั้นต้น + 100 · บอสภาคสนาม · ดันเจี้ยนประจำวัน",
+   "use": "+11 ถึง +15 · หลอม 5 → ขั้นสูง",
+   "r1": "U4: ไม่ดรอปจากมอนแผนที่ฟาร์ม (เดิมหัวหน้ากลุ่มมอน)",
+   "r2": "U6: คง NPC รับซื้อ 20% ตาม drops (ขั้นบันไดหิน · แบบจำลองนับหินทุกขั้นเป็นหินต้น) · trade 5.6 เขียนกลุ่ม 10% ให้ trade แก้ถ้อยคำ"
+  },
+  {
+   "name": "หินตีบวกขั้นสูง",
+   "ref": 3600,
+   "npc_buy": 720,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "หลอม 5 ขั้นกลาง + 600 · บอสโลก · บอสพันธมิตร",
+   "use": "+16 ถึง +20",
+   "r1": "U4: ได้จากหลอมและบอสเท่านั้น",
+   "r2": "U6: คง NPC รับซื้อ 20% ตาม drops (ขั้นบันไดหิน · แบบจำลองนับหินทุกขั้นเป็นหินต้น) · trade 5.6 เขียนกลุ่ม 10% ให้ trade แก้ถ้อยคำ"
+  },
+  {
+   "name": "ยันต์กันถอยขั้น",
+   "ref": null,
+   "npc_buy": null,
+   "npc_sell": 1000,
+   "tradable": false,
+   "source": "โรงช่างหลวง 1,000 · ร้านทอง 6 ทอง (สัปดาห์ละ 30 ใบ) · กิจกรรม",
+   "use": "กันขั้นลดเมื่อพลาดที่ +13 ขึ้นไป"
+  },
+  {
+   "name": "เศษอัญมณี",
+   "ref": 150,
+   "npc_buy": 15,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "มอน Lv 35+ · ห่อวัตถุดิบบอส [drops 3.1]",
+   "use": "รวม 10 → อัญมณีขั้น 1 ไม่มีค่ารวม",
+   "r1": "U3: เพิ่มแถว (1/10 ของอัญมณีขั้น 1 ตาม drops)",
+   "r2": "U6: NPC รับซื้อ 30 → 15 (10% ตาม drops · trade 5.6)"
+  },
+  {
+   "name": "อัญมณีขั้น 1 (ทับทิม นิล มรกต ไพลิน)",
+   "ref": 1500,
+   "npc_buy": 150,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "รวมเศษ 10 ชิ้น · ดันเจี้ยน · บอส [drops] · รวมราว 3.2–3.3 เม็ดต่อคนต่อวัน [drops D8 · balance]",
+   "use": "ใส่เบ้า · หลอม 3 → ขั้นถัดไป",
+   "r1": "U3: ราคากลาง 200 → 1,500 (= เศษ 10 × 150 ตรง drops) · U2: ลบ NPC ขาย 400",
+   "r2": "U6: NPC รับซื้อ 300 → 150 (10%) · drops D14 ตัวคูณดรอป Lv < 50 × 0.8 · Lv 50–79 × 1.1 · Lv 80 × 0.9"
+  },
+  {
+   "name": "หินสุ่มค่า",
+   "ref": 300,
+   "npc_buy": 30,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "มอนแผนที่ฟาร์ม Lv 30+",
+   "use": "สุ่มค่าพิเศษ บรรทัดละ 1",
+   "r1": "U2: ลบ NPC ขาย 300 (ขัด npc 3.8) · ขาดแล้วซื้อจากตลาด",
+   "r2": "U6: ราคากลาง 150 → 300 ตาม drops (= 3 × หินต้น) · รับซื้อ 30 = 10%"
+  },
+  {
+   "name": "หญ้าม้า",
+   "ref": 20,
+   "npc_buy": 4,
+   "npc_sell": 40,
+   "tradable": true,
+   "source": "มอนแผนที่ฟาร์ม",
+   "use": "ดาวม้า 30 × ดาว",
+   "r1": "U2: ยุ้งฉางยังขาย 80",
+   "r2": "U6: 40 / 8 / 80 → 20 / 4 / 40 ตาม drops และ npc (ยุ้งฉาง 20% / 200%) · drops D10 ตัวคูณดรอป Lv 60–69 × 0.9 · 70–79 × 0.5 · 80 × 0.45"
+  },
+  {
+   "name": "ตราม้า",
+   "ref": null,
+   "npc_buy": null,
+   "npc_sell": "5,000 + ตราม้าถิ่น 2",
+   "tradable": false,
+   "source": "ม้าซ้ำตัวละ 10 · ตลาดม้าชายแดน · ร้านอีเวนต์",
+   "use": "ดาว 6–10"
+  },
+  {
+   "name": "ตราม้าถิ่น",
+   "ref": null,
+   "npc_buy": null,
+   "npc_sell": null,
+   "tradable": false,
+   "source": "เควสรายวันครบชุด วันละ 1 (Lv 30+)",
+   "use": "ตลาดม้าชายแดน"
+  },
+  {
+   "name": "ตราเลื่อนชั้น",
+   "ref": 2000,
+   "npc_buy": 200,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "ด่านเรื่องราวผ่านครั้งแรก ด่านละ 1 · ดันเจี้ยนประจำวัน 12.5% ต่อวัน (drops D11 รอบ 2 · เดิม 50%) · ตลาด",
+   "use": "เลื่อนชั้นทหาร T2/T3/T4/T5 = 1/3/6/10",
+   "r1": "U2: ลบ NPC ขาย 4,000 (ขัด npc 3.8) · ขาดแล้วซื้อจากตลาด",
+   "r2": "U6: NPC รับซื้อ 400 → 200 (10%) · drops D11 × 0.25 · T4 วันที่ 31 / 16 / 14 (แบบจำลองรอบ 2)"
+  },
+  {
+   "name": "ตราทัพ",
+   "ref": 600,
+   "npc_buy": 60,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "มอนแผนที่ฟาร์ม (หายาก) · ดันเจี้ยนประจำวัน 1",
+   "use": "ขั้นเกลาทหาร 2 × ขั้น",
+   "r1": "U2: ลบ NPC ขาย 1,000 (ขัด npc 3.8) · ขาดแล้วซื้อจากตลาด",
+   "r2": "U6: 500 / 100 → 600 / 60 ตาม drops (2 เท่าของหินสุ่มค่า · รับซื้อ 10%) · drops D12 ตัวคูณดรอป Lv < 70 × 0.1 · 70–79 × 0.4 · 80 × 1.0"
+  },
+  {
+   "name": "ชิ้นส่วนชุด (เซ็ต Lv 60 / 80)",
+   "ref": 800,
+   "npc_buy": 80,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "บอสโลก: ร่วมตี 1 · อันดับบน 10% +1 · 3 อันดับแรก +2 · บอสพันธมิตร · ร้านอีเวนต์ · บอสโลกช่วง Lv 40–59 ให้ชิ้นส่วนเซ็ต Lv 60 (รอบ 2 U7)",
+   "use": "หลอมเซ็ต 10 ต่อชิ้น",
+   "r1": "U1: 5 → 10 ชิ้นต่อชิ้นของ · ราคากลาง 1,500 → 800 ตาม drops (10 ชิ้น = 8,000 ≈ 49% ของค่าหลอมเซ็ต Lv 80)",
+   "r2": "U6: NPC รับซื้อ 160 → 80 (10%) · U7: ตัดเซ็ต Lv 40"
+  },
+  {
+   "name": "เหล็กร้อยหลอม",
+   "ref": 1000,
+   "npc_buy": 100,
+   "npc_sell": null,
+   "tradable": true,
+   "source": "บอสพันธมิตร (เข้าคลังพันธมิตร) 0.6 ก้อนต่อคนต่อวันเมื่อ Lv < 70 · 0.3 ตั้งแต่ Lv 70 (drops D15 · รอบ 2 U8)",
+   "use": "ทะลวงขั้น g(เลเวลใหม่)",
+   "r1": "U2: ลบ NPC ขาย 2,000 (ขัด npc 3.8) · ขาดแล้วซื้อจากตลาด",
+   "drops_name": "ศิลาทะลวงขั้น",
+   "r2": "U6: NPC รับซื้อ 200 → 100 (10%) · U8: ดรอปตาม drops D15 ค่าทะลวงขั้นเท่าเดิม"
+  }
+ ],
+ "enhance": {
+  "rules": [
+   {
+    "t": 1,
+    "fee_h": 0.05,
+    "grade": "ต้น",
+    "stones_x_g": 1,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 2,
+    "fee_h": 0.1,
+    "grade": "ต้น",
+    "stones_x_g": 1,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 3,
+    "fee_h": 0.15,
+    "grade": "ต้น",
+    "stones_x_g": 1,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 4,
+    "fee_h": 0.2,
+    "grade": "ต้น",
+    "stones_x_g": 2,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 5,
+    "fee_h": 0.25,
+    "grade": "ต้น",
+    "stones_x_g": 2,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 6,
+    "fee_h": 0.3,
+    "grade": "ต้น",
+    "stones_x_g": 2,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 7,
+    "fee_h": 0.35,
+    "grade": "ต้น",
+    "stones_x_g": 3,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 8,
+    "fee_h": 0.4,
+    "grade": "ต้น",
+    "stones_x_g": 3,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 9,
+    "fee_h": 0.45,
+    "grade": "ต้น",
+    "stones_x_g": 3,
+    "p": 1.0,
+    "fail": "none",
+    "charms_x_g": 0,
+    "attempts": 1.0
+   },
+   {
+    "t": 10,
+    "fee_h": 0.5,
+    "grade": "ต้น",
+    "stones_x_g": 3,
+    "p": 0.8,
+    "fail": "stay",
+    "charms_x_g": 0,
+    "attempts": 1.25
+   },
+   {
+    "t": 11,
+    "fee_h": 0.6,
+    "grade": "กลาง",
+    "stones_x_g": 1,
+    "p": 0.7,
+    "fail": "stay",
+    "charms_x_g": 0,
+    "attempts": 1.43
+   },
+   {
+    "t": 12,
+    "fee_h": 0.7,
+    "grade": "กลาง",
+    "stones_x_g": 1,
+    "p": 0.6,
+    "fail": "stay",
+    "charms_x_g": 0,
+    "attempts": 1.67
+   },
+   {
+    "t": 13,
+    "fee_h": 0.8,
+    "grade": "กลาง",
+    "stones_x_g": 1,
+    "p": 0.5,
+    "fail": "drop",
+    "charms_x_g": 1,
+    "attempts": 2.0
+   },
+   {
+    "t": 14,
+    "fee_h": 0.9,
+    "grade": "กลาง",
+    "stones_x_g": 1,
+    "p": 0.45,
+    "fail": "drop",
+    "charms_x_g": 1,
+    "attempts": 2.22
+   },
+   {
+    "t": 15,
+    "fee_h": 1.0,
+    "grade": "กลาง",
+    "stones_x_g": 2,
+    "p": 0.4,
+    "fail": "drop",
+    "charms_x_g": 1,
+    "attempts": 2.49
+   },
+   {
+    "t": 16,
+    "fee_h": 1.2,
+    "grade": "สูง",
+    "stones_x_g": 1,
+    "p": 0.35,
+    "fail": "drop",
+    "charms_x_g": 2,
+    "attempts": 2.83
+   },
+   {
+    "t": 17,
+    "fee_h": 1.4,
+    "grade": "สูง",
+    "stones_x_g": 1,
+    "p": 0.3,
+    "fail": "drop",
+    "charms_x_g": 2,
+    "attempts": 3.27
+   },
+   {
+    "t": 18,
+    "fee_h": 1.6,
+    "grade": "สูง",
+    "stones_x_g": 1,
+    "p": 0.25,
+    "fail": "drop",
+    "charms_x_g": 2,
+    "attempts": 3.83
+   },
+   {
+    "t": 19,
+    "fee_h": 1.8,
+    "grade": "สูง",
+    "stones_x_g": 1,
+    "p": 0.2,
+    "fail": "drop",
+    "charms_x_g": 3,
+    "attempts": 4.57
+   },
+   {
+    "t": 20,
+    "fee_h": 2.0,
+    "grade": "สูง",
+    "stones_x_g": 2,
+    "p": 0.15,
+    "fail": "drop",
+    "charms_x_g": 3,
+    "attempts": 5.55
+   }
+  ],
+  "item_Lv80": [
+   {
+    "t": 1,
+    "fee_per_try": 410,
+    "stones_per_try": 7,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 410,
+    "exp_charms": 0,
+    "exp_sink": 410,
+    "exp_stones": 7.0,
+    "cum_sink": 410,
+    "cum_sink_10": 4100,
+    "cum_stone_value": 700,
+    "unprotected_exp": null
+   },
+   {
+    "t": 2,
+    "fee_per_try": 820,
+    "stones_per_try": 7,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 820,
+    "exp_charms": 0,
+    "exp_sink": 820,
+    "exp_stones": 7.0,
+    "cum_sink": 1230,
+    "cum_sink_10": 12300,
+    "cum_stone_value": 1400,
+    "unprotected_exp": null
+   },
+   {
+    "t": 3,
+    "fee_per_try": 1230,
+    "stones_per_try": 7,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 1230,
+    "exp_charms": 0,
+    "exp_sink": 1230,
+    "exp_stones": 7.0,
+    "cum_sink": 2460,
+    "cum_sink_10": 24600,
+    "cum_stone_value": 2100,
+    "unprotected_exp": null
+   },
+   {
+    "t": 4,
+    "fee_per_try": 1640,
+    "stones_per_try": 14,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 1640,
+    "exp_charms": 0,
+    "exp_sink": 1640,
+    "exp_stones": 14.0,
+    "cum_sink": 4100,
+    "cum_sink_10": 41000,
+    "cum_stone_value": 3500,
+    "unprotected_exp": null
+   },
+   {
+    "t": 5,
+    "fee_per_try": 2050,
+    "stones_per_try": 14,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 2050,
+    "exp_charms": 0,
+    "exp_sink": 2050,
+    "exp_stones": 14.0,
+    "cum_sink": 6150,
+    "cum_sink_10": 61500,
+    "cum_stone_value": 4900,
+    "unprotected_exp": null
+   },
+   {
+    "t": 6,
+    "fee_per_try": 2460,
+    "stones_per_try": 14,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 2460,
+    "exp_charms": 0,
+    "exp_sink": 2460,
+    "exp_stones": 14.0,
+    "cum_sink": 8610,
+    "cum_sink_10": 86100,
+    "cum_stone_value": 6300,
+    "unprotected_exp": null
+   },
+   {
+    "t": 7,
+    "fee_per_try": 2870,
+    "stones_per_try": 21,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 2870,
+    "exp_charms": 0,
+    "exp_sink": 2870,
+    "exp_stones": 21.0,
+    "cum_sink": 11480,
+    "cum_sink_10": 114800,
+    "cum_stone_value": 8400,
+    "unprotected_exp": null
+   },
+   {
+    "t": 8,
+    "fee_per_try": 3280,
+    "stones_per_try": 21,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 3280,
+    "exp_charms": 0,
+    "exp_sink": 3280,
+    "exp_stones": 21.0,
+    "cum_sink": 14760,
+    "cum_sink_10": 147600,
+    "cum_stone_value": 10500,
+    "unprotected_exp": null
+   },
+   {
+    "t": 9,
+    "fee_per_try": 3690,
+    "stones_per_try": 21,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.0,
+    "exp_fee": 3690,
+    "exp_charms": 0,
+    "exp_sink": 3690,
+    "exp_stones": 21.0,
+    "cum_sink": 18450,
+    "cum_sink_10": 184500,
+    "cum_stone_value": 12600,
+    "unprotected_exp": null
+   },
+   {
+    "t": 10,
+    "fee_per_try": 4100,
+    "stones_per_try": 21,
+    "grade": "ต้น",
+    "charms_per_fail": 0,
+    "attempts": 1.25,
+    "exp_fee": 5125,
+    "exp_charms": 0,
+    "exp_sink": 5125,
+    "exp_stones": 26.2,
+    "cum_sink": 23575,
+    "cum_sink_10": 235750,
+    "cum_stone_value": 15225,
+    "unprotected_exp": null
+   },
+   {
+    "t": 11,
+    "fee_per_try": 4920,
+    "stones_per_try": 7,
+    "grade": "กลาง",
+    "charms_per_fail": 0,
+    "attempts": 1.43,
+    "exp_fee": 7029,
+    "exp_charms": 0,
+    "exp_sink": 7029,
+    "exp_stones": 10.0,
+    "cum_sink": 30604,
+    "cum_sink_10": 306036,
+    "cum_stone_value": 21225,
+    "unprotected_exp": null
+   },
+   {
+    "t": 12,
+    "fee_per_try": 5740,
+    "stones_per_try": 7,
+    "grade": "กลาง",
+    "charms_per_fail": 0,
+    "attempts": 1.67,
+    "exp_fee": 9566,
+    "exp_charms": 0,
+    "exp_sink": 9566,
+    "exp_stones": 11.7,
+    "cum_sink": 40170,
+    "cum_sink_10": 401698,
+    "cum_stone_value": 28225,
+    "unprotected_exp": null
+   },
+   {
+    "t": 13,
+    "fee_per_try": 6560,
+    "stones_per_try": 7,
+    "grade": "กลาง",
+    "charms_per_fail": 7,
+    "attempts": 2.0,
+    "exp_fee": 13114,
+    "exp_charms": 7.0,
+    "exp_sink": 20107,
+    "exp_stones": 14.0,
+    "cum_sink": 60277,
+    "cum_sink_10": 602766,
+    "cum_stone_value": 36621,
+    "unprotected_exp": 38086
+   },
+   {
+    "t": 14,
+    "fee_per_try": 7380,
+    "stones_per_try": 7,
+    "grade": "กลาง",
+    "charms_per_fail": 7,
+    "attempts": 2.22,
+    "exp_fee": 16377,
+    "exp_charms": 8.5,
+    "exp_sink": 24911,
+    "exp_stones": 15.5,
+    "cum_sink": 85188,
+    "cum_sink_10": 851876,
+    "cum_stone_value": 45941,
+    "unprotected_exp": 72283
+   },
+   {
+    "t": 15,
+    "fee_per_try": 8200,
+    "stones_per_try": 14,
+    "grade": "กลาง",
+    "charms_per_fail": 7,
+    "attempts": 2.49,
+    "exp_fee": 20426,
+    "exp_charms": 10.4,
+    "exp_sink": 30862,
+    "exp_stones": 34.9,
+    "cum_sink": 116050,
+    "cum_sink_10": 1160498,
+    "cum_stone_value": 66865,
+    "unprotected_exp": 149924
+   },
+   {
+    "t": 16,
+    "fee_per_try": 9840,
+    "stones_per_try": 3,
+    "grade": "สูง",
+    "charms_per_fail": 14,
+    "attempts": 2.83,
+    "exp_fee": 27868,
+    "exp_charms": 25.6,
+    "exp_sink": 53518,
+    "exp_stones": 8.5,
+    "cum_sink": 169568,
+    "cum_sink_10": 1695680,
+    "cum_stone_value": 97452,
+    "unprotected_exp": 337402
+   },
+   {
+    "t": 17,
+    "fee_per_try": 11480,
+    "stones_per_try": 3,
+    "grade": "สูง",
+    "charms_per_fail": 14,
+    "attempts": 3.27,
+    "exp_fee": 37510,
+    "exp_charms": 31.7,
+    "exp_sink": 69254,
+    "exp_stones": 9.8,
+    "cum_sink": 238822,
+    "cum_sink_10": 2388219,
+    "cum_stone_value": 132740,
+    "unprotected_exp": 861539
+   },
+   {
+    "t": 18,
+    "fee_per_try": 13120,
+    "stones_per_try": 3,
+    "grade": "สูง",
+    "charms_per_fail": 14,
+    "attempts": 3.83,
+    "exp_fee": 50264,
+    "exp_charms": 39.6,
+    "exp_sink": 89898,
+    "exp_stones": 11.5,
+    "cum_sink": 328720,
+    "cum_sink_10": 3287202,
+    "cum_stone_value": 174115,
+    "unprotected_exp": 2680296
+   },
+   {
+    "t": 19,
+    "fee_per_try": 14760,
+    "stones_per_try": 3,
+    "grade": "สูง",
+    "charms_per_fail": 21,
+    "attempts": 4.57,
+    "exp_fee": 67461,
+    "exp_charms": 75.0,
+    "exp_sink": 142441,
+    "exp_stones": 13.7,
+    "cum_sink": 471161,
+    "cum_sink_10": 4711614,
+    "cum_stone_value": 223477,
+    "unprotected_exp": 10848983
+   },
+   {
+    "t": 20,
+    "fee_per_try": 16400,
+    "stones_per_try": 6,
+    "grade": "สูง",
+    "charms_per_fail": 21,
+    "attempts": 5.55,
+    "exp_fee": 91037,
+    "exp_charms": 95.6,
+    "exp_sink": 186609,
+    "exp_stones": 33.3,
+    "cum_sink": 657771,
+    "cum_sink_10": 6577705,
+    "cum_stone_value": 343379,
+    "unprotected_exp": 61730902
+   }
+  ],
+  "by_item_level": [
+   {
+    "Li": 10,
+    "S": 1200,
+    "g": 1,
+    "cap": 10,
+    "sink_to_10": 3450,
+    "stone_value_to_10": 2175
+   },
+   {
+    "Li": 20,
+    "S": 2200,
+    "g": 2,
+    "cap": 10,
+    "sink_to_10": 6325,
+    "stone_value_to_10": 4350
+   },
+   {
+    "Li": 30,
+    "S": 3200,
+    "g": 3,
+    "cap": 12,
+    "sink_to_10": 9200,
+    "stone_value_to_10": 6525,
+    "sink_to_12": 15676,
+    "stone_value_to_12": 12096
+   },
+   {
+    "Li": 40,
+    "S": 4200,
+    "g": 4,
+    "cap": 12,
+    "sink_to_10": 12075,
+    "stone_value_to_10": 8700,
+    "sink_to_12": 20575,
+    "stone_value_to_12": 16128
+   },
+   {
+    "Li": 50,
+    "S": 5200,
+    "g": 4,
+    "cap": 15,
+    "sink_to_10": 14950,
+    "stone_value_to_10": 8700,
+    "sink_to_12": 25474,
+    "stone_value_to_12": 16128,
+    "sink_to_15": 71964,
+    "stone_value_to_15": 38208
+   },
+   {
+    "Li": 60,
+    "S": 6200,
+    "g": 5,
+    "cap": 15,
+    "sink_to_10": 17825,
+    "stone_value_to_10": 10875,
+    "sink_to_12": 30372,
+    "stone_value_to_12": 20160,
+    "sink_to_15": 86659,
+    "stone_value_to_15": 47761
+   },
+   {
+    "Li": 70,
+    "S": 7200,
+    "g": 6,
+    "cap": 20,
+    "sink_to_10": 20700,
+    "stone_value_to_10": 13050,
+    "sink_to_12": 35271,
+    "stone_value_to_12": 24193,
+    "sink_to_15": 101355,
+    "stone_value_to_15": 57313,
+    "sink_to_20": 571418,
+    "stone_value_to_20": 333827
+   },
+   {
+    "Li": 80,
+    "S": 8200,
+    "g": 7,
+    "cap": 20,
+    "sink_to_10": 23575,
+    "stone_value_to_10": 15225,
+    "sink_to_12": 40170,
+    "stone_value_to_12": 28225,
+    "sink_to_15": 116050,
+    "stone_value_to_15": 66865,
+    "sink_to_20": 657771,
+    "stone_value_to_20": 343379
+   },
+   {
+    "Li": 90,
+    "S": 9200,
+    "g": 8,
+    "cap": 20,
+    "sink_to_10": 26450,
+    "stone_value_to_10": 17400,
+    "sink_to_12": 45069,
+    "stone_value_to_12": 32257,
+    "sink_to_15": 130745,
+    "stone_value_to_15": 76417,
+    "sink_to_20": 744123,
+    "stone_value_to_20": 352932
+   },
+   {
+    "Li": 100,
+    "S": 10200,
+    "g": 9,
+    "cap": 20,
+    "sink_to_10": 29325,
+    "stone_value_to_10": 19575,
+    "sink_to_12": 49967,
+    "stone_value_to_12": 36289,
+    "sink_to_15": 145440,
+    "stone_value_to_15": 85969,
+    "sink_to_20": 830476,
+    "stone_value_to_20": 454655
+   },
+   {
+    "Li": 120,
+    "S": 12200,
+    "g": 10,
+    "cap": 20,
+    "sink_to_10": 35075,
+    "stone_value_to_10": 21750,
+    "sink_to_12": 59765,
+    "stone_value_to_12": 40321,
+    "sink_to_15": 171121,
+    "stone_value_to_15": 95521,
+    "sink_to_20": 961247,
+    "stone_value_to_20": 464207
+   }
+  ],
+  "transfer_fee": {
+   "20_5": 495,
+   "20_10": 1815,
+   "40_5": 945,
+   "40_10": 3465,
+   "40_12": 5103,
+   "60_5": 1395,
+   "60_10": 5115,
+   "60_12": 7533,
+   "60_15": 12555,
+   "80_5": 1845,
+   "80_10": 6765,
+   "80_12": 9963,
+   "80_15": 16605,
+   "80_20": 36285,
+   "100_5": 2295,
+   "100_10": 8415,
+   "100_12": 12393,
+   "100_15": 20655,
+   "100_20": 45135
+  },
+  "stat_proposal": {
+   "+1..+10": "4% ของค่าพื้นฐานต่อขั้น",
+   "+11..+15": "5% ต่อขั้น",
+   "+16..+20": "6% ต่อขั้น",
+   "total_at_+20": "95%"
+  }
+ },
+ "troops": {
+  "level_cum": {
+   "10": 7200,
+   "20": 24700,
+   "30": 52200,
+   "40": 89700,
+   "50": 137200,
+   "60": 194700,
+   "70": 262200,
+   "80": 339700,
+   "90": 427200,
+   "100": 524700
+  },
+  "promo": {
+   "T1": {
+    "level": 12,
+    "tokens": 0,
+    "fee_h": 1.0,
+    "fee": 1400,
+    "value_with_tokens": 1400
+   },
+   "T2": {
+    "level": 36,
+    "tokens": 1,
+    "fee_h": 3.0,
+    "fee": 11400,
+    "value_with_tokens": 13400
+   },
+   "T3": {
+    "level": 56,
+    "tokens": 3,
+    "fee_h": 3.0,
+    "fee": 17400,
+    "value_with_tokens": 23400
+   },
+   "T4": {
+    "level": 72,
+    "tokens": 6,
+    "fee_h": 3.0,
+    "fee": 22200,
+    "value_with_tokens": 34200
+   },
+   "T5": {
+    "level": 92,
+    "tokens": 10,
+    "fee_h": 3.0,
+    "fee": 28200,
+    "value_with_tokens": 48200
+   }
+  },
+  "refine_Lv80": [
+   {
+    "r": 1,
+    "min_level": 35,
+    "bonus_pct": 3,
+    "fee_h": 0.5,
+    "fee_at_Lv80": 4100,
+    "tokens": 2,
+    "cum_at_Lv80": 4100
+   },
+   {
+    "r": 2,
+    "min_level": 40,
+    "bonus_pct": 6,
+    "fee_h": 2.0,
+    "fee_at_Lv80": 16400,
+    "tokens": 4,
+    "cum_at_Lv80": 20500
+   },
+   {
+    "r": 3,
+    "min_level": 45,
+    "bonus_pct": 9,
+    "fee_h": 4.5,
+    "fee_at_Lv80": 36900,
+    "tokens": 6,
+    "cum_at_Lv80": 57400
+   },
+   {
+    "r": 4,
+    "min_level": 50,
+    "bonus_pct": 12,
+    "fee_h": 8.0,
+    "fee_at_Lv80": 65600,
+    "tokens": 8,
+    "cum_at_Lv80": 123000
+   },
+   {
+    "r": 5,
+    "min_level": 55,
+    "bonus_pct": 15,
+    "fee_h": 12.5,
+    "fee_at_Lv80": 102500,
+    "tokens": 10,
+    "cum_at_Lv80": 225500
+   },
+   {
+    "r": 6,
+    "min_level": 60,
+    "bonus_pct": 18,
+    "fee_h": 18.0,
+    "fee_at_Lv80": 147600,
+    "tokens": 12,
+    "cum_at_Lv80": 373100
+   },
+   {
+    "r": 7,
+    "min_level": 65,
+    "bonus_pct": 21,
+    "fee_h": 24.5,
+    "fee_at_Lv80": 200900,
+    "tokens": 14,
+    "cum_at_Lv80": 574000
+   },
+   {
+    "r": 8,
+    "min_level": 70,
+    "bonus_pct": 24,
+    "fee_h": 32.0,
+    "fee_at_Lv80": 262400,
+    "tokens": 16,
+    "cum_at_Lv80": 836400
+   },
+   {
+    "r": 9,
+    "min_level": 75,
+    "bonus_pct": 27,
+    "fee_h": 40.5,
+    "fee_at_Lv80": 332100,
+    "tokens": 18,
+    "cum_at_Lv80": 1168500
+   },
+   {
+    "r": 10,
+    "min_level": 80,
+    "bonus_pct": 30,
+    "fee_h": 50.0,
+    "fee_at_Lv80": 410000,
+    "tokens": 20,
+    "cum_at_Lv80": 1578500
+   }
+  ]
+ },
+ "horses": {
+  "stars_Lv80": [
+   {
+    "star": 1,
+    "min_level": 8,
+    "fee_h": 0.4,
+    "fee": 3280,
+    "hay": 30,
+    "marks": 0,
+    "local_tokens": 0,
+    "tael_total": 3280,
+    "cum": 3280
+   },
+   {
+    "star": 2,
+    "min_level": 16,
+    "fee_h": 0.8,
+    "fee": 6560,
+    "hay": 60,
+    "marks": 0,
+    "local_tokens": 0,
+    "tael_total": 6560,
+    "cum": 9840
+   },
+   {
+    "star": 3,
+    "min_level": 24,
+    "fee_h": 1.2000000000000002,
+    "fee": 9840,
+    "hay": 90,
+    "marks": 0,
+    "local_tokens": 0,
+    "tael_total": 9840,
+    "cum": 19680
+   },
+   {
+    "star": 4,
+    "min_level": 32,
+    "fee_h": 1.6,
+    "fee": 13120,
+    "hay": 120,
+    "marks": 0,
+    "local_tokens": 0,
+    "tael_total": 13120,
+    "cum": 32800
+   },
+   {
+    "star": 5,
+    "min_level": 40,
+    "fee_h": 2.0,
+    "fee": 16400,
+    "hay": 150,
+    "marks": 0,
+    "local_tokens": 0,
+    "tael_total": 16400,
+    "cum": 49200
+   },
+   {
+    "star": 6,
+    "min_level": 48,
+    "fee_h": 2.4000000000000004,
+    "fee": 19680,
+    "hay": 180,
+    "marks": 2,
+    "local_tokens": 4,
+    "tael_total": 29680,
+    "cum": 78880
+   },
+   {
+    "star": 7,
+    "min_level": 56,
+    "fee_h": 2.8000000000000003,
+    "fee": 22960,
+    "hay": 210,
+    "marks": 4,
+    "local_tokens": 8,
+    "tael_total": 42960,
+    "cum": 121840
+   },
+   {
+    "star": 8,
+    "min_level": 64,
+    "fee_h": 3.2,
+    "fee": 26240,
+    "hay": 240,
+    "marks": 6,
+    "local_tokens": 12,
+    "tael_total": 56240,
+    "cum": 178080
+   },
+   {
+    "star": 9,
+    "min_level": 72,
+    "fee_h": 3.6,
+    "fee": 29520,
+    "hay": 270,
+    "marks": 8,
+    "local_tokens": 16,
+    "tael_total": 69520,
+    "cum": 247600
+   },
+   {
+    "star": 10,
+    "min_level": 80,
+    "fee_h": 4.0,
+    "fee": 32800,
+    "hay": 300,
+    "marks": 10,
+    "local_tokens": 20,
+    "tael_total": 82800,
+    "cum": 330400
+   }
+  ],
+  "border_market": {
+   "horse_tael": 50000,
+   "horse_local_tokens": 20,
+   "mark_tael": 5000,
+   "mark_local_tokens": 2,
+   "mark_weekly_cap": 10,
+   "strains_buyable": 6,
+   "day": "พุธ",
+   "unlock_level": 35
+  },
+  "legend_horse": {
+   "manes": 40,
+   "fee_Lv80": 41000
+  },
+  "hay_total_note": "หญ้าม้ารวมดาว 1–10 = 1,650 มัด = 33,000 ที่ราคากลาง 20 (รอบ 2 U6 · เดิม 66,000 ที่ 40) · ตำลึงของดาวม้าไม่เปลี่ยน"
+ },
+ "gems": [
+  {
+   "tier": 1,
+   "min_level": 40,
+   "tier1_count": 1,
+   "ref": 1500,
+   "combine_fee_to_next": 900,
+   "total_fee_from_tier1": 0,
+   "insert_fee_Lv80": 164,
+   "remove_fee_Lv80": 820,
+   "ref_r0": 200
+  },
+  {
+   "tier": 2,
+   "min_level": 40,
+   "tier1_count": 3,
+   "ref": 5400,
+   "combine_fee_to_next": 3240,
+   "total_fee_from_tier1": 900,
+   "insert_fee_Lv80": 328,
+   "remove_fee_Lv80": 1640,
+   "ref_r0": 720
+  },
+  {
+   "tier": 3,
+   "min_level": 40,
+   "tier1_count": 9,
+   "ref": 19440,
+   "combine_fee_to_next": 11664,
+   "total_fee_from_tier1": 5940,
+   "insert_fee_Lv80": 492,
+   "remove_fee_Lv80": 2460,
+   "ref_r0": 2590
+  },
+  {
+   "tier": 4,
+   "min_level": 40,
+   "tier1_count": 27,
+   "ref": 69980,
+   "combine_fee_to_next": 41988,
+   "total_fee_from_tier1": 29480,
+   "insert_fee_Lv80": 656,
+   "remove_fee_Lv80": 3280,
+   "ref_r0": 9320
+  },
+  {
+   "tier": 5,
+   "min_level": 60,
+   "tier1_count": 81,
+   "ref": 251930,
+   "combine_fee_to_next": 151158,
+   "total_fee_from_tier1": 130430,
+   "insert_fee_Lv80": 820,
+   "remove_fee_Lv80": 4100,
+   "ref_r0": 33550
+  },
+  {
+   "tier": 6,
+   "min_level": 80,
+   "tier1_count": 243,
+   "ref": 906950,
+   "combine_fee_to_next": 544170,
+   "total_fee_from_tier1": 542450,
+   "insert_fee_Lv80": 984,
+   "remove_fee_Lv80": 4920,
+   "ref_r0": 120780
+  },
+  {
+   "tier": 7,
+   "min_level": 100,
+   "tier1_count": 729,
+   "ref": 3265020,
+   "combine_fee_to_next": 1959012,
+   "total_fee_from_tier1": 2171520,
+   "insert_fee_Lv80": 1148,
+   "remove_fee_Lv80": 5740,
+   "ref_r0": 434810
+  },
+  {
+   "tier": 8,
+   "min_level": 120,
+   "tier1_count": 2187,
+   "ref": 11754070,
+   "combine_fee_to_next": 7052442,
+   "total_fee_from_tier1": 8473570,
+   "insert_fee_Lv80": 1312,
+   "remove_fee_Lv80": 6560,
+   "ref_r0": 1565320
+  },
+  {
+   "tier": 9,
+   "min_level": 140,
+   "tier1_count": 6561,
+   "ref": 42314650,
+   "combine_fee_to_next": 25388790,
+   "total_fee_from_tier1": 32473150,
+   "insert_fee_Lv80": 1476,
+   "remove_fee_Lv80": 7380,
+   "ref_r0": 5635150
+  },
+  {
+   "tier": 10,
+   "min_level": 160,
+   "tier1_count": 19683,
+   "ref": 152332740,
+   "combine_fee_to_next": null,
+   "total_fee_from_tier1": 122808240,
+   "insert_fee_Lv80": 1640,
+   "remove_fee_Lv80": 8200,
+   "ref_r0": 20286540
+  }
+ ],
+ "reroll": {
+  "cost_Lv80": [
+   {
+    "lines": 1,
+    "locked": 0,
+    "tael": 410,
+    "stones": 1
+   },
+   {
+    "lines": 2,
+    "locked": 0,
+    "tael": 820,
+    "stones": 2
+   },
+   {
+    "lines": 2,
+    "locked": 1,
+    "tael": 2050,
+    "stones": 1
+   },
+   {
+    "lines": 3,
+    "locked": 0,
+    "tael": 1230,
+    "stones": 3
+   },
+   {
+    "lines": 3,
+    "locked": 1,
+    "tael": 2460,
+    "stones": 2
+   },
+   {
+    "lines": 3,
+    "locked": 2,
+    "tael": 6970,
+    "stones": 1
+   },
+   {
+    "lines": 4,
+    "locked": 0,
+    "tael": 1640,
+    "stones": 4
+   },
+   {
+    "lines": 4,
+    "locked": 1,
+    "tael": 2870,
+    "stones": 3
+   },
+   {
+    "lines": 4,
+    "locked": 2,
+    "tael": 7380,
+    "stones": 2
+   },
+   {
+    "lines": 4,
+    "locked": 3,
+    "tael": 15170,
+    "stones": 1
+   }
+  ],
+  "examples_Lv80": [
+   {
+    "case": "ฟ้า 1 บรรทัด ได้ค่าที่ต้องการระดับสูงขึ้นไป",
+    "p_line": 0.025,
+    "rolls": 40.0,
+    "stones": 40,
+    "tael": 16400
+   },
+   {
+    "case": "ม่วง 2 บรรทัด ได้ค่าที่ต้องการระดับสูงขึ้นไปทั้งสอง",
+    "p_line": 0.025,
+    "rolls": 60.3,
+    "stones": 81,
+    "tael": 98608
+   },
+   {
+    "case": "ส้ม 3 บรรทัด ได้ค่าที่ต้องการระดับสูงขึ้นไปทั้งสาม",
+    "p_line": 0.025,
+    "rolls": 73.9,
+    "stones": 122,
+    "tael": 345440
+   },
+   {
+    "case": "ส้ม 3 บรรทัด รับได้ 2 ค่า ระดับสูงขึ้นไป",
+    "p_line": 0.05,
+    "rolls": 37.3,
+    "stones": 62,
+    "tael": 173255
+   }
+  ],
+  "lines_by_rarity": {
+   "ฟ้า": 1,
+   "ม่วง": 2,
+   "ส้ม": 3,
+   "แดง": 4,
+   "ตำนาน": 4
+  },
+  "stat_pool": [
+   "โจมตี%",
+   "ป้องกัน%",
+   "พลังชีวิต%",
+   "ต้านเวท%",
+   "คริติคอล",
+   "หลบ",
+   "แม่นยำ",
+   "เจาะเกราะ"
+  ],
+  "grade_weights": {
+   "ต่ำ": 50,
+   "กลาง": 30,
+   "สูง": 15,
+   "สุด": 5
+  },
+  "grade_note": "ของฟ้าและม่วงไม่มีระดับสุด สูงเป็น 20"
+ },
+ "set_break": [
+  {
+   "Li": 40,
+   "set_fee_per_item": null,
+   "set_fee_6": null,
+   "pieces_6": 0,
+   "break_fee": 12600,
+   "break_iron": 4,
+   "pieces_per_item": null,
+   "pieces_value_6": 0,
+   "set_open": false,
+   "note": "รอบ 2 U7: ไม่มีเซ็ต Lv 40 · แถวนี้เหลือค่าทะลวงขั้นขึ้น Lv 40"
+  },
+  {
+   "Li": 60,
+   "set_fee_per_item": 12400,
+   "set_fee_6": 74400,
+   "pieces_6": 60,
+   "break_fee": 18600,
+   "break_iron": 5,
+   "pieces_per_item": 10,
+   "pieces_value_6": 48000,
+   "set_open": true
+  },
+  {
+   "Li": 80,
+   "set_fee_per_item": 16400,
+   "set_fee_6": 98400,
+   "pieces_6": 60,
+   "break_fee": 24600,
+   "break_iron": 7,
+   "pieces_per_item": 10,
+   "pieces_value_6": 48000,
+   "set_open": true
+  },
+  {
+   "Li": 100,
+   "set_fee_per_item": 20400,
+   "set_fee_6": 122400,
+   "pieces_6": 60,
+   "break_fee": 30600,
+   "break_iron": 9,
+   "pieces_per_item": 10,
+   "pieces_value_6": 48000,
+   "set_open": true
+  },
+  {
+   "Li": 120,
+   "set_fee_per_item": 24400,
+   "set_fee_6": 146400,
+   "pieces_6": 60,
+   "break_fee": 36600,
+   "break_iron": 10,
+   "pieces_per_item": 10,
+   "pieces_value_6": 48000,
+   "set_open": true
+  }
+ ],
+ "dismantle": [
+  {
+   "Li": 20,
+   "rarity": "ขาว",
+   "npc_price": 44,
+   "stones": 0.44
+  },
+  {
+   "Li": 20,
+   "rarity": "เขียว",
+   "npc_price": 88,
+   "stones": 0.88
+  },
+  {
+   "Li": 20,
+   "rarity": "ฟ้า",
+   "npc_price": 176,
+   "stones": 1.76
+  },
+  {
+   "Li": 20,
+   "rarity": "ม่วง",
+   "npc_price": 440,
+   "stones": 4.4
+  },
+  {
+   "Li": 20,
+   "rarity": "ส้ม",
+   "npc_price": 1320,
+   "stones": 13.2
+  },
+  {
+   "Li": 40,
+   "rarity": "ขาว",
+   "npc_price": 84,
+   "stones": 0.84
+  },
+  {
+   "Li": 40,
+   "rarity": "เขียว",
+   "npc_price": 168,
+   "stones": 1.68
+  },
+  {
+   "Li": 40,
+   "rarity": "ฟ้า",
+   "npc_price": 336,
+   "stones": 3.36
+  },
+  {
+   "Li": 40,
+   "rarity": "ม่วง",
+   "npc_price": 840,
+   "stones": 8.4
+  },
+  {
+   "Li": 40,
+   "rarity": "ส้ม",
+   "npc_price": 2520,
+   "stones": 25.2
+  },
+  {
+   "Li": 60,
+   "rarity": "ขาว",
+   "npc_price": 124,
+   "stones": 1.24
+  },
+  {
+   "Li": 60,
+   "rarity": "เขียว",
+   "npc_price": 248,
+   "stones": 2.48
+  },
+  {
+   "Li": 60,
+   "rarity": "ฟ้า",
+   "npc_price": 496,
+   "stones": 4.96
+  },
+  {
+   "Li": 60,
+   "rarity": "ม่วง",
+   "npc_price": 1240,
+   "stones": 12.4
+  },
+  {
+   "Li": 60,
+   "rarity": "ส้ม",
+   "npc_price": 3720,
+   "stones": 37.2
+  },
+  {
+   "Li": 80,
+   "rarity": "ขาว",
+   "npc_price": 164,
+   "stones": 1.64
+  },
+  {
+   "Li": 80,
+   "rarity": "เขียว",
+   "npc_price": 328,
+   "stones": 3.28
+  },
+  {
+   "Li": 80,
+   "rarity": "ฟ้า",
+   "npc_price": 656,
+   "stones": 6.56
+  },
+  {
+   "Li": 80,
+   "rarity": "ม่วง",
+   "npc_price": 1640,
+   "stones": 16.4
+  },
+  {
+   "Li": 80,
+   "rarity": "ส้ม",
+   "npc_price": 4920,
+   "stones": 49.2
+  }
+ ],
+ "nobility": {
+  "costs": {
+   "9": {
+    "tael": 100000,
+    "level": 45,
+    "merit": 8000,
+    "phase": "launch"
+   },
+   "10": {
+    "tael": 250000,
+    "level": 55,
+    "merit": 20000,
+    "phase": "launch"
+   },
+   "11": {
+    "tael": 500000,
+    "level": 65,
+    "merit": 40000,
+    "phase": "launch"
+   },
+   "12": {
+    "tael": 1000000,
+    "level": 75,
+    "merit": 70000,
+    "phase": "launch"
+   },
+   "13": {
+    "tael": 2000000,
+    "level": 85,
+    "merit": 110000,
+    "phase": "patch"
+   },
+   "14": {
+    "tael": 4000000,
+    "level": 95,
+    "merit": 160000,
+    "phase": "patch"
+   }
+  },
+  "buy_day": {
+   "casual": {
+    "9": 6,
+    "10": 20,
+    "11": 43,
+    "12": 88
+   },
+   "hardcore": {
+    "9": 4,
+    "10": 13,
+    "11": 29,
+    "12": 60
+   },
+   "payer": {
+    "9": 4,
+    "10": 10,
+    "11": 23,
+    "12": 45
+   }
+  },
+  "seats_15_16": "ได้จากที่นั่ง ไม่มีค่าตำลึง",
+  "source": "spine ข้อ 10"
+ },
+ "gold_shop": {
+  "item": "ยันต์กันถอยขั้น (ผูก)",
+  "price_gold_each": 6,
+  "bundle": 10,
+  "bundle_price": 60,
+  "weekly_cap": 30,
+  "price_rule": "ปัดลงของ 1.2 × 1,000 ÷ 194 = 6.19",
+  "payer_charms_per_week": 30,
+  "payer_gold_per_day": 25.7,
+  "payer_gold_per_month": 771,
+  "tael_equivalent_per_day": 4286
+ },
+ "whale_gap": {
+  "hardcore": 86384,
+  "board_week_cap": 328000,
+  "charms_week": 30000,
+  "whale_per_day": 137527,
+  "ratio": 1.592
+ },
+ "sim": {
+  "personas": {
+   "casual": {
+    "21-40": {
+     "days": [
+      1,
+      1
+     ],
+     "income_per_day": 57639,
+     "upgrade_sink_per_day": 25937,
+     "share_of_income": 0.45,
+     "sink_per_day_by_code": {
+      "K_ENH": 2710,
+      "K_TROOP": 20809,
+      "K_HORSE": 1767,
+      "K_GEM": 0,
+      "K_REROLL": 651,
+      "K_SET": 0,
+      "K_BREAK": 0
+     }
+    },
+    "41-60": {
+     "days": [
+      2,
+      7
+     ],
+     "income_per_day": 46195,
+     "upgrade_sink_per_day": 19402,
+     "share_of_income": 0.42,
+     "sink_per_day_by_code": {
+      "K_ENH": 3132,
+      "K_TROOP": 12515,
+      "K_HORSE": 2108,
+      "K_GEM": 878,
+      "K_REROLL": 768,
+      "K_SET": 0,
+      "K_BREAK": 0
+     }
+    },
+    "61-80": {
+     "days": [
+      8,
+      52
+     ],
+     "income_per_day": 53141,
+     "upgrade_sink_per_day": 20725,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 9858,
+      "K_TROOP": 6520,
+      "K_HORSE": 1245,
+      "K_GEM": 585,
+      "K_REROLL": 868,
+      "K_SET": 1149,
+      "K_BREAK": 500
+     }
+    },
+    "80 ก่อนซื้อขั้น 12": {
+     "days": [
+      53,
+      88
+     ],
+     "income_per_day": 58296,
+     "upgrade_sink_per_day": 22735,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 13355,
+      "K_TROOP": 4424,
+      "K_HORSE": 2980,
+      "K_GEM": 0,
+      "K_REROLL": 991,
+      "K_SET": 985,
+      "K_BREAK": 0
+     }
+    },
+    "80 หลังซื้อขั้น 12": {
+     "days": [
+      89,
+      90
+     ],
+     "income_per_day": 59324,
+     "upgrade_sink_per_day": 29662,
+     "share_of_income": 0.5,
+     "sink_per_day_by_code": {
+      "K_ENH": 16861,
+      "K_TROOP": 0,
+      "K_HORSE": 0,
+      "K_GEM": 0,
+      "K_REROLL": 706,
+      "K_SET": 0,
+      "K_BREAK": 12096
+     }
+    }
+   },
+   "hardcore": {
+    "41-60": {
+     "days": [
+      1,
+      4
+     ],
+     "income_per_day": 75200,
+     "upgrade_sink_per_day": 31584,
+     "share_of_income": 0.42,
+     "sink_per_day_by_code": {
+      "K_ENH": 2843,
+      "K_TROOP": 24363,
+      "K_HORSE": 1777,
+      "K_GEM": 1365,
+      "K_REROLL": 1236,
+      "K_SET": 0,
+      "K_BREAK": 0
+     }
+    },
+    "61-80": {
+     "days": [
+      5,
+      33
+     ],
+     "income_per_day": 79112,
+     "upgrade_sink_per_day": 30854,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 15698,
+      "K_TROOP": 9855,
+      "K_HORSE": 2260,
+      "K_GEM": 925,
+      "K_REROLL": 1326,
+      "K_SET": 0,
+      "K_BREAK": 790
+     }
+    },
+    "80 ก่อนซื้อขั้น 12": {
+     "days": [
+      34,
+      60
+     ],
+     "income_per_day": 86458,
+     "upgrade_sink_per_day": 33719,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 19070,
+      "K_TROOP": 6421,
+      "K_HORSE": 3908,
+      "K_GEM": 0,
+      "K_REROLL": 1413,
+      "K_SET": 1938,
+      "K_BREAK": 969
+     }
+    },
+    "80 หลังซื้อขั้น 12": {
+     "days": [
+      61,
+      90
+     ],
+     "income_per_day": 86384,
+     "upgrade_sink_per_day": 43192,
+     "share_of_income": 0.5,
+     "sink_per_day_by_code": {
+      "K_ENH": 24181,
+      "K_TROOP": 8106,
+      "K_HORSE": 4937,
+      "K_GEM": 2699,
+      "K_REROLL": 1674,
+      "K_SET": 1595,
+      "K_BREAK": 0
+     }
+    }
+   },
+   "payer": {
+    "41-60": {
+     "days": [
+      1,
+      4
+     ],
+     "income_per_day": 80779,
+     "upgrade_sink_per_day": 33927,
+     "share_of_income": 0.42,
+     "sink_per_day_by_code": {
+      "K_ENH": 2802,
+      "K_TROOP": 26623,
+      "K_HORSE": 1818,
+      "K_GEM": 1393,
+      "K_REROLL": 1291,
+      "K_SET": 0,
+      "K_BREAK": 0
+     }
+    },
+    "61-80": {
+     "days": [
+      5,
+      30
+     ],
+     "income_per_day": 102276,
+     "upgrade_sink_per_day": 39888,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 20860,
+      "K_TROOP": 11484,
+      "K_HORSE": 4054,
+      "K_GEM": 988,
+      "K_REROLL": 1656,
+      "K_SET": 0,
+      "K_BREAK": 845
+     }
+    },
+    "80 ก่อนซื้อขั้น 12": {
+     "days": [
+      31,
+      45
+     ],
+     "income_per_day": 110236,
+     "upgrade_sink_per_day": 42992,
+     "share_of_income": 0.39,
+     "sink_per_day_by_code": {
+      "K_ENH": 25132,
+      "K_TROOP": 9522,
+      "K_HORSE": 4082,
+      "K_GEM": 0,
+      "K_REROLL": 1875,
+      "K_SET": 2381,
+      "K_BREAK": 0
+     }
+    },
+    "80 หลังซื้อขั้น 12": {
+     "days": [
+      46,
+      90
+     ],
+     "income_per_day": 112542,
+     "upgrade_sink_per_day": 56271,
+     "share_of_income": 0.5,
+     "sink_per_day_by_code": {
+      "K_ENH": 35058,
+      "K_TROOP": 10318,
+      "K_HORSE": 4629,
+      "K_GEM": 1905,
+      "K_REROLL": 2298,
+      "K_SET": 1501,
+      "K_BREAK": 563
+     }
+    }
+   }
+  },
+  "persona_90d": {
+   "casual": {
+    "upgrade_budget": 1952777,
+    "spent": 1840483,
+    "saved_in_buckets_day90": 112294,
+    "by_system": {
+     "enh": 924018,
+     "troop": 515100,
+     "horse": 166000,
+     "gem": 30080,
+     "reroll": 76685,
+     "set": 82400,
+     "brk": 46200
+    },
+    "detail": {
+     "enh": 637989,
+     "transfer": 120030,
+     "charm": 142928,
+     "troop_lv": 339700,
+     "promo": 52400,
+     "refine": 123000,
+     "star": 106000,
+     "horse_mark": 60000,
+     "horse_buy": 0,
+     "gem": 30080,
+     "reroll": 76685,
+     "set": 82400,
+     "brk": 46200,
+     "combine": 23071
+    },
+    "share": {
+     "enh": 0.502,
+     "troop": 0.28,
+     "horse": 0.09,
+     "gem": 0.016,
+     "reroll": 0.042,
+     "set": 0.045,
+     "brk": 0.025
+    }
+   },
+   "hardcore": {
+    "upgrade_budget": 3227257,
+    "spent": 3139149,
+    "saved_in_buckets_day90": 88108,
+    "by_system": {
+     "enh": 1668869,
+     "troop": 765200,
+     "horse": 319320,
+     "gem": 113200,
+     "reroll": 127960,
+     "set": 98400,
+     "brk": 46200
+    },
+    "detail": {
+     "enh": 1056674,
+     "transfer": 114000,
+     "charm": 427609,
+     "troop_lv": 339700,
+     "promo": 52400,
+     "refine": 373100,
+     "star": 169320,
+     "horse_mark": 150000,
+     "horse_buy": 0,
+     "gem": 113200,
+     "reroll": 127960,
+     "set": 98400,
+     "brk": 46200,
+     "combine": 70586
+    },
+    "share": {
+     "enh": 0.532,
+     "troop": 0.244,
+     "horse": 0.102,
+     "gem": 0.036,
+     "reroll": 0.041,
+     "set": 0.031,
+     "brk": 0.015
+    }
+   },
+   "payer": {
+    "upgrade_budget": 4349849,
+    "spent": 4187076,
+    "saved_in_buckets_day90": 162773,
+    "by_system": {
+     "enh": 2421691,
+     "troop": 966100,
+     "horse": 368400,
+     "gem": 113280,
+     "reroll": 173005,
+     "set": 98400,
+     "brk": 46200
+    },
+    "detail": {
+     "enh": 1449205,
+     "transfer": 124020,
+     "charm": 724533,
+     "troop_lv": 339700,
+     "promo": 52400,
+     "refine": 574000,
+     "star": 168400,
+     "horse_mark": 150000,
+     "horse_buy": 50000,
+     "gem": 113280,
+     "reroll": 173005,
+     "set": 98400,
+     "brk": 46200,
+     "combine": 123934
+    },
+    "share": {
+     "enh": 0.578,
+     "troop": 0.231,
+     "horse": 0.088,
+     "gem": 0.027,
+     "reroll": 0.041,
+     "set": 0.024,
+     "brk": 0.011
+    }
+   }
+  },
+  "milestones": {
+   "casual": {
+    "1": {
+     "L": 36,
+     "gear_level": 30,
+     "enh_avg": 1.23,
+     "troop_level": 16,
+     "troop_tier": 1,
+     "refine": 0,
+     "stars": 1,
+     "border_horses": 0,
+     "gem_tier": 0,
+     "rerolls": 1,
+     "set_items": 0,
+     "set_level": 0
+    },
+    "7": {
+     "L": 60,
+     "gear_level": 60,
+     "enh_avg": 2.09,
+     "troop_level": 36,
+     "troop_tier": 2,
+     "refine": 0,
+     "stars": 3,
+     "border_horses": 0,
+     "gem_tier": 1,
+     "rerolls": 6,
+     "set_items": 0,
+     "set_level": 60
+    },
+    "14": {
+     "L": 66,
+     "gear_level": 60,
+     "enh_avg": 4.54,
+     "troop_level": 51,
+     "troop_tier": 2,
+     "refine": 0,
+     "stars": 4,
+     "border_horses": 0,
+     "gem_tier": 1,
+     "rerolls": 11,
+     "set_items": 1,
+     "set_level": 60
+    },
+    "30": {
+     "L": 74,
+     "gear_level": 70,
+     "enh_avg": 8.54,
+     "troop_level": 65,
+     "troop_tier": 3,
+     "refine": 0,
+     "stars": 5,
+     "border_horses": 0,
+     "gem_tier": 2,
+     "rerolls": 22,
+     "set_items": 2,
+     "set_level": 60
+    },
+    "45": {
+     "L": 78,
+     "gear_level": 70,
+     "enh_avg": 11.65,
+     "troop_level": 74,
+     "troop_tier": 3,
+     "refine": 0,
+     "stars": 6,
+     "border_horses": 0,
+     "gem_tier": 2,
+     "rerolls": 32,
+     "set_items": 3,
+     "set_level": 60
+    },
+    "60": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 12.01,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 1,
+     "stars": 7,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 42,
+     "set_items": 0,
+     "set_level": 80
+    },
+    "90": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 13.67,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 4,
+     "stars": 8,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 61,
+     "set_items": 2,
+     "set_level": 80
+    }
+   },
+   "hardcore": {
+    "1": {
+     "L": 43,
+     "gear_level": 40,
+     "enh_avg": 1.07,
+     "troop_level": 20,
+     "troop_tier": 1,
+     "refine": 0,
+     "stars": 1,
+     "border_horses": 0,
+     "gem_tier": 0,
+     "rerolls": 2,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "7": {
+     "L": 64,
+     "gear_level": 60,
+     "enh_avg": 2.76,
+     "troop_level": 47,
+     "troop_tier": 2,
+     "refine": 0,
+     "stars": 3,
+     "border_horses": 0,
+     "gem_tier": 1,
+     "rerolls": 8,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "14": {
+     "L": 71,
+     "gear_level": 70,
+     "enh_avg": 5.3,
+     "troop_level": 61,
+     "troop_tier": 3,
+     "refine": 0,
+     "stars": 5,
+     "border_horses": 0,
+     "gem_tier": 2,
+     "rerolls": 16,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "30": {
+     "L": 78,
+     "gear_level": 70,
+     "enh_avg": 11.9,
+     "troop_level": 73,
+     "troop_tier": 4,
+     "refine": 0,
+     "stars": 6,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 32,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "45": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 12.56,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 2,
+     "stars": 7,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 46,
+     "set_items": 1,
+     "set_level": 80
+    },
+    "60": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 13.69,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 4,
+     "stars": 8,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 60,
+     "set_items": 3,
+     "set_level": 80
+    },
+    "90": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 15.58,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 6,
+     "stars": 10,
+     "border_horses": 0,
+     "gem_tier": 4,
+     "rerolls": 96,
+     "set_items": 6,
+     "set_level": 80
+    }
+   },
+   "payer": {
+    "1": {
+     "L": 44,
+     "gear_level": 40,
+     "enh_avg": 1.02,
+     "troop_level": 20,
+     "troop_tier": 1,
+     "refine": 0,
+     "stars": 1,
+     "border_horses": 0,
+     "gem_tier": 0,
+     "rerolls": 2,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "7": {
+     "L": 65,
+     "gear_level": 60,
+     "enh_avg": 3.27,
+     "troop_level": 51,
+     "troop_tier": 2,
+     "refine": 0,
+     "stars": 3,
+     "border_horses": 0,
+     "gem_tier": 1,
+     "rerolls": 10,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "14": {
+     "L": 72,
+     "gear_level": 70,
+     "enh_avg": 7.76,
+     "troop_level": 62,
+     "troop_tier": 3,
+     "refine": 0,
+     "stars": 5,
+     "border_horses": 0,
+     "gem_tier": 2,
+     "rerolls": 19,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "30": {
+     "L": 79,
+     "gear_level": 70,
+     "enh_avg": 12.81,
+     "troop_level": 79,
+     "troop_tier": 4,
+     "refine": 0,
+     "stars": 7,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 40,
+     "set_items": 0,
+     "set_level": 40
+    },
+    "45": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 13.17,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 4,
+     "stars": 8,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 58,
+     "set_items": 2,
+     "set_level": 80
+    },
+    "60": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 14.83,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 5,
+     "stars": 9,
+     "border_horses": 0,
+     "gem_tier": 3,
+     "rerolls": 81,
+     "set_items": 5,
+     "set_level": 80
+    },
+    "90": {
+     "L": 80,
+     "gear_level": 80,
+     "enh_avg": 16.57,
+     "troop_level": 80,
+     "troop_tier": 4,
+     "refine": 7,
+     "stars": 10,
+     "border_horses": 1,
+     "gem_tier": 4,
+     "rerolls": 128,
+     "set_items": 6,
+     "set_level": 80
+    }
+   }
+  },
+  "early_band_per_hour": [
+   {
+    "band": "1-20",
+    "h_eq": 1.69,
+    "farm": 2387,
+    "story": 12350,
+    "income_per_h_eq": 8709,
+    "upgrade_share": 0.38,
+    "upgrade_per_h_eq": 3309
+   },
+   {
+    "band": "21-40",
+    "h_eq": 7.36,
+    "farm": 24888,
+    "story": 32500,
+    "income_per_h_eq": 7799,
+    "upgrade_share": 0.45,
+    "upgrade_per_h_eq": 3510
+   },
+   {
+    "band": "41-60",
+    "h_eq": 31.26,
+    "farm": 168234,
+    "story": 52500,
+    "income_per_h_eq": 7062,
+    "upgrade_share": 0.42,
+    "upgrade_per_h_eq": 2966
+   },
+   {
+    "band": "61-80",
+    "h_eq": 269.19,
+    "farm": 2005267,
+    "story": 72500,
+    "income_per_h_eq": 7719,
+    "upgrade_share": 0.39,
+    "upgrade_per_h_eq": 3010
+   }
+  ],
+  "materials_per_day_at_cap": {
+   "casual": {
+    "from_day": 53,
+    "ton": 0.0,
+    "klang": 9.9,
+    "sung": 0.0,
+    "hay": 11.8,
+    "reroll_stone": 0.9,
+    "troop_token": 0.53,
+    "gem1": 0.0,
+    "set_piece": 0.26,
+    "iron": 0.18,
+    "charms_from_gold": 0.0,
+    "demand_value": 6806,
+    "map_supply_value": 9837,
+    "tradable_supply_value": 1967,
+    "net_market_buy_value": -3031
+   },
+   "hardcore": {
+    "from_day": 34,
+    "ton": 0.0,
+    "klang": 22.1,
+    "sung": 0.9,
+    "hay": 17.9,
+    "reroll_stone": 1.6,
+    "troop_token": 0.74,
+    "gem1": 12.6,
+    "set_piece": 0.53,
+    "iron": 0.12,
+    "charms_from_gold": 0.0,
+    "demand_value": 17728,
+    "map_supply_value": 17956,
+    "tradable_supply_value": 10085,
+    "net_market_buy_value": -227
+   },
+   "payer": {
+    "from_day": 31,
+    "ton": 0.0,
+    "klang": 20.9,
+    "sung": 3.7,
+    "hay": 13.5,
+    "reroll_stone": 2.2,
+    "troop_token": 0.93,
+    "gem1": 12.0,
+    "set_piece": 0.5,
+    "iron": 0.12,
+    "charms_from_gold": 0.29,
+    "demand_value": 27304,
+    "map_supply_value": 17218,
+    "tradable_supply_value": 5412,
+    "net_market_buy_value": 10086
+   }
+  },
+  "map_supply_per_manual_hour": [
+   {
+    "L": 10,
+    "value": 360,
+    "stone_ton_equiv": 3.31,
+    "hay": 0.45,
+    "reroll_stone": 0.04,
+    "troop_token": 0.01
+   },
+   {
+    "L": 20,
+    "value": 660,
+    "stone_ton_equiv": 6.07,
+    "hay": 0.82,
+    "reroll_stone": 0.07,
+    "troop_token": 0.018
+   },
+   {
+    "L": 30,
+    "value": 960,
+    "stone_ton_equiv": 8.83,
+    "hay": 1.2,
+    "reroll_stone": 0.1,
+    "troop_token": 0.027
+   },
+   {
+    "L": 40,
+    "value": 1260,
+    "stone_ton_equiv": 11.59,
+    "hay": 1.57,
+    "reroll_stone": 0.13,
+    "troop_token": 0.035
+   },
+   {
+    "L": 50,
+    "value": 1560,
+    "stone_ton_equiv": 14.35,
+    "hay": 1.95,
+    "reroll_stone": 0.17,
+    "troop_token": 0.044
+   },
+   {
+    "L": 60,
+    "value": 1860,
+    "stone_ton_equiv": 17.11,
+    "hay": 2.33,
+    "reroll_stone": 0.2,
+    "troop_token": 0.052
+   },
+   {
+    "L": 70,
+    "value": 2160,
+    "stone_ton_equiv": 19.87,
+    "hay": 2.7,
+    "reroll_stone": 0.23,
+    "troop_token": 0.06
+   },
+   {
+    "L": 80,
+    "value": 2460,
+    "stone_ton_equiv": 22.63,
+    "hay": 3.08,
+    "reroll_stone": 0.26,
+    "troop_token": 0.069
+   },
+   {
+    "L": 90,
+    "value": 2760,
+    "stone_ton_equiv": 25.39,
+    "hay": 3.45,
+    "reroll_stone": 0.29,
+    "troop_token": 0.077
+   },
+   {
+    "L": 100,
+    "value": 3060,
+    "stone_ton_equiv": 28.15,
+    "hay": 3.83,
+    "reroll_stone": 0.33,
+    "troop_token": 0.086
+   },
+   {
+    "L": 120,
+    "value": 3660,
+    "stone_ton_equiv": 33.67,
+    "hay": 4.58,
+    "reroll_stone": 0.39,
+    "troop_token": 0.102
+   }
+  ],
+  "map_drop_mix_value_share": {
+   "ton": 0.223,
+   "klang": 0.613,
+   "sung": 0.084,
+   "hay": 0.05,
+   "rstone": 0.016,
+   "ttok": 0.014
+  },
+  "material_supply_rates": {
+   "manual_S_per_h": 0.3,
+   "auto_S_per_h": 0.24,
+   "offline_S_per_h": 0.12,
+   "offline_bound": true,
+   "note": "ออฟไลน์ครึ่งหนึ่งของออโต้ ต่ำกว่าอัตราตำลึง (0.44) เพื่อให้ตลาดวัตถุดิบไม่ล้น ดูตารางตรวจตลาด"
+  },
+  "boss_supply_per_day": {
+   "gem_tier1": {
+    "casual": 8,
+    "hardcore": 16,
+    "payer": 16
+   },
+   "set_pieces": {
+    "casual": 1.2,
+    "hardcore": 2.6,
+    "payer": 2.4
+   },
+   "promo_tokens": "ด่านเรื่องราว 1 ต่อด่าน + ดันเจี้ยนประจำวัน 0.5 ต่อวัน (ต้องได้ 10 ก่อน Lv 72) · NPC ไม่ขาย ขาดแล้วซื้อจากตลาด (รอบ 1 U2)",
+   "top_stone_share_from_boss": 0.5,
+   "mid_stone_share_from_drops": 0.5,
+   "iron_per_breakthrough": "g(เลเวลใหม่)",
+   "gem_tier1_note": "gem_tier1 และ set_pieces เป็นข้อสมมติก่อนรอบ 1 (อัญมณีราคา 200 · ชิ้นส่วน 5 ต่อชิ้นของ) ค่ารอบ 1 อยู่ข้างล่าง",
+   "gem_tier1_r1": {
+    "server_avg_per_player_day": 3.3,
+    "drops_D8_server_avg": 3.2,
+    "drops_D8_Lv80": {
+     "casual": 2.4,
+     "hardcore": 5.2,
+     "payer": 5.0
+    },
+    "ref": 1500,
+    "source": "เศษจากมอน Lv 35+ (ใน 0.3 × S) + ดันเจี้ยนและบอส · drops D1 D8",
+    "sim_used_per_day_90d": {
+     "casual": 2.5,
+     "hardcore": 4.0,
+     "payer": 4.4,
+     "whale": 5.6
+    }
+   },
+   "set_pieces_r1": {
+    "hardcore_drop_per_day": 2.1,
+    "per_item": 10,
+    "ref": 800,
+    "source": "drops D4",
+    "sim_used_per_day_Lv80": {
+     "casual": 0.6,
+     "hardcore": 1.0,
+     "payer": 1.0
+    }
+   },
+   "farm_stone_grade": "ต้นอย่างเดียว (รอบ 1 U4 · drops D7) · mid/top share = ส่วนที่ได้จากบอส ส่วนที่เหลือจากหลอมหินต้น",
+   "iron_r2": {
+    "per_player_day_below_Lv70": 0.6,
+    "per_player_day_from_Lv70": 0.3,
+    "source": "drops D15 (รอบ 1: 0.3 ทุกเลเวล)",
+    "Lv70_breakthrough_days_to_collect": 10,
+    "Lv70_breakthrough_days_to_collect_r1": 20
+   },
+   "promo_tokens_r2": "drops D11 × 0.25: ดันเจี้ยนประจำวัน 12.5% ต่อวัน (ผูกตัว) · ด่านเรื่องราว 4 อันเท่าเดิม · T4 วันที่ 31 / 16 / 14",
+   "gem_tier1_r2": "drops D14: Lv < 50 × 0.8 · Lv 50–79 × 1.1 · Lv 80 × 0.9 (ฟรีขยันเทรดได้ Lv 70: 3.50 → 3.85 · Lv 80: 3.92 → 3.53 เม็ดเทียบขั้น 1 ต่อวัน)",
+   "set_pieces_r2": "บอสโลกช่วง Lv 40–59 ให้ชิ้นส่วนเซ็ต Lv 60 (U7)"
+  },
+  "material_balance_90d": {
+   "per_persona": {
+    "casual": {
+     "demand": 758973,
+     "supply": 818608,
+     "ratio": 0.93
+    },
+    "hardcore": {
+     "demand": 1483932,
+     "supply": 1541321,
+     "ratio": 0.96
+    },
+    "payer": {
+     "demand": 2165552,
+     "supply": 1484087,
+     "ratio": 1.46
+    }
+   },
+   "server_weighted_ratio": 0.979
+  },
+  "offline_material_rate_check": [
+   {
+    "offline_rate_S_per_h": 0.132,
+    "demand_over_supply": 0.918,
+    "tradable_sold_per_player_day": 1319,
+    "tradable_bought_per_player_day": 322,
+    "buy_over_sell": 0.244,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 1389,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 1387,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 6443,
+      "bound_surplus_per_day": 0
+     }
+    }
+   },
+   {
+    "offline_rate_S_per_h": 0.125,
+    "demand_over_supply": 0.953,
+    "tradable_sold_per_player_day": 913,
+    "tradable_bought_per_player_day": 355,
+    "buy_over_sell": 0.389,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 965,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 950,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 7101,
+      "bound_surplus_per_day": 0
+     }
+    }
+   },
+   {
+    "offline_rate_S_per_h": 0.12,
+    "demand_over_supply": 0.979,
+    "tradable_sold_per_player_day": 623,
+    "tradable_bought_per_player_day": 379,
+    "buy_over_sell": 0.607,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 663,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 638,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 7572,
+      "bound_surplus_per_day": 0
+     }
+    }
+   },
+   {
+    "offline_rate_S_per_h": 0.115,
+    "demand_over_supply": 1.006,
+    "tradable_sold_per_player_day": 333,
+    "tradable_bought_per_player_day": 402,
+    "buy_over_sell": 1.207,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 360,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 325,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 8042,
+      "bound_surplus_per_day": 0
+     }
+    }
+   },
+   {
+    "offline_rate_S_per_h": 0.11,
+    "demand_over_supply": 1.035,
+    "tradable_sold_per_player_day": 43,
+    "tradable_bought_per_player_day": 426,
+    "buy_over_sell": 9.85,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 57,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 13,
+      "buy_per_day": 0,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 8513,
+      "bound_surplus_per_day": 0
+     }
+    }
+   },
+   {
+    "offline_rate_S_per_h": 0.1,
+    "demand_over_supply": 1.099,
+    "tradable_sold_per_player_day": 0,
+    "tradable_bought_per_player_day": 1010,
+    "buy_over_sell": null,
+    "per_persona": {
+     "casual": {
+      "sell_per_day": 0,
+      "buy_per_day": 549,
+      "bound_surplus_per_day": 0
+     },
+     "hardcore": {
+      "sell_per_day": 0,
+      "buy_per_day": 611,
+      "bound_surplus_per_day": 0
+     },
+     "payer": {
+      "sell_per_day": 0,
+      "buy_per_day": 9454,
+      "bound_surplus_per_day": 0
+     }
+    }
+   }
+  ],
+  "market_flows_per_day_at_0_12": {
+   "offline_rate_S_per_h": 0.12,
+   "demand_over_supply": 0.979,
+   "tradable_sold_per_player_day": 623,
+   "tradable_bought_per_player_day": 379,
+   "buy_over_sell": 0.607,
+   "per_persona": {
+    "casual": {
+     "sell_per_day": 663,
+     "buy_per_day": 0,
+     "bound_surplus_per_day": 0
+    },
+    "hardcore": {
+     "sell_per_day": 638,
+     "buy_per_day": 0,
+     "bound_surplus_per_day": 0
+    },
+    "payer": {
+     "sell_per_day": 0,
+     "buy_per_day": 7572,
+     "bound_surplus_per_day": 0
+    }
+   }
+  },
+  "gold_flows": {
+   "payer_gold_per_day_on_charms": 25.7,
+   "payer_gold_per_month": 771,
+   "free_bound_gold_share_on_charms": 0.3,
+   "free_bound_gold_per_month_cap": 1500,
+   "tael_replaced_by_gold_charms_per_day_payer": 4286
+  },
+  "faucets": {
+   "F_NPC_BUYBACK_materials": "ส่วนเกินขาย NPC ที่ 20% (หินทุกขั้น หญ้าม้า) หรือ 10% (ของอื่น) ของราคากลาง ≤ 1 × S(L) ต่อวัน · แบบจำลองของโมดูลนี้ = 0 ที่อัตราออฟไลน์ 0.12 · แบบจำลองรอบ 2: 0.4% ของก๊อก → 0.1% หลัง drops D10–D16",
+   "dismantle": {
+    "gear_buyback_S_per_manual_h": 0.1,
+    "default_dismantle_share": 0.3,
+    "effect": "ย้าย 0.03 × S ต่อชั่วโมงเล่นเองจากตำลึงไปเป็นหินต้น มูลค่าเท่ากัน"
+   }
+  },
+  "capacity_Lv80": {
+   "enh_to15_10items": 1160500,
+   "enh_to20_10items": 6577710,
+   "troop_all": 1970600,
+   "horse_all": 671400,
+   "gems_tier6_50sockets": 27122500,
+   "set_Lv80": 98400,
+   "nobility_9_12": 1850000,
+   "gems_tier6_50sockets_r0": 3609000,
+   "gems_tier6_50sockets_tier1_needed": 12150,
+   "set_Lv80_pieces": 60,
+   "total_money": 38290610,
+   "total_not_drop_gated": 11168110,
+   "total_r0": 14777110,
+   "note": "อัญมณีติดของดรอป (12,150 เม็ดขั้น 1 ≈ 10 ปีของดรอป) · ส่วนที่ไม่ติดของดรอป 11.2 ล้าน (เดิมรวมอัญมณีที่ราคา 200 = 14.8 ล้าน) · สุ่มค่าเป็นตัวดูดปลายเปิด · ที่รับที่เหลือวันที่ 90 เทียบงบ S4 ใน sim.r1_check.remaining_day90"
+  },
+  "whale": {
+   "note": "เล่นแบบฟรีขยัน + ขายทองเต็มเพดาน 40 × S ต่อสัปดาห์ตั้งแต่วันที่ 4 + ยันต์ทอง 30 ใบต่อสัปดาห์ · อัญมณี 24 ต่อวัน (ซื้อเพิ่ม)",
+   "upgrade_budget_90d": 4919977,
+   "upgrade_per_day_at_cap": 66621,
+   "milestones": {
+    "30": {
+     "L": 78,
+     "enh_avg": 13.28,
+     "refine": 2,
+     "stars": 7,
+     "gem_tier": 3
+    },
+    "45": {
+     "L": 80,
+     "enh_avg": 13.82,
+     "refine": 4,
+     "stars": 8,
+     "gem_tier": 4
+    },
+    "60": {
+     "L": 80,
+     "enh_avg": 15.09,
+     "refine": 5,
+     "stars": 9,
+     "gem_tier": 4
+    },
+    "90": {
+     "L": 80,
+     "enh_avg": 17.0,
+     "refine": 7,
+     "stars": 10,
+     "gem_tier": 4
+    }
+   }
+  },
+  "policy": {
+   "split_start": {
+    "enh": 0.5,
+    "troop": 0.2,
+    "horse": 0.1,
+    "other": 0.2
+   },
+   "other_split": {
+    "set": 0.25,
+    "gem": 0.4,
+    "reroll": 0.2,
+    "brk": 0.15
+   },
+   "troop_catch_up": "ยืมงบตีบวกเมื่อทหารต่ำกว่าผู้เล่นเกิน 10 เลเวล · เลื่อนชั้นก่อนเสมอ",
+   "protect_from": 13,
+   "gear_tier_every": 10,
+   "sockets": 40,
+   "combine_share": 0.5
+  },
+  "map_drop_mix_value_share_note": "map_drop_mix_value_share คือความต้องการตามราคากลาง (ton/klang/sung) ไม่ใช่ขั้นที่ดรอป · รอบ 1 ฟาร์มดรอปหินต้นอย่างเดียว · drops ใช้ส่วนผสม D1 แทน · รอบ 2: สัดส่วนนี้คิดที่ราคาเดิม (หญ้าม้า 40 · หินสุ่มค่า 150 · ตราทัพ 500) จำนวนชิ้นเป็นความต้องการเดิม · drops ใช้ D1 + ตัวคูณตามเลเวล D10–D15",
+  "drops_D1_mix_r1": {
+   "stone": 0.424,
+   "gem_shard": 0.25,
+   "promo_token": 0.1,
+   "hay": 0.036,
+   "reroll_stone": 0.03,
+   "troop_token": 0.023,
+   "rare": 0.05,
+   "sum_of_R": 0.913,
+   "note": "สัดส่วนของ R เดิมที่ Lv 50 ขึ้นไป (drops D1) · หินต่ำกว่า Lv 50 × 0.6"
+  },
+  "r1_check": {
+   "source": "balance_r1.md ข้อ 4.4 · สำเนา sim.js ใน design/_upgrade_r1/env/ + r1_changes.json + u3_gem1500.json · ผสม 70/22/8",
+   "enh_avg_day90_balance_gem200": {
+    "casual": 14.5,
+    "hardcore": 16.4,
+    "payer": 16.7,
+    "whale": 18.2
+   },
+   "enh_avg_day90_gem1500": {
+    "casual": 14.3,
+    "hardcore": 16.2,
+    "payer": 16.6,
+    "whale": 18.1
+   },
+   "enh_target_hardcore": [
+    15,
+    16.5
+   ],
+   "gems_day90_40_sockets": {
+    "casual": {
+     "2": 23,
+     "3": 17
+    },
+    "hardcore": {
+     "3": 40
+    },
+    "payer": {
+     "3": 38,
+     "4": 2
+    },
+    "whale": {
+     "3": 32,
+     "4": 8
+    }
+   },
+   "gems_day90_tier_expected": "2–3 (เดิมคาด 3–4)",
+   "gem1_used_per_day_90d": {
+    "casual": 2.5,
+    "hardcore": 4.0,
+    "payer": 4.4,
+    "whale": 5.6
+   },
+   "set_Lv80_pieces_day90": {
+    "casual": 2,
+    "hardcore": 6,
+    "payer": 6,
+    "whale": 6
+   },
+   "refine_day90": {
+    "casual": 4,
+    "hardcore": 5,
+    "payer": 6,
+    "whale": 7
+   },
+   "K_GEM_per_day_Lv80_gem1500": {
+    "casual": 2016,
+    "hardcore": 3055,
+    "payer": 4289,
+    "whale": 5840
+   },
+   "K_GEM_per_day_Lv80_gem200": {
+    "casual": 296,
+    "hardcore": 461,
+    "payer": 694,
+    "whale": 902
+   },
+   "K_GEM_note": "Lv 80 หลังซื้อขั้น 12 · ฟรีเล่นน้อยใช้ช่วงก่อนขั้น 12",
+   "upgrade_over_income": {
+    "90d": {
+     "casual": 0.39,
+     "hardcore": 0.442,
+     "payer": 0.453,
+     "whale": 0.476
+    },
+    "Lv61-79_budget_0.42": {
+     "casual": 0.393,
+     "hardcore": 0.398,
+     "payer": 0.408,
+     "whale": 0.398
+    },
+    "Lv80_pre_tier12_budget_0.42": {
+     "casual": 0.403,
+     "hardcore": 0.373,
+     "payer": 0.369,
+     "whale": 0.356
+    },
+    "Lv80_post_tier12_budget_0.54": {
+     "casual": null,
+     "hardcore": 0.543,
+     "payer": 0.537,
+     "whale": 0.522
+    }
+   },
+   "remaining_day90": {
+    "scope": "ตีบวกถึง +20 · ขั้นเกลาถึง 10 · ดาวถึง 10 · ไม่นับอัญมณีและสุ่มค่า",
+    "tael": {
+     "casual": 7200000,
+     "hardcore": 6100000,
+     "payer": 5700000,
+     "whale": 4200000
+    },
+    "days_at_post_tier12_rate": {
+     "casual": 225,
+     "hardcore": 128,
+     "payer": 106,
+     "whale": 57
+    }
+   },
+   "server": {
+    "cum_in_over_out": 1.033,
+    "money_stock_days_max": 2.71,
+    "whale_gap": 1.57,
+    "upgrade_share_of_sinks": [
+     0.406,
+     0.532
+    ],
+    "kpi_fail_same_as_balance_r1": [
+     "board_N",
+     "price_index",
+     "velocity"
+    ],
+    "K_GEM_share_of_tael_in_day30_90": [
+     0.023,
+     0.04
+    ],
+    "K_GEM_share_gem200": [
+     0.004,
+     0.005
+    ],
+    "granary_stone_buy_share_of_sinks_day60_90": [
+     0.007,
+     0.045
+    ],
+    "granary_stone_buy_share_balance_r1": [
+     0.017,
+     0.057
+    ]
+   },
+   "U5": "ยืนยัน: หลังขั้น 12 ใช้ได้ 52–54% ตามงบ · ก่อนขั้น 12 ใช้จริง 36–41% เพราะเงินกันรอชิ้นถัดไปและเงินฝากบรรดาศักดิ์ ไม่ใช่ของหมด · ที่รับที่เหลือพอราว 2–7 เดือนก่อนแพตช์ Lv 81–90",
+   "follow_up_r2": [
+    "อัญมณีขาดที่ Lv 50–79 แก้ด้วย D14 (รอบ 2 U9 · เดิมเขียน \"อัญมณีอาจล้น\"): ใช้ + ต้องการแต่ไม่มีของ 1.16–1.21 เท่าของที่ได้ที่ Lv 50–79 · เหลือเล็กน้อยที่ Lv 80 (0.85) · ความกังวลเรื่องล้นมาจากการตรวจกับ drops ฉบับเก่าที่คูณอัญมณี 2.08 (balance_r2 F38) · D14 ทำให้ทั้งเซิร์ฟ 0.90 (+ ขาด 0.10) → 0.93 (+ 0.08) อัญมณีวันที่ 90 เท่าเดิม",
+    "drops 3.1: อัญมณีขั้น 2 ต้องเป็น 5,400 (ไม่ใช่ 4,800) · รวมเศษไม่มีค่ารวม",
+    "ราคารับซื้อของที่ NPC ไม่ขาย: ไฟล์นี้ 20% · drops 10% (แบบจำลองใช้ 10%)",
+    "ราคากลางต่างจาก drops: หญ้าม้า 40 (drops 20) · หินสุ่มค่า 150 (drops 300) · ตราทัพ 500 (drops 600) · แบบจำลองใช้ของ drops"
+   ],
+   "follow_up_r2_status": [
+    "ปิด: อัญมณีขาดที่ Lv 50–79 แก้ด้วย drops D14 (U9)",
+    "ปิด: balance_r2 D17 ให้ drops แก้อัญมณีขั้น 2 เป็น 5,400",
+    "ปิด: U6 NPC รับซื้อของที่ NPC ไม่ขาย 10% ตาม drops (หินกลางและสูงคง 20%)",
+    "ปิด: U6 ใช้ราคาของ drops หญ้าม้า 20 / 4 / 40 · หินสุ่มค่า 300 · ตราทัพ 600 / 60"
+   ]
+  },
+  "r2_check": {
+   "source": "balance_r2.md ข้อ 4.3 และ 5 · design/sim/sim.js ฉาก r2_changes (r2_design + sim/r2_changes.json · drops D10–D16) · ผสม 70/22/8 · ผู้เล่นอ้างอิง",
+   "enh_avg_day90": {
+    "casual": 14.4,
+    "hardcore": 16.1,
+    "payer": 16.5,
+    "whale": 17.9
+   },
+   "enh_avg_day90_mix_70_25_5": {
+    "casual": 14.3,
+    "hardcore": 16.0,
+    "payer": 16.8,
+    "whale": 17.8
+   },
+   "enh_target_hardcore": [
+    15,
+    16.5
+   ],
+   "weapon_day90": {
+    "casual": 16,
+    "hardcore": 17,
+    "payer": 18,
+    "whale": 19
+   },
+   "gems_day90_40_sockets": {
+    "casual": {
+     "2": 27,
+     "3": 13
+    },
+    "hardcore": {
+     "3": 40
+    },
+    "payer": {
+     "3": 38,
+     "4": 2
+    },
+    "whale": {
+     "3": 33,
+     "4": 7
+    }
+   },
+   "gem1_used_per_day_90d": {
+    "casual": 2.2,
+    "hardcore": 4.0,
+    "payer": 4.4,
+    "whale": 5.4
+   },
+   "gem1_used_note": "[สูตร] เบ้าวันที่ 90 เทียบอัญมณีขั้น 1 ÷ 90",
+   "gem_use_over_supply": {
+    "server_before_D14": {
+     "use": 0.9,
+     "unmet": 0.1
+    },
+    "server_after_D14": {
+     "use": 0.93,
+     "unmet": 0.08
+    },
+    "Lv50_79_before_D14_use_plus_unmet": [
+     1.16,
+     1.21
+    ],
+    "by_level_after_D14": {
+     "30-49": [
+      0.76,
+      0.14
+     ],
+     "50-59": [
+      1.0,
+      0.11
+     ],
+     "60-69": [
+      1.0,
+      0.15
+     ],
+     "70-79": [
+      0.92,
+      0.16
+     ],
+     "80": [
+      0.91,
+      0.0
+     ]
+    },
+    "note": "คู่ [ใช้, ต้องการแต่ไม่มีของ] ÷ ผลิต"
+   },
+   "K_share_of_faucets_90d": {
+    "K_GEM": [
+     0.026,
+     0.027
+    ],
+    "K_GEM_70_22_8": 0.0265,
+    "K_GEM_70_25_5": 0.0266,
+    "K_SET": 0.016,
+    "K_BREAK_before_D15": 0.004,
+    "K_BREAK": 0.006,
+    "K_ENH": 0.208,
+    "K_TROOP": 0.107,
+    "K_HORSE": 0.04,
+    "K_REROLL": 0.017
+   },
+   "set_day90": {
+    "casual": {
+     "60": 2,
+     "80": 3
+    },
+    "hardcore": {
+     "60": 4,
+     "80": 6
+    },
+    "payer": {
+     "60": 3,
+     "80": 6
+    },
+    "whale": {
+     "60": 3,
+     "80": 6
+    }
+   },
+   "set_Lv40_crafted_of_1000": 0,
+   "refine_day90": {
+    "casual": 4,
+    "hardcore": 6,
+    "payer": 7,
+    "whale": 8
+   },
+   "horse_stars_day90": {
+    "casual": 8,
+    "hardcore": 10,
+    "payer": 10,
+    "whale": 10
+   },
+   "troop_T4_day": {
+    "casual": 31,
+    "hardcore": 16,
+    "payer": 14,
+    "whale": 12
+   },
+   "upgrade_over_income_90d_incl_npc_material_buy": {
+    "casual": 0.396,
+    "hardcore": 0.441,
+    "payer": 0.46
+   },
+   "iron_use_over_supply": {
+    "server_unmet_before_after_D15": [
+     3.7,
+     0.82
+    ],
+    "by_level_after_D15": {
+     "50-59": [
+      0.0,
+      4.55
+     ],
+     "60-69": [
+      0.0,
+      2.56
+     ],
+     "70-79": [
+      1.12,
+      0.0
+     ],
+     "80": [
+      0.46,
+      0.01
+     ]
+    },
+    "server_after_D15": [
+     0.5,
+     0.82
+    ],
+    "note": "Lv 50–69 ยังทะลวงได้น้อย ผู้เล่นเปลี่ยนของใหม่ทุก 10 เลเวล · balance รอบ 2 ไม่เสนอแก้เพิ่ม"
+   },
+   "material_use_over_supply_server": {
+    "hay": 0.97,
+    "reroll": 0.92,
+    "gem": 0.93,
+    "insignia": 0.7,
+    "seal": 0.35,
+    "set": 0.74,
+    "iron": 0.5
+   },
+   "server": {
+    "cum_in_over_out": 1.034,
+    "money_stock_days_max": 2.66,
+    "whale_gap": 1.57,
+    "upgrade_share_of_sinks": [
+     0.412,
+     0.517
+    ],
+    "npc_glut_sale_share_of_faucets_before_after": [
+     0.004,
+     0.001
+    ]
+   },
+   "tael_effect_of_U6_U9": "ไม่มี: U6 แบบจำลองใช้ราคาของ drops อยู่แล้ว · U7 ไม่มีใครหลอมเซ็ต Lv 40 · U8 ค่าธรรมเนียมเท่าเดิม · U9 เอกสาร",
+   "open": [
+    "ทะลวงขั้น Lv 50–69 ยังเกิดน้อย (ต้องการแต่ไม่มีของ 4.6 / 2.6 เท่าของที่ได้)",
+    "trade 5.6 ต้องแก้ถ้อยคำหินกลางและสูงเป็น NPC รับซื้อ 20% ตาม drops",
+    "npc 6.1 ต้องอนุญาตรับซื้อวัตถุดิบเทรดได้ที่ 10% ตาม N5",
+    "KPI 8 ดัชนีราคายังไม่ผ่าน ต้องวัดในเบต้าปิด",
+    "spine.md ข้อ 6.1 ยังต้องแก้ตามงบ S4 ที่โมดูลนี้ใช้"
+   ]
+  }
+ },
+ "kpi": [
+  {
+   "name": "อัตราสำเร็จจริงเทียบประกาศ",
+   "formula": "สำเร็จ ÷ ครั้งที่กด ต่อขั้น 30 วัน",
+   "target": "ต่างไม่เกิน ±1 จุด เมื่อ ≥ 10,000 ครั้ง",
+   "red": "ต่างเกิน 2 จุด: หยุดตีบวกขั้นนั้นแล้วตรวจ"
+  },
+  {
+   "name": "อัปเกรดในตัวดูดทั้งหมด",
+   "formula": "spine KPI 13",
+   "target": "≥ 35%",
+   "red": "< 20%"
+  },
+  {
+   "name": "ตีบวกเฉลี่ยของฟรีขยันวันที่ 90",
+   "formula": "ค่าเฉลี่ย 10 ช่อง กลุ่มออนไลน์ ≥ 4 ชม.",
+   "target": "+15 ถึง +16.5",
+   "red": "> +18 หรือ < +13"
+  },
+  {
+   "name": "ดัชนีราคาหินกลาง",
+   "formula": "ราคากลาง ÷ 600",
+   "target": "0.8–1.2",
+   "red": "< 0.5 หรือ > 1.8"
+  },
+  {
+   "name": "ใช้ยันต์ที่ +13 ขึ้นไป",
+   "formula": "ครั้งที่ใช้ยันต์ ÷ ครั้งที่กด",
+   "target": "60–95%",
+   "red": "< 30%: ยันต์แพงเกิน"
+  },
+  {
+   "name": "ทหารตามหลังผู้เล่น",
+   "formula": "เลเวลผู้เล่น − เลเวลทหาร มัธยฐาน คนฟรี Lv 70+",
+   "target": "≤ 10",
+   "red": "> 20: ลดค่าฝึกทหาร Lv 41–70"
+  }
+ ],
+ "deviations": [
+  {
+   "spine": "แบ่งอัปเกรด 50/20/10/20 (ข้อ 6.2)",
+   "here": "ผลจริง 90 วัน เล่นน้อย 50/28/9/13 · ขยัน 53/24/10/13 · เติมเงิน 58/23/9/10",
+   "why": "ค่าฝึกทหารของ spine หนักช่วงต้น · อัญมณีติดของดรอป (เศษจากมอนและบอส) · สัดส่วนอัปเกรดต่อรายได้ 38–50% ตรง spine ใช้จริง 94–97% ของงบ"
+  },
+  {
+   "spine": "ตีบวกครบ +10 = 2.75 × S ต่อชิ้น (ข้อ 9 #32)",
+   "here": "ที่คาด 2.875 × S",
+   "why": "+10 พลาดได้ 20% ตามเอกสาร ค่าธรรมเนียมต่อครั้งเท่า spine"
+  },
+  {
+   "spine": "วัตถุดิบออฟไลน์ผูกตัว ไม่ระบุอัตรา (ข้อ 5.2)",
+   "here": "0.12 × S ต่อชั่วโมงออฟไลน์",
+   "why": "อัตราเดียวกับตำลึง (0.132) ทำให้ของเทรดได้ล้นตลาด 4 เท่า"
+  },
+  {
+   "spine": "กำแพงเงินซื้อผลสงคราม (ข้อ 7.6)",
+   "here": "เพิ่มทาง ทอง → ยันต์กันถอยขั้นผูกตัว สัปดาห์ละ 30 ใบ",
+   "why": "เอกสารขายของกันลดขั้น · ช่องว่างวาฬ 1.59 ≤ 1.6"
+  },
+  {
+   "spine": "รหัส ledger ข้อ 12.2",
+   "here": "เพิ่ม K_SET · K_GRANARY · G_SHOP_CHARM",
+   "why": "แยกดูตัวดูดใหม่"
+  },
+  {
+   "spine": "ยุ้งฉางเฉพาะวัตถุดิบขั้นต้น (ข้อ 7.3)",
+   "here": "รอบ 1 กลับมาตรง spine: ยุ้งฉางขายแค่หินต้น (200) และหญ้าม้า (40 ตั้งแต่รอบ 2) · หินสุ่มค่า ตราเลื่อนชั้น ตราทัพ เหล็กร้อยหลอม อัญมณีขั้น 1 NPC ไม่ขาย รับซื้อ 10% (รอบ 2 U6 ตาม trade 5.6 · spine 9.2 กำหนดแค่วัตถุดิบขั้นต้น 20% จึงไม่ขัด)",
+   "why": "ฉบับก่อนตีความของชั้นเดียวว่าเป็นขั้นต้น ขัดกับ npc 3.8 · แก้ตาม balance รอบ 1 U2 และรอบ 2 U6"
+  },
+  {
+   "spine": "งบอัปเกรด 38 / 45 / 42 / 39 / 50% (ข้อ 6.1)",
+   "here": "39 / 46.3 / 44 / 42 / 54%",
+   "why": "S4 ของรอบ 1 รับส่วนต่างภาษีการค้า (S3) · spine ต้องแก้ข้อ 6.1 ตาม · ที่รับพอตาม sim.r1_check"
+  }
+ ],
+ "budget_share": {
+  "bands": [
+   "1-20",
+   "21-40",
+   "41-60",
+   "61-80",
+   "80 หลังซื้อบรรดาศักดิ์ที่เปิดครบ"
+  ],
+  "spine_6_1": [
+   0.38,
+   0.45,
+   0.42,
+   0.39,
+   0.5
+  ],
+  "r1_S4": [
+   0.39,
+   0.463,
+   0.44,
+   0.42,
+   0.54
+  ],
+  "nobility_saving": [
+   0.43,
+   0.34,
+   0.37,
+   0.41,
+   0.0
+  ],
+  "note": "รอบ 1 S4 รับส่วนต่างจากภาษีการค้า · spine ข้อ 6.1 ต้องแก้ตาม · โมดูลนี้รับได้ (sim.r1_check.U5) · ตาราง sim.personas ยังคิดที่งบเดิม"
+ },
+ "materials_note": "ราคากลางเริ่มต้น NPC รับซื้อ NPC ขาย ตรง drops 3.1 (รอบ 2 U6 · drops เป็นเจ้าของราคากลางเริ่มต้นตาม trade 5.6) · ยุ้งฉางขายแค่หินต้น 200 และหญ้าม้า 40 (npc_sell ไม่ใช่ null เฉพาะสองแถวนี้ กับยันต์และตราม้าที่เป็นของผูกตัว NPC ขายเอง) · NPC รับซื้อ: หินต้น หญ้าม้า หินกลาง หินสูง 20% · ของอื่น 10% · รวมไม่เกิน 1 × S(L) ต่อวันต่อตัวละคร (trade 5.8 · npc N5)",
+ "gems_note": "รอบ 1 U3: ขั้น 1 = 1,500 (เดิม 200) ทั้งตาราง × 7.5 · ค่าใส่และค่าถอดคิดจาก S ไม่เปลี่ยน · ref_r0 = ราคาก่อนรอบ 1 · วันที่ 90 คาดขั้น 2–3 (จำลองรอบ 1 · เดิมคาด 3–4) · รอบ 2 (แบบจำลอง r2_changes): วันที่ 90 เล่นน้อย ขั้น 2 × 27 ขั้น 3 × 13 · ขยัน ขั้น 3 × 40 · เติมเงิน ขั้น 3 × 38 ขั้น 4 × 2 · K_GEM 2.6–2.7% ของก๊อก 90 วัน · อัญมณีขาดที่ Lv 50–79 แก้ด้วย drops D14",
+ "set_break_note": "รอบ 1 U1: ชิ้นส่วน 10 ต่อชิ้นของ (60 ต่อเซ็ต · มูลค่า 48,000 ที่ 800) · ค่าหลอมตำลึง 2 × S เท่าเดิม · รอบ 2 U7: ตัดเซ็ต Lv 40 (0 จาก 1,000 คนหลอมได้ใน 90 วัน · balance_r2 F40) เซ็ตเริ่มที่ Lv 60 · บอสโลก Lv 40–59 ให้ชิ้นส่วนเซ็ต Lv 60 · U8: ค่าทะลวง 3 × S และเหล็ก g(L) เท่าเดิม เหล็กตาม drops D15",
+ "revision_r1": [
+  {
+   "id": "U1",
+   "what": "ชิ้นส่วนชุดต่อชิ้นของในการหลอมเซ็ต",
+   "from": "5 (ราคากลาง 1,500 → 7,500 ต่อชิ้นของ)",
+   "to": "10 (ราคากลาง 800 ตาม drops → 8,000 ต่อชิ้นของ) · ค่าหลอม 2 × S เท่าเดิม",
+   "sections": [
+    "0",
+    "2.1",
+    "6",
+    "21"
+   ],
+   "effect": {
+    "set_Lv80_day90": {
+     "casual": 2,
+     "hardcore": 6,
+     "payer": 6,
+     "whale": 6
+    },
+    "pieces_used_per_day_Lv80": {
+     "casual": 0.6,
+     "hardcore": 1.0,
+     "payer": 1.0
+    }
+   }
+  },
+  {
+   "id": "U2",
+   "what": "ราคา NPC ขายในตาราง 2.1",
+   "from": "อัญมณีขั้น 1 400 · หินสุ่มค่า 300 · ตราทัพ 1,000 · ตราเลื่อนชั้น 4,000 · เหล็กร้อยหลอม 2,000",
+   "to": "ลบทั้งหมด · ยุ้งฉางเหลือหินต้น 200 และหญ้าม้า 80 · ราคารับซื้อคงเดิม",
+   "sections": [
+    "2.1",
+    "10.2",
+    "14.3",
+    "18",
+    "19"
+   ],
+   "effect": {
+    "granary_stone_buy_share_of_sinks_day60_90": [
+     0.007,
+     0.045
+    ]
+   }
+  },
+  {
+   "id": "U3",
+   "what": "ราคากลางอัญมณีขั้น 1",
+   "from": "200 (ค่าหลอมขั้น 1 → 2 = 120)",
+   "to": "1,500 ตรง drops (เศษ 10 × 150) · ค่าหลอมขั้น 1 → 2 = 900 · ตาราง 4.2 × 7.5 · เพิ่มแถวเศษอัญมณี",
+   "sections": [
+    "0",
+    "2.1",
+    "2.2",
+    "4",
+    "13.5",
+    "14.1",
+    "20",
+    "21"
+   ],
+   "effect": {
+    "gem_tier_day90": "2–3 (เดิมคาด 3–4)",
+    "enh_day90_delta": [
+     -0.2,
+     -0.1
+    ],
+    "capacity_gems_tier6_50sockets": [
+     3609000,
+     27122500
+    ]
+   }
+  },
+  {
+   "id": "U4",
+   "what": "ขั้นบันไดหินและหินจากฟาร์ม",
+   "from": "หินกลางและสูงครึ่งหนึ่งดรอปตรง รวมหัวหน้ากลุ่มมอน",
+   "to": "คงขั้นบันได ต้น 100 / กลาง = 5 ต้น + 100 / สูง = 5 กลาง + 600 · หินจากมอนแผนที่ฟาร์มเป็นหินต้นอย่างเดียว (คู่ drops D7)",
+   "sections": [
+    "2.1",
+    "14.1"
+   ],
+   "effect": {}
+  },
+  {
+   "id": "U5",
+   "what": "รับงบอัปเกรด S4",
+   "from": "38 / 45 / 42 / 39 / 50%",
+   "to": "39 / 46.3 / 44 / 42 / 54%",
+   "sections": [
+    "1.3",
+    "13.5",
+    "19",
+    "22"
+   ],
+   "effect": {
+    "Lv61_79_used": [
+     0.393,
+     0.408
+    ],
+    "Lv80_post_tier12_used": [
+     0.522,
+     0.543
+    ],
+    "enh_day90_gem1500": {
+     "casual": 14.3,
+     "hardcore": 16.2,
+     "payer": 16.6,
+     "whale": 18.1
+    },
+    "enh_day90_balance": {
+     "casual": 14.5,
+     "hardcore": 16.4,
+     "payer": 16.7,
+     "whale": 18.2
+    }
+   }
+  }
+ ],
+ "revision_r2": [
+  {
+   "id": "U6",
+   "what": "ตาราง 2.1 ราคากลาง / NPC รับซื้อ / NPC ขาย ตรง drops",
+   "from": "หญ้าม้า 40 / 8 / 80 · หินสุ่มค่า 150 / 30 · ตราทัพ 500 / 100 · ตราเลื่อนชั้น — / 400 · อัญมณีขั้น 1 — / 300 · ชิ้นส่วนชุด — / 160 · เหล็กร้อยหลอม — / 200 · เศษอัญมณี — / 30 · NPC รับซื้อ 20% ทุกแถว",
+   "to": "หญ้าม้า 20 / 4 / 40 · หินสุ่มค่า 300 / 30 · ตราทัพ 600 / 60 · ตราเลื่อนชั้น 200 · อัญมณีขั้น 1 150 · ชิ้นส่วนชุด 80 · เหล็กร้อยหลอม 100 · เศษอัญมณี 15 · NPC รับซื้อของที่ NPC ไม่ขาย 10% · หินต้น 20 / 100 / 200 และหินกลาง 120 หินสูง 720 คงเดิม",
+   "sections": [
+    "0",
+    "1.1",
+    "2.1",
+    "9.1",
+    "14",
+    "18",
+    "19",
+    "21.5"
+   ],
+   "source": "balance_r2 F41 · trade 5.6 · npc N5 · drops 3.1",
+   "effect": {
+    "tael": "ไม่มี (แบบจำลองใช้ราคาของ drops อยู่แล้ว)",
+    "hay_total_value": [
+     66000,
+     33000
+    ]
+   }
+  },
+  {
+   "id": "U7",
+   "what": "เซ็ต Lv 40",
+   "from": "หลอมได้ที่ Lv 40–59 · 10 ชิ้นต่อชิ้นของ",
+   "to": "ตัดเซ็ต Lv 40 · เซ็ตเริ่มที่ Lv 60 · บอสโลก Lv 40–59 ให้ชิ้นส่วนเซ็ต Lv 60 · ทางเลือก (ไม่เลือก): ชุด Lv 40 จากเควสหลัก",
+   "sections": [
+    "0",
+    "1.4",
+    "2.1",
+    "6",
+    "20"
+   ],
+   "source": "balance_r2 F40 (0 จาก 1,000 คนหลอมได้)",
+   "effect": {
+    "tael": "ไม่มี · K_SET 1.6% ของก๊อก",
+    "set_day90": {
+     "casual": {
+      "60": 2,
+      "80": 3
+     },
+     "hardcore": {
+      "60": 4,
+      "80": 6
+     },
+     "payer": {
+      "60": 3,
+      "80": 6
+     },
+     "whale": {
+      "60": 3,
+      "80": 6
+     }
+    }
+   }
+  },
+  {
+   "id": "U8",
+   "what": "ทะลวงขั้นคู่ drops D15",
+   "from": "เหล็ก 0.3 ต่อคนต่อวันทุกเลเวล",
+   "to": "เหล็ก 0.6 ต่อคนต่อวันเมื่อ Lv < 70 · 0.3 ตั้งแต่ Lv 70 · ค่าธรรมเนียม 3 × S และ g(L) ก้อนเท่าเดิม",
+   "sections": [
+    "0",
+    "2.1",
+    "7"
+   ],
+   "source": "balance_r2 F37",
+   "effect": {
+    "K_BREAK_share_of_faucets": [
+     0.004,
+     0.006
+    ],
+    "iron_unmet_over_supply": [
+     3.7,
+     0.82
+    ],
+    "Lv70_79_use_over_supply": 1.12
+   }
+  },
+  {
+   "id": "U9",
+   "what": "ค่าคาดวันที่ 90 และถ้อยคำอัญมณี",
+   "from": "ตีบวก +14.3 / +16.2 / +16.6 (วาฬ +18.1) · อัญมณีเล่นน้อย ขั้น 2 × 23 ขั้น 3 × 17 · \"อัญมณีอาจล้น\"",
+   "to": "ตีบวก +14.4 / +16.1 / +16.5 (วาฬ +17.9) · อัญมณี เล่นน้อย ขั้น 2 × 27 ขั้น 3 × 13 · ขยัน ขั้น 3 × 40 · เติมเงิน ขั้น 3 × 38 ขั้น 4 × 2 · K_GEM 2.6–2.7% ของก๊อก 90 วัน · \"ขาดที่ Lv 50–79 แก้ด้วย D14\"",
+   "sections": [
+    "0",
+    "4.2",
+    "10.2",
+    "13.4",
+    "20",
+    "21",
+    "22"
+   ],
+   "source": "balance_r2 F38 · ข้อ 5.2",
+   "effect": {
+    "enh_day90": {
+     "casual": 14.4,
+     "hardcore": 16.1,
+     "payer": 16.5,
+     "whale": 17.9
+    },
+    "gems_day90": {
+     "casual": {
+      "2": 27,
+      "3": 13
+     },
+     "hardcore": {
+      "3": 40
+     },
+     "payer": {
+      "3": 38,
+      "4": 2
+     },
+     "whale": {
+      "3": 33,
+      "4": 7
+     }
+    }
+   }
+  }
+ ]
+}

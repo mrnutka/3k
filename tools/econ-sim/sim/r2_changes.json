@@ -1,0 +1,150 @@
+{
+  "_note": "Round-2 proposed design changes (balance_r2.md §4). Deep-merged on top of r2_design (= module designs after round 1 + spine proposals S1/S2/S4 in SPINE_R1). KPI definition proposals S7/S9/S10 are evaluated in every run as 'prop' KPIs. matBandMult = multiplier on drops.json material counts (tradable and bound) by player level, piecewise. | Fix pass 2026-09-29 (review_numbers D3): gold-shop charm 6 -> 10 gold each (priced from the main-scenario board price 115, not 194); payers buy 18 charms a week from gold (same 180 gold a week as before), whale stays at the 30-a-week cap. NOTE: drops.json was regenerated at 13:35 with the matBandMult multipliers baked in; this file still carries matBandMult, so it must be run against the pre-round-2 drops.json (_drops_r2/orig/drops.json, mirror _fix_sim/B) to reproduce balance_r2 and the tab numbers.",
+  "drops": {
+    "matBandMult": {
+      "grass": [
+        [
+          1,
+          1
+        ],
+        [
+          59,
+          1
+        ],
+        [
+          60,
+          0.9
+        ],
+        [
+          69,
+          0.9
+        ],
+        [
+          70,
+          0.5
+        ],
+        [
+          79,
+          0.5
+        ],
+        [
+          80,
+          0.45
+        ]
+      ],
+      "reroll": [
+        [
+          1,
+          0.9
+        ],
+        [
+          69,
+          0.9
+        ],
+        [
+          70,
+          0.75
+        ],
+        [
+          79,
+          0.75
+        ],
+        [
+          80,
+          0.7
+        ]
+      ],
+      "insig": [
+        [
+          1,
+          0.1
+        ],
+        [
+          69,
+          0.1
+        ],
+        [
+          70,
+          0.4
+        ],
+        [
+          79,
+          0.4
+        ],
+        [
+          80,
+          1
+        ]
+      ],
+      "seal": [
+        [
+          1,
+          0.25
+        ],
+        [
+          80,
+          0.25
+        ]
+      ],
+      "gem": [
+        [
+          1,
+          0.8
+        ],
+        [
+          49,
+          0.8
+        ],
+        [
+          50,
+          1.1
+        ],
+        [
+          79,
+          1.1
+        ],
+        [
+          80,
+          0.9
+        ]
+      ],
+      "iron": [
+        [
+          1,
+          2
+        ],
+        [
+          69,
+          2
+        ],
+        [
+          70,
+          1
+        ],
+        [
+          80,
+          1
+        ]
+      ],
+      "plunder": [
+        [
+          1,
+          0.75
+        ],
+        [
+          80,
+          0.75
+        ]
+      ]
+    }
+  },
+  "upgrade": {
+    "charmGold": 10,
+    "goldCharmsPerWeek": {
+      "casual": 0,
+      "hardcore": 0,
+      "payer": 18,
+      "whale": 30
+    }
+  }
+}

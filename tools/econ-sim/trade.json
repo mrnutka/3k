@@ -1,0 +1,3012 @@
+{
+ "meta": {
+  "module": "trade",
+  "file": "trade.md",
+  "date": "2026-09-29",
+  "binding_inputs": [
+   "design/spine.md",
+   "design/spine.json"
+  ],
+  "calc": "design/trade_calc.py -> design/trade_calc_out.json · builder design/make_trade_json.py",
+  "value_function": "S(L) = 100 × (L + 2) ตำลึงต่อชั่วโมงเล่นเอง [spine 5.1]",
+  "tags": [
+   "spine",
+   "เอกสาร",
+   "เกมอื่น",
+   "สูตร",
+   "อนุมาน"
+  ],
+  "codex_tags": [
+   "ประวัติศาสตร์",
+   "อนุมาน",
+   "แต่งใหม่"
+  ],
+  "calc_r1": "design/sim/sim.js (balance_r1) -> design/sim/out/{base_70_22_8, r1_changes_70_22_8, r1_changes_70_25_5}.json",
+  "revision_r1": {
+   "date": "2026-09-29",
+   "source": "design/balance_r1.md ข้อ 4.5 T1 T2",
+   "md_section": 22,
+   "applied": [
+    "T1 คงทุกอัตรา (ตลาด 1% + 9% · แลกของ 10%) เพราะขึ้น 1 จุดได้ไม่ถึง 0.03% ของก๊อก",
+    "T2 ภาษีการค้า 0.1–0.3% ของก๊อก (ไม่ใช่ 0.99%) · ความเร็วเงินหลังชุดแก้ 1.8–3.8%",
+    "T2 ขายวัตถุดิบล้นให้ NPC ที่ราคาพื้น = F_NPC_BUYBACK:material_floor (แทน granary) เพดาน 1 × S(L) ต่อตัวละครต่อวัน · KPI T10"
+   ],
+   "note": "แก้ trade.json ตรง ไม่ได้รัน make_trade_json.py / trade_calc.py ใหม่ · ค่าฝั่งผลิตเดิมอยู่ใน sim.pre_r1_supply_side"
+  },
+  "calc_r2": "design/sim/sim.js (balance_r2) -> design/sim/out/{r2_design_70_22_8, r2_changes_70_22_8, r2_changes_70_25_5}.json · สรุปด้วย design/_trade_r2_stats.py",
+  "revision_r2": {
+   "date": "2026-09-29",
+   "source": "design/balance_r2.md ข้อ 4.5 T3–T6",
+   "md_section": 23,
+   "applied": [
+    "T3 KPI 11 ใช้ S10: ซื้อขาย (ตลาด แลกของ กระดาน) ÷ ก๊อกเฉลี่ย 7 วัน เป้า 2–8% ค่าคาด 2.1–4.7% · ความเร็วเงินแสดงอย่างเดียว",
+    "T4 ทางการรับซื้อ: ยกเลิกเปิดอัตโนมัติและสูตรงบ 10% ของภาษี 9% · เหลือเครื่องมือ GM เปิดด้วยมือ งบ ≤ 0.5% ของก๊อกต่อสัปดาห์",
+    "T5 ราคากลางขยับ ±10% ต่อวันคงเดิม (±5%: S9 −20.2..+11.3% · ±3%: S9 −16.5..+7.8% แต่ของล้นลงราคาช้า 3 เท่า)",
+    "T6 ข้อ 21.7: ภาษีการค้า 0.1% ของก๊อก · ซื้อขาย ÷ ก๊อก 2.0–4.7% · material_floor 0.1%"
+   ],
+   "open": [
+    "KPI T1 T2 ใช้เกณฑ์รอบ 1 แต่ค่ารอบ 2 ต่ำกว่าแดง 30–51 / 20–44 จาก 70 วัน · เสนอแสดงอย่างเดียวจนเบต้าปิด",
+    "S10 ราว 65% ของตัวตั้งเป็นกระดาน ต้องดูคู่กับ T1",
+    "KPI 8 (S9) ไม่ผ่านทุกฉาก ไม่ใช่คันโยกของโมดูลนี้ (balance_r2 F30 F31 · npc N6)",
+    "npc 6.1: balance_r2 N5 แก้ฝั่ง npc",
+    "spine.md ยังเป็นฉบับก่อนรอบ 1 (7.2 · KPI 8 · KPI 11)"
+   ],
+   "note": "แก้ trade.json ตรง ไม่ได้รัน make_trade_json.py / trade_calc.py ใหม่ · ค่ารอบ 2 อยู่ใน sim.r2 · ค่ารอบ 1 คงไว้ที่เดิม"
+  }
+ },
+ "summary_th": [
+  "ช่องทาง: แลกของ ตลาดกลาง แผงร้าน คลังของพันธมิตร · จดหมายเป็นของระบบ ไม่มีของแนบ ไม่มีเก็บเงินปลายทาง",
+  "ทุกช่องทางใช้ตำลึง ทองย้ายมือได้เฉพาะกระดานแลกทอง",
+  "ต้นทุนเท่ากัน: ตลาด 1% + 9% · แลกของ 10% ของตำลึง · ให้เปล่าเกินครึ่ง 10% ของส่วนต่าง · แลกของกับของ 2% · เฟส 5 บวกภาษีเมืองหลวง 0–5%",
+  "ภาษีตลาด 5% ของเสนาบดีสูงสุด = ภาษีเมืองหลวงบวกเพิ่ม 0–5% ครึ่งหนึ่งเข้าคลังเงินพันธมิตร (เพดาน 3,000,000/สัปดาห์) ครึ่งหนึ่งทำลาย",
+  "ราคากลาง VWAP 24 ชม. ขยับ ≤ 10%/วัน · กรอบ 70–130% · พื้น = NPC ÷ 0.9 · เพดาน 2/3/3/5 เท่าของราคากลางเริ่มต้น",
+  "ส้มทุกชิ้นและรายการ ≥ 10 × S(เพดานเซิร์ฟ) = 82,000 ประกาศ 30 นาทีแล้วจับฉลาก",
+  "ส้มขายต่อได้ 1 ครั้ง · ขาว–ม่วง +0 และวัตถุดิบจากฟาร์มและบอสเทรดได้ · ที่เหลือผูกตัว",
+  "เพดานสุทธิต่อวัน 5,000 / 50,000 / 500,000 · ช่วงพัก 72 ชม. และ 24 ชม.",
+  "ภาษีการค้า 0.1–0.3% ของก๊อก (แบบจำลองรอบ 1 · ไม่ใช่ 0.99%) · คงอัตราเดิมเพราะขึ้น 1 จุดได้ไม่ถึง 0.03% ของก๊อก · ความเร็วเงินหลังชุดแก้ 1.8–3.8% · ขายของล้นให้ NPC = F_NPC_BUYBACK:material_floor",
+  "รอบ 2: ภาษีการค้าราว 0.1% ของก๊อก · KPI 11 = ซื้อขาย ÷ ก๊อก เป้า 2–8% (คาด 2.1–4.7%) แทนความเร็วเงิน · ทางการรับซื้อเป็นเครื่องมือ GM เปิดด้วยมือ ≤ 0.5% ของก๊อกต่อสัปดาห์ · ราคากลางคง ±10%/วัน · material_floor ราว 0.1%"
+ ],
+ "names_th": {
+  "market": "ตลาดกลาง",
+  "stall": "แผงร้าน",
+  "market_square": "ลานตลาด",
+  "npc_market": "นายตลาด",
+  "trade": "แลกของ",
+  "list": "ลงขาย",
+  "bid": "ตั้งรับซื้อ",
+  "buy_now": "ซื้อทันที",
+  "sell_now": "ขายทันที",
+  "ref_price": "ราคากลาง",
+  "band": "กรอบราคา",
+  "floor": "ราคาพื้น",
+  "ceiling": "ราคาเพดาน",
+  "listing_fee": "ค่าลงขาย",
+  "sale_tax": "ภาษีการค้า",
+  "trade_tax": "ภาษีแลกของ",
+  "swap_fee": "ค่าแลกของกับของ",
+  "gift_fee": "ค่าให้เปล่า",
+  "capital_tax": "ภาษีเมืองหลวง",
+  "city_tax": "ภาษีเมือง",
+  "publicity": "ช่วงประกาศขาย",
+  "reserve": "จอง",
+  "lottery": "จับฉลาก",
+  "market_box": "กล่องตลาด",
+  "trust_tiers": [
+   "ใหม่",
+   "ทั่วไป",
+   "ยืนยัน",
+   "ล็อก"
+  ],
+  "bind_states": {
+   "free": "เทรดได้",
+   "once": "ขายต่อได้ 1 ครั้ง",
+   "bound": "ผูกตัว",
+   "ally": "ผูกพันธมิตร",
+   "npc_only": "ขายได้เฉพาะ NPC"
+  },
+  "hold": "ช่วงพัก",
+  "npc_granary": "พ่อค้าหลวง",
+  "official_buy": "ทางการรับซื้อ",
+  "ally_storage": "คลังของพันธมิตร",
+  "ally_treasury": "คลังเงินพันธมิตร",
+  "trade_history": "ประวัติการค้า",
+  "report": "แจ้งโกง"
+ },
+ "channels": [
+  {
+   "id": "trade",
+   "who": "Lv ≥ 10 ทั้งสองฝั่ง · ระดับ 0 แลกได้เฉพาะของ",
+   "where": "ห่าง ≤ 10 ม. นอกสงคราม อารีนา ดันเจี้ยน ห้องข้ามเซิร์ฟ",
+   "moves": "ของ + ตำลึง",
+   "phase": 2
+  },
+  {
+   "id": "market",
+   "who": "ซื้อ Lv ≥ 10 · ขาย ระดับ ≥ 1",
+   "where": "เมนูทุกที่นอกพื้นที่ต่อสู้ และนายตลาด",
+   "moves": "ของ ↔ ตำลึง",
+   "phase": 3
+  },
+  {
+   "id": "stall",
+   "who": "ผู้ขายระดับ ≥ 1",
+   "where": "ลานตลาด 3 เมือง 120 ที่",
+   "moves": "แสดงรายการตลาดกลาง",
+   "phase": 4
+  },
+  {
+   "id": "ally_storage",
+   "who": "หัวหน้าและรองหัวหน้าแจก · สมาชิก ≥ 72 ชม. รับ",
+   "where": "เมนูพันธมิตร",
+   "moves": "ของดรอปบอสพันธมิตร",
+   "phase": 3
+  },
+  {
+   "id": "board",
+   "who": "ตาม spine 8",
+   "moves": "ทอง ↔ ตำลึง",
+   "phase": 4,
+   "open_server_day": 4
+  },
+  {
+   "id": "mail",
+   "who": "ระบบเท่านั้น",
+   "player_attachments": false,
+   "cod": false,
+   "phase": 1
+  },
+  {
+   "id": "ground_drop",
+   "who": "เจ้าของเท่านั้น"
+  },
+  {
+   "id": "cash_shop_gift",
+   "exists": false,
+   "why": "ย้ายมูลค่าทองระหว่างผู้เล่น ขัดข้อตัดสิน 3"
+  }
+ ],
+ "direct_trade": {
+  "distance_m": 10,
+  "min_level": 10,
+  "slots_per_side": 8,
+  "tael_slot": 1,
+  "invite_timeout_s": 30,
+  "repeat_invite_s": 3,
+  "idle_close_s": 120,
+  "not_hit_within_s": 10,
+  "confirm_countdown_s": 3,
+  "confirm_hold_ms": 600,
+  "pin_at_value": 200000,
+  "trades_per_day": 50,
+  "blocked_in": [
+   "สงคราม",
+   "อารีนา",
+   "ดันเจี้ยน",
+   "ห้องข้ามเซิร์ฟ"
+  ],
+  "cross_kingdom": true,
+  "change_after_lock": "ปลดล็อกทั้งสองฝั่ง กะพริบช่องที่เปลี่ยน",
+  "costs": {
+   "trade_tax": {
+    "pct_of_tael_given": 10,
+    "phase5": "อัตราตลาดรวมของวันนั้น = 10 + ภาษีเมืองหลวง",
+    "payer": "ฝั่งที่ใส่ตำลึง",
+    "on_top": true,
+    "code": "K_TRADE_TAX"
+   },
+   "swap_fee": {
+    "pct_of_ref_total_both_sides": 2,
+    "min": 50,
+    "waived_below_ref_total": 1000,
+    "when": "ทั้งสองฝั่งใส่ของ",
+    "payer": "ผู้เริ่มแลก",
+    "code": "K_SWAP_FEE"
+   },
+   "gift_fee": {
+    "rule": "ถ้า G ≥ 1,000 และ G > 0.5 × max(V_A, V_B): 10% × G − ภาษีและค่าแลกที่ผู้ให้จ่ายแล้ว (ไม่ติดลบ)",
+    "V": "ตำลึงที่ใส่ + ราคากลางรวมของของที่ใส่",
+    "G": "|V_A − V_B|",
+    "payer": "ฝั่งที่ V มากกว่า",
+    "code": "K_GIFT_FEE",
+    "new": true
+   },
+   "rounding": "ปัดลง",
+   "max_tax_per_trade": 5000000
+  },
+  "examples": [
+   {
+    "a": "ดาบม่วง ราคากลาง 7,200",
+    "b": "7,000 ตำลึง",
+    "G": 200,
+    "cost": "B ภาษี 700",
+    "note": "เท่าขายในตลาด 70 + 630"
+   },
+   {
+    "a": "หินตีบวกขั้นต้น 20 ก้อน 2,000",
+    "b": "อัญมณี 2,500",
+    "G": 500,
+    "cost": "ค่าแลกของกับของ 90"
+   },
+   {
+    "a": "หินตีบวกขั้นต้น 8 ก้อน 800",
+    "b": "—",
+    "G": 800,
+    "cost": 0
+   },
+   {
+    "a": "ชุดม่วง 5 ชิ้น 36,000",
+    "b": "—",
+    "G": 36000,
+    "cost": "ค่าให้เปล่า 3,600"
+   },
+   {
+    "a": "50,000 ตำลึง",
+    "b": "หมวกขาว 820",
+    "G": 49180,
+    "cost": "ภาษี 5,000 · ค่าให้เปล่า 0"
+   }
+  ]
+ },
+ "market": {
+  "buyers_min_level": 10,
+  "seller_min_tier": 1,
+  "markets_per_server": 1,
+  "currency": "tael",
+  "listing_fee_pct": 1,
+  "listing_fee_min": 10,
+  "listing_fee_refund": false,
+  "sale_tax_pct": 9,
+  "listing_hours": 48,
+  "active_listings": {
+   "tier1": 10,
+   "tier2": 20
+  },
+  "new_listings_per_day": 30,
+  "partial_fill": true,
+  "cancel": "ได้ตลอด ยกเว้นช่วงประกาศ",
+  "bids": {
+   "exist": true,
+   "fee": 0,
+   "escrow": "เต็มจำนวน",
+   "hours": 48,
+   "active": {
+    "tier0": 5,
+    "tier1": 10,
+    "tier2": 20
+   },
+   "new_per_day": 30,
+   "priority": "ราคาสูงก่อน แล้วเวลา · ที่เพดาน ≥ 2 คำสั่ง จับฉลาก"
+  },
+  "sell_now_cost": "ค่าลงขาย 1% + ภาษี 9% เท่าลงขาย",
+  "proceeds": "เข้ากระเป๋าทันที ส่วนเกิน 999,999,999 ค้างในกล่องตลาด",
+  "market_box": {
+   "cap_entries": 100,
+   "expires": false,
+   "full": "ซื้อหรือลงขายเพิ่มไม่ได้"
+  },
+  "example": {
+   "list_total": 1000,
+   "listing_fee": 10,
+   "received_on_sale": 910,
+   "net": 900,
+   "phase5_capital_3pct_received": 880
+  }
+ },
+ "price_controls": {
+  "ref": {
+   "method": "VWAP 24 ชม. ของการขายในตลาดกลาง คำนวณ 05:00",
+   "min_fills": 5,
+   "min_sellers": 3,
+   "min_buyers": 3,
+   "exclude": [
+    "แลกของ",
+    "บัญชีระบบ",
+    "คู่ที่อุปกรณ์หรือ IP เดียวกัน"
+   ],
+   "move_max_pct_per_day": 10,
+   "move_r2": {
+    "decision": "คง 10 (balance_r2 T5)",
+    "tested_pm5": {
+     "S9_weekly_pct": [
+      -20.2,
+      11.3
+     ],
+     "spine_index_weekly_pct": [
+      -16,
+      29
+     ]
+    },
+    "tested_pm3": {
+     "S9_weekly_pct": [
+      -16.5,
+      7.8
+     ],
+     "spine_index_weekly_pct": [
+      -16,
+      17
+     ],
+     "glut_reprice": "ลง 30% ใน 12 วัน แทน 4 วัน (ช้า 3 เท่า)"
+    },
+    "S9_target_weekly_pct": 10,
+    "reason": "ก้าวเล็กลงไม่ทำให้ดัชนีผ่าน ±10% · ดัชนีแกว่งตามวงจรความต้องการของแต่ละของ (balance_r2 F30 F31)"
+   },
+   "gm_override_pct": 30,
+   "gm_override_per_day": 1
+  },
+  "band_pct": [
+   70,
+   130
+  ],
+  "floor": "ปัดขึ้น(ราคา NPC รับซื้อ ÷ (1 − อัตราตลาดรวม)) · เปิดไทย = NPC ÷ 0.9",
+  "ceiling_x_ref_start": {
+   "basic_material": 2,
+   "other_material": 3,
+   "gear_white_to_purple": 3,
+   "gear_orange": 5
+  },
+  "ref_start": {
+   "basic_material": {
+    "npc_buy_pct_of_ref_start": 20,
+    "rule": "ตั้งเอง",
+    "example": {
+     "item": "หินตีบวกขั้นต้น",
+     "npc_buy": 20,
+     "floor": 23,
+     "ref": 100,
+     "ceiling": 200
+    }
+   },
+   "other_material": {
+    "npc_buy_pct_of_ref_start": 10,
+    "rule": "0.3 × S(เลเวลที่ดรอป) × ชั่วโมงเล่นเองเฉลี่ยต่อ 1 ชิ้น",
+    "example": {
+     "item": "หินตีบวกขั้นกลาง Lv 50 1 ก้อนต่อ 2 ชม.",
+     "npc_buy": 312,
+     "floor": 347,
+     "ref": 3120,
+     "band": [
+      2184,
+      4056
+     ],
+     "ceiling": 9360
+    }
+   },
+   "gear_x_S_item_level": {
+    "ขาว": {
+     "npc": 0.02,
+     "ref": 0.1
+    },
+    "เขียว": {
+     "npc": 0.04,
+     "ref": 0.2
+    },
+    "ฟ้า": {
+     "npc": 0.08,
+     "ref": 0.4
+    },
+    "ม่วง": {
+     "npc": 0.2,
+     "ref": 1.0
+    },
+    "ส้ม": {
+     "npc": 0.6,
+     "ref": 6.0
+    }
+   },
+   "gear_examples": [
+    {
+     "item": "ดาบม่วง Lv 70",
+     "npc_buy": 1440,
+     "floor": 1600,
+     "ref": 7200,
+     "band": [
+      5040,
+      9360
+     ],
+     "ceiling": 21600,
+     "publicity": false
+    },
+    {
+     "item": "เกราะส้ม Lv 80",
+     "npc_buy": 4920,
+     "floor": 5467,
+     "ref": 49200,
+     "band": [
+      34440,
+      63960
+     ],
+     "ceiling": 246000,
+     "publicity": true
+    }
+   ],
+   "requires": "อุปกรณ์ดรอปไม่มีบรรทัดสุ่มตอนดรอป"
+  }
+ },
+ "publicity_lottery": {
+  "applies_to": [
+   "อุปกรณ์ส้มทุกชิ้น",
+   "รายการราคารวม ≥ 10 × S(เลเวลเพดานเซิร์ฟ)"
+  ],
+  "threshold_at_cap80": 82000,
+  "minutes": 30,
+  "reserve": "ตำลึงเต็มจำนวนไปที่พัก · 1 บัญชี 1 สิทธิ์ · 1 อุปกรณ์ 1 สิทธิ์ · ระดับ ≥ 1",
+  "end": "มีผู้จอง ≥ 1 สุ่ม 1 คน คืนเงินคนอื่น · ไม่มี = รายการปกติจนครบ 48 ชม.",
+  "seller": "ยกเลิกไม่ได้ เลือกผู้ซื้อไม่ได้",
+  "log": "lottery_draw (seed ผู้จอง ผู้ชนะ)"
+ },
+ "npc_granary": {
+  "what": "วัตถุดิบขั้นต้น",
+  "buy_pct_of_ref_start": 20,
+  "sell_x_ref_start": 2,
+  "bought_items": "ผูกตัว",
+  "always_on": true,
+  "code": "F_NPC_BUYBACK:material_floor"
+ },
+ "material_floor": {
+  "what": "ขายวัตถุดิบเทรดได้ที่ใช้ไม่หมดให้ NPC ที่ราคาพื้น",
+  "price": "ราคา NPC รับซื้อข้อ 5.6: วัตถุดิบขั้นต้น 20% ของราคากลางเริ่มต้น (พ่อค้าหลวง) · วัตถุดิบอื่น 10%",
+  "tax": 0,
+  "cap_xS_per_char_day": 1,
+  "cap_scope": "รวมทุกชนิด",
+  "cap_source": "npc 3.9",
+  "code": "F_NPC_BUYBACK:material_floor",
+  "label_matches": "npc 12.8",
+  "replaces_code": "F_NPC_BUYBACK:granary",
+  "budget": "นอกงบ S(L) (ของเทรดได้ไม่อยู่ใน S(L) spine 5.1)",
+  "sim_r1_pct_F_d21_90": {
+   "design_70_22_8": [
+    1.4,
+    1.7
+   ],
+   "package_70_22_8": [
+    0.3,
+    0.65
+   ],
+   "package_70_25_5": [
+    0.3,
+    0.65
+   ]
+  },
+  "sim_r1_pct_F_mean90": {
+   "design_70_22_8": 1.54,
+   "package_70_22_8": 0.54,
+   "package_70_25_5": 0.54
+  },
+  "sim_r1_day60_per_day": {
+   "design_70_22_8": 1110048,
+   "package_70_22_8": 391170,
+   "package_70_25_5": 410381
+  },
+  "balance_r1_quote": "ตามแบบ 1.5–1.7% ของก๊อก · หลังแก้ส่วนผสมดรอป D1 0.4–0.6%",
+  "seal_share_after_package": 0.6,
+  "kpi": "T10",
+  "open": "npc 6.1 ห้าม NPC รับซื้อวัตถุดิบขั้นกลางขึ้นไป (owner_decisions_open ข้อ 10)",
+  "sim_r2_pct_F_mean90": {
+   "design_70_22_8": 0.38,
+   "package_70_22_8": 0.07,
+   "package_70_25_5": 0.07
+  },
+  "sim_r2_pct_F_7d_d21_90": {
+   "design_70_22_8": [
+    0.31,
+    0.52
+   ],
+   "package_70_22_8": [
+    0.0,
+    0.12
+   ],
+   "package_70_25_5": [
+    0.0,
+    0.13
+   ]
+  },
+  "sim_r2_day60_per_day": {
+   "design_70_22_8": 282479,
+   "package_70_22_8": 59573,
+   "package_70_25_5": 59731
+  },
+  "balance_r2_quote": "หลัง drops D10–D16 ราว 0.1% ของก๊อก (ตราเลื่อนชั้น × 0.25 ทุกเลเวล)",
+  "open_r2": "balance_r2 N5 ให้ npc รับซื้อวัตถุดิบเทรดได้ทุกขั้นที่ 10% (แก้ฝั่ง npc 6.1)"
+ },
+ "official_buyback": {
+  "lever": true,
+  "mode": "gm_manual",
+  "trigger": "ไม่มีเปิดอัตโนมัติ (รอบ 2) · GM เปิดด้วยมือพร้อมเหตุผลและประกาศในหน้าตลาด · ใช้กับของชนิดที่ล้นจริง (KPI T10)",
+  "budget": "GM ตั้งต่อครั้ง รวมไม่เกิน 0.5% ของก๊อกรวม 7 วันที่ผ่านมา ต่อสัปดาห์ (ระบบไม่ให้ตั้งเกิน) · ไม่ผูกกับภาษีการค้า",
+  "weekly_cap_pct_F": 0.5,
+  "weekly_cap_basis": "ก๊อกรวม 7 วันที่ผ่านมา",
+  "removed_r2": {
+   "auto_trigger": "ดัชนีราคาตะกร้าลง > 10% ใน 7 วัน (spine KPI 8)",
+   "budget_formula": "10% ของภาษีการค้า 9% ของเมื่อวาน (spine 7.2)",
+   "source": "balance_r2 T4 F33"
+  },
+  "max_items_per_week": 5,
+  "price_pct_of_ref": 70,
+  "select": "รายชื่อแนะนำให้ GM ทุกจันทร์ 05:00 (ระบบไม่เปิดเอง): รายการค้าง ≥ 3 วันของปริมาณขาย และราคากลางลง ≥ 15% ใน 7 วัน ไม่รวมอุปกรณ์",
+  "bought_items": "ทำลาย",
+  "code": "F_NPC_BUYBACK:official",
+  "day60_budget_1000dau": 14335,
+  "day60_budget_1000dau_range_r1": [
+   10265,
+   14335
+  ],
+  "day60_budget_1000dau_pre_r1": 46352,
+  "day60_budget_note": "day60_budget_1000dau* = งบตามสูตรเดิมที่ยกเลิกในรอบ 2 เก็บไว้เทียบ",
+  "day60_weekly_cap_1000dau_r2": {
+   "design_70_22_8": 2294536,
+   "package_70_22_8": 2286726,
+   "package_70_25_5": 2304228
+  },
+  "day60_cap_per_day_1000dau_r2": 326675,
+  "sim_r2_old_formula": {
+   "budget_mean_per_day_90d": {
+    "design_70_22_8": 2360,
+    "package_70_22_8": 3186,
+    "package_70_25_5": 3581
+   },
+   "budget_max_per_day": {
+    "design_70_22_8": 5673,
+    "package_70_22_8": 12501,
+    "package_70_25_5": 25352
+   },
+   "spent_90d": {
+    "design_70_22_8": 70198,
+    "package_70_22_8": 146833,
+    "package_70_25_5": 203483
+   },
+   "active_days": {
+    "design_70_22_8": 27,
+    "package_70_22_8": 33,
+    "package_70_25_5": 37
+   },
+   "balance_r2_quote": "เฉลี่ย 2,400–3,200 ต่อวัน (สูงสุด 12,500) ใช้จริงรวม 70,000–147,000 ตลอด 90 วัน (70/22/8)",
+   "S9_weekly_pct_without": [
+    -19.7,
+    12.5
+   ],
+   "S9_weekly_pct_budget_300000_per_day": [
+    -19.4,
+    12.5
+   ],
+   "budget_300000_per_day_pct_F": 0.45,
+   "max_effect_on_F_K": "ใช้เต็มเพดาน 0.5% เข้า:ออกขึ้นได้ไม่เกินราว 0.005"
+  }
+ },
+ "stalls": {
+  "squares": [
+   {
+    "city": "ลกเอี๋ยง",
+    "for": "ง่อและทุกก๊ก",
+    "spots": 40
+   },
+   {
+    "city": "ฮูโต๋",
+    "for": "วุย",
+    "spots": 40
+   },
+   {
+    "city": "เสียวพ่าย",
+    "for": "จ๊ก",
+    "spots": 40
+   }
+  ],
+  "spots_total": 120,
+  "rows_x_cols": [
+   4,
+   10
+  ],
+  "visible_max": 20,
+  "per_account": 1,
+  "listings_shown": 20,
+  "bids_shown": 5,
+  "sign_chars": 12,
+  "sign_block_digit_run": 5,
+  "rent": 0,
+  "permit_item": false,
+  "offline": "ลูกจ้างเฝ้าแผง ตราบที่มีรายการ",
+  "release_after_offline_h": 48,
+  "overflow": "ซอยตลาด (เมนู)",
+  "war_hide": "เมืองที่มีศึกในแผนที่เมือง ซ่อนภาพ 20:00–21:00 วันเสาร์"
+ },
+ "mail": {
+  "sender": "ระบบเท่านั้น",
+  "player_attachments": false,
+  "cod": false,
+  "grant_key": true,
+  "claim": "UPDATE … WHERE claimed_at IS NULL ใน transaction เดียว"
+ },
+ "ally_storage": {
+  "in": "ดรอปบอสพันธมิตรเท่านั้น",
+  "member_deposit": false,
+  "state": "ผูกพันธมิตร",
+  "distributors": [
+   "หัวหน้า",
+   "รองหัวหน้า 2"
+  ],
+  "recipient_min_hours": 72,
+  "after_receive": "ผูกตัว",
+  "capacity": 200,
+  "unassigned_days": 7,
+  "unassigned_rule": "สุ่มให้ผู้ร่วมตีบอส",
+  "log_days": 30,
+  "disband": "สุ่มให้สมาชิก ≥ 72 ชม.",
+  "internal_auction_at_launch": false
+ },
+ "taxes": [
+  {
+   "id": "listing_fee",
+   "rate": "1% ขั้นต่ำ 10",
+   "range": [
+    0.5,
+    2
+   ],
+   "on": "ตลาด แผง",
+   "payer": "ผู้ขาย",
+   "goes": "ทำลาย",
+   "code": "K_MKT_LIST"
+  },
+  {
+   "id": "sale_tax",
+   "rate": "9%",
+   "range": [
+    6,
+    12
+   ],
+   "on": "ตลาด แผง",
+   "payer": "ผู้ขาย",
+   "goes": "ทำลายทั้งหมด (รอบ 2 ไม่แบ่ง 10% เป็นงบทางการรับซื้อ)",
+   "code": "K_MKT_TAX"
+  },
+  {
+   "id": "trade_tax",
+   "rate": "10% ของตำลึงที่ใส่",
+   "range": [
+    8,
+    14
+   ],
+   "on": "แลกของ",
+   "payer": "ผู้ใส่ตำลึง",
+   "goes": "ทำลาย",
+   "code": "K_TRADE_TAX"
+  },
+  {
+   "id": "swap_fee",
+   "rate": "2% ของราคากลางรวม ขั้นต่ำ 50 ยกเว้น < 1,000",
+   "range": [
+    1,
+    4
+   ],
+   "on": "แลกของที่ทั้งสองฝั่งใส่ของ",
+   "payer": "ผู้เริ่มแลก",
+   "goes": "ทำลาย",
+   "code": "K_SWAP_FEE"
+  },
+  {
+   "id": "gift_fee",
+   "rate": "10% ของส่วนต่าง − ที่จ่ายแล้ว",
+   "range": "เท่าภาษีแลกของ",
+   "on": "แลกของที่ส่วนต่างเกินครึ่งและ ≥ 1,000",
+   "payer": "ผู้ให้",
+   "goes": "ทำลาย",
+   "code": "K_GIFT_FEE",
+   "new": true
+  },
+  {
+   "id": "capital_tax",
+   "rate": "0–5% ขั้นละ 1%",
+   "phase": 5,
+   "on": "ตลาด แผง ภาษีแลกของ",
+   "payer": "ผู้ขาย · ผู้ใส่ตำลึง",
+   "owner_share": 0.5,
+   "weekly_cap": 3000000,
+   "over_cap": "ทำลาย",
+   "goes": "50% คลังเงินพันธมิตรเสนาบดีสูงสุด · 50% ทำลาย",
+   "codes": [
+    "T_CITY_TAX_TREASURY",
+    "K_CITY_TAX_BURN"
+   ],
+   "change": "วันละครั้ง มีผล 05:00 ถัดไป แสดงล่วงหน้า"
+  },
+  {
+   "id": "city_tax_ref",
+   "rate": "0–10% ขั้นละ 2%",
+   "on": "ร้าน NPC ในเมืองศึก 7 เมือง",
+   "note": "ไม่แตะการค้าผู้เล่น [spine 7.2]"
+  },
+  {
+   "id": "board_fee_ref",
+   "rate": "6% ต่อฝั่ง",
+   "on": "กระดานแลกทอง",
+   "code": "K_BOARD_FEE"
+  }
+ ],
+ "market_max_total_pct": 15,
+ "paid_tax_discount": false,
+ "rates_r1": {
+  "decision": "คงทุกอัตราและช่วงปรับ",
+  "listing_fee_pct": 1,
+  "sale_tax_pct": 9,
+  "trade_tax_pct": 10,
+  "swap_fee_pct": 2,
+  "gift_fee_pct": 10,
+  "plus_1pt_all_channels_pct_F_mean90": {
+   "design_70_22_8": 0.014,
+   "package_70_22_8": 0.022,
+   "package_70_25_5": 0.021
+  },
+  "plus_1pt_limit_pct_F": 0.03,
+  "reason": "ปริมาณซื้อขายราว 1.4–2.2% ของก๊อก ภาษีจึงใช้กันปั่นและกันฟอกมูลค่า ไม่ใช่คุมเงินเฟ้อ"
+ },
+ "capital_tax_fit": {
+  "doc": "ภาษีตลาด 5% ของเสนาบดีสูงสุด (m19ey5s49dk.35949)",
+  "decision": "ภาษีบวกเพิ่ม 0–5% ที่ผู้ครองตั้ง ไม่ใช่ส่วนแบ่งภาษีฐาน",
+  "day60_at_3pct_1000dau": {
+   "extra_sink": 59730,
+   "treasury_per_day": 29865,
+   "treasury_per_week": 209055,
+   "range_extra_sink_r1": [
+    42770,
+    59730
+   ],
+   "range_treasury_per_week_r1": [
+    149694,
+    209055
+   ],
+   "source": "แบบจำลองรอบ 1 วันที่ 60 (หลังชุดแก้ 70/22/8 · ช่วงรวมตามแบบ)",
+   "pre_r1": {
+    "extra_sink": 193135,
+    "treasury_per_day": 96567,
+    "treasury_per_week": 675969
+   },
+   "r2": {
+    "extra_sink": {
+     "design_70_22_8": 17281,
+     "package_70_22_8": 22119,
+     "package_70_25_5": 26451
+    },
+    "treasury_per_week": {
+     "design_70_22_8": 60484,
+     "package_70_22_8": 77417,
+     "package_70_25_5": 92579
+    },
+    "source": "แบบจำลองรอบ 2 วันที่ 60 · 3% × ปริมาณตลาด"
+   }
+  }
+ },
+ "binding": {
+  "states": [
+   "free",
+   "once",
+   "bound",
+   "ally",
+   "npc_only"
+  ],
+  "rules": [
+   {
+    "cat": "ตำลึง",
+    "state": "ย้ายได้ผ่านตลาด แผง แลกของ เสียภาษีทุกทาง"
+   },
+   {
+    "cat": "ทอง",
+    "state": "กระดานแลกทองเท่านั้น 1 ครั้งหลังพ้นช่วงรอ"
+   },
+   {
+    "cat": "ทองผูก",
+    "state": "ย้ายไม่ได้"
+   },
+   {
+    "cat": "แต้มทุกชนิด (ความดีความชอบ แต้มพันธมิตร เหรียญเกียรติยศ แต้มสะสมบอส)",
+    "state": "ย้ายไม่ได้"
+   },
+   {
+    "cat": "เสบียงศึก",
+    "state": "ไม่ใช่ของ ย้ายไม่ได้"
+   },
+   {
+    "cat": "อุปกรณ์ดรอป ขาว–ม่วง +0",
+    "state": "free",
+    "bind_on": [
+     "สวม",
+     "ตีบวก",
+     "ใส่อัญมณี",
+     "สุ่มค่า",
+     "หลอมเซ็ต",
+     "ทะลวงขั้น"
+    ]
+   },
+   {
+    "cat": "อุปกรณ์ดรอป ส้ม +0",
+    "state": "once",
+    "bind_on": [
+     "เปลี่ยนมือครั้งแรก",
+     "สวม",
+     "ตีบวก",
+     "ใส่อัญมณี",
+     "สุ่มค่า",
+     "หลอมเซ็ต",
+     "ทะลวงขั้น"
+    ],
+    "new": true
+   },
+   {
+    "cat": "อุปกรณ์แดงและตำนาน",
+    "state": "bound"
+   },
+   {
+    "cat": "อุปกรณ์จากร้าน NPC",
+    "state": "bound"
+   },
+   {
+    "cat": "อุปกรณ์จากเควสและเนื้อเรื่อง",
+    "state": "bound"
+   },
+   {
+    "cat": "อุปกรณ์จากเงินจริง (อาวุธม่วงเติมครั้งแรก)",
+    "state": "bound"
+   },
+   {
+    "cat": "วัตถุดิบจากมอน เล่นเองและออโต้ (หินตีบวก อัญมณี หินสุ่มค่า หญ้าม้า ตราเลื่อนชั้น ชิ้นส่วนชุด)",
+    "state": "free"
+   },
+   {
+    "cat": "วัตถุดิบจากบอสและดันเจี้ยน (ดรอปสุ่ม)",
+    "state": "free"
+   },
+   {
+    "cat": "วัตถุดิบจากฟาร์มออฟไลน์",
+    "state": "bound"
+   },
+   {
+    "cat": "วัตถุดิบจากพ่อค้าหลวงหรือร้าน NPC",
+    "state": "bound"
+   },
+   {
+    "cat": "วัตถุดิบจากคลังของพันธมิตร",
+    "state": "ally",
+    "after": "bound"
+   },
+   {
+    "cat": "ของสิ้นเปลือง (ยา อาหาร เสบียงทหาร ยาเพิ่ม EXP)",
+    "state": "bound"
+   },
+   {
+    "cat": "ขุนพลและชิ้นขุนพล",
+    "state": "bound"
+   },
+   {
+    "cat": "ของจากกาชา",
+    "state": "bound"
+   },
+   {
+    "cat": "ของร้านทองและแพ็กเงินจริง",
+    "state": "bound",
+    "gift_from_shop": false
+   },
+   {
+    "cat": "ของกิจกรรม โค้ด ชวนเพื่อน บัตรผ่านซีซัน",
+    "state": "bound"
+   },
+   {
+    "cat": "ของเควส (รวมตราม้าถิ่น)",
+    "state": "bound",
+    "discard_sell": false
+   },
+   {
+    "cat": "รางวัลยศ สงคราม ความดีความชอบ (หีบสงคราม ร้านเหรียญเกียรติยศ ชุดทหารม้าชั้น 3 ม้าเพิ่มความดีความชอบ)",
+    "state": "bound"
+   },
+   {
+    "cat": "รางวัลอันดับและแต้มสะสมบอส",
+    "state": "bound"
+   },
+   {
+    "cat": "ม้าและของม้า (ม้า เกราะม้า สกิน ตราม้า ขนแผงม้ากระต่ายแดง)",
+    "state": "bound",
+    "note": "หญ้าม้าจากฟาร์มเทรดได้"
+   },
+   {
+    "cat": "ศาสตรานาม ทุกแหล่ง",
+    "state": "bound"
+   },
+   {
+    "cat": "เครื่องยศ ฉายา สายตรา",
+    "state": "bound"
+   },
+   {
+    "cat": "ของขายเฉพาะ NPC (พวงเหรียญเก่า เขี้ยว หนัง ทองคำแท่งพระราชทาน)",
+    "state": "npc_only"
+   },
+   {
+    "cat": "ป้ายและตำรา (ป้ายย้ายก๊ก ตำราล้างสาย บัตรเปลี่ยนชื่อ)",
+    "state": "bound"
+   }
+  ],
+  "change_rules": [
+   "ผูกแล้วไม่ปลดคืน",
+   "รวมของที่มีชิ้นผูก ผลเป็นผูก",
+   "ถอดอัญมณีจากของผูก ได้อัญมณีผูก",
+   "ผูกกับเทรดได้ไม่ซ้อนกองเดียวกัน",
+   "สวมครั้งแรกถามยืนยัน",
+   "ผูกตัว = ผูกกับตัวละคร",
+   "ร้านทองประกาศว่าของจากทองผูกตัวทุกชิ้นตั้งแต่วันแรก"
+  ]
+ },
+ "trust_tiers": [
+  {
+   "tier": 0,
+   "name_th": "ใหม่",
+   "condition": "Lv < 20 หรือบัญชี < 48 ชม.",
+   "market": "ซื้ออย่างเดียว",
+   "bids": 5,
+   "tael_give_per_day": 0,
+   "net_give_per_day": 5000,
+   "net_receive_per_day": 5000,
+   "trades_per_day": 50
+  },
+  {
+   "tier": 1,
+   "name_th": "ทั่วไป",
+   "condition": "Lv ≥ 20 และบัญชี ≥ 2 วัน",
+   "market": "ลงขายค้าง 10",
+   "bids": 10,
+   "tael_give_per_day": 50000,
+   "net_give_per_day": 50000,
+   "net_receive_per_day": 50000,
+   "trades_per_day": 50
+  },
+  {
+   "tier": 2,
+   "name_th": "ยืนยัน",
+   "condition": "Lv ≥ 40 และบัญชี ≥ 7 วัน และ (OTP หรือเคยเติมที่ผ่านมาแล้ว > 7 วัน)",
+   "market": "ลงขายค้าง 20",
+   "bids": 20,
+   "tael_give_per_day": 500000,
+   "pin_above_per_trade": 200000,
+   "net_give_per_day": 500000,
+   "net_receive_per_day": 500000,
+   "trades_per_day": 50
+  },
+  {
+   "tier": "lock",
+   "name_th": "ล็อก",
+   "condition": "ธง RMT · chargeback · เปลี่ยนการผูกบัญชี รหัสผ่าน หรืออีเมลไม่ถึง 72 ชม.",
+   "market": "ปิด",
+   "bids": 0,
+   "tael_give_per_day": 0,
+   "net_give_per_day": 0,
+   "net_receive_per_day": 0,
+   "trades_per_day": 0
+  }
+ ],
+ "minor_under_18_max_tier": 1,
+ "holds": [
+  {
+   "kind": "gold_before_board",
+   "hours": {
+    "promptpay_truemoney_bank_rabbit": 72,
+    "card_or_account_lt_7d": 168
+   },
+   "allows": "ร้านทอง",
+   "blocks": "ลงกระดาน",
+   "source": "spine 8.1"
+  },
+  {
+   "kind": "board_tael",
+   "hours": 72,
+   "allows": "ซื้อในตลาด ร้าน NPC อัปเกรด",
+   "blocks": "ใส่ในแลกของ",
+   "new": true
+  },
+  {
+   "kind": "gift_from_tier0_1",
+   "min_net_value": 1000,
+   "hours": 24,
+   "allows": "ถือไว้",
+   "blocks": "ใช้ สวม ตีบวก ขาย ส่งต่อ",
+   "new": true
+  },
+  {
+   "kind": "security_change",
+   "hours": 72,
+   "blocks": "ทุกช่องทางค้า",
+   "trigger": "เปลี่ยนการผูกบัญชี รหัสผ่าน อีเมล"
+  }
+ ],
+ "rmt_signals": [
+  {
+   "id": 1,
+   "name_th": "รับจากหลายบัญชีใหม่",
+   "rule": "รับจากบัญชีระดับ 0–1 ≥ 10 บัญชีใน 24 ชม.",
+   "points": 5
+  },
+  {
+   "id": 2,
+   "name_th": "ให้มากกว่ารับ",
+   "rule": "ให้ > 5 เท่าของที่รับใน 7 วัน และให้รวม ≥ 20 × S(L)",
+   "points": 3
+  },
+  {
+   "id": 3,
+   "name_th": "ขายซ้ำคู่เดิมที่ขอบกรอบ",
+   "rule": "≥ 3 ครั้งใน 7 วัน ที่ ≥ 125% หรือ ≤ 75%",
+   "points": 3
+  },
+  {
+   "id": 4,
+   "name_th": "แลกของห่างราคากลาง",
+   "rule": "ส่วนต่างเกินครึ่ง ≥ 3 ครั้งใน 7 วัน",
+   "points": 2
+  },
+  {
+   "id": 5,
+   "name_th": "กลุ่มอุปกรณ์ IP ASN",
+   "rule": "≥ 3 บัญชีในกลุ่มค้ากันเอง",
+   "points": 3
+  },
+  {
+   "id": 6,
+   "name_th": "ซื้อทันทีที่ลง",
+   "rule": "ผู้ซื้อเดิมซื้อของผู้ขายเดิมภายใน 10 วิหลังลง ≥ 3 ครั้งใน 7 วัน",
+   "points": 4
+  },
+  {
+   "id": 7,
+   "name_th": "ชนเพดาน",
+   "rule": "ชนเพดานให้หรือรับ 3 วันติด",
+   "points": 3
+  },
+  {
+   "id": 8,
+   "name_th": "รวยกระโดด",
+   "rule": "ทรัพย์เพิ่ม ≥ 30 × S(L) ใน 24 ชม. ขณะก๊อกตัวเอง < 10 × S(L)",
+   "points": 4
+  },
+  {
+   "id": 9,
+   "name_th": "เทแล้วหาย",
+   "rule": "บัญชี ≤ 7 วัน ย้ายทรัพย์ ≥ 80% แล้วไม่เข้าเกม 72 ชม.",
+   "points": 5
+  },
+  {
+   "id": 10,
+   "name_th": "แชทขายเงิน",
+   "rule": "ตัวกรองแชทจับไอดีไลน์ เบอร์ รับเติม",
+   "points": 3
+  }
+ ],
+ "rmt_score": {
+  "window_days": 7,
+  "queue_at": 5,
+  "auto_lock_at": 10,
+  "auto_lock_hours": 72,
+  "review_minutes_per_day": 30
+ },
+ "penalty_ladder": [
+  {
+   "step": 1,
+   "name_th": "เตือน",
+   "trigger": "สัญญาณครั้งแรกที่ไม่ชัด",
+   "effect": "ระดับบัญชีลด 1 ขั้น 7 วัน",
+   "confiscate": false
+  },
+  {
+   "step": 2,
+   "name_th": "ล็อกเทรด",
+   "trigger": "ยืนยันซื้อนอกเกมครั้งแรก",
+   "lock_days": 14,
+   "confiscate": "ส่วนที่ได้มาผิด ทำลาย"
+  },
+  {
+   "step": 3,
+   "name_th": "แบนชั่วคราว",
+   "trigger": "ครั้งที่สอง",
+   "ban_days": 30,
+   "confiscate": "ยึดและทำลาย"
+  },
+  {
+   "step": 4,
+   "name_th": "แบนถาวร",
+   "trigger": "ผู้ขายนอกเกม บอต ขโมยบัญชี ครั้งที่สาม",
+   "ban_days": null,
+   "confiscate": "ทั้งหมด ทำลาย · บัญชีดำอุปกรณ์"
+  }
+ ],
+ "confiscated_goes": "ทำลาย (K_CONFISCATE) ไม่แจกคนแจ้ง",
+ "chargeback": "ล็อกบัญชี · หักทองจนติดลบได้ · ดึงตำลึงจากกระดานคืน (ติดลบได้) · ย้อนการจับคู่ใน 7 วันเท่าที่ทำได้ · ตรวจด้วยมือ",
+ "hacked_account": {
+  "report_within_days": 7,
+  "restore": "ของที่ตามด้วย item_uid ได้และยังไม่ถูกใช้ · ตำลึงจากส่วนที่ยึดได้เท่านั้น",
+  "mint_new": "เฉพาะความผิดของเกม ด้วย grant_key"
+ },
+ "scam_ui": [
+  "แตะของเห็นใบข้อมูลเต็มพร้อมราคากลาง พื้น เพดาน สถานะผูก",
+  "เปลี่ยนของหลังล็อก ปลดล็อกทั้งสองฝั่งและกะพริบ 3 วิ",
+  "ปุ่มยืนยันนับถอยหลัง 3 วิ แล้วกดค้าง 0.6 วิ",
+  "ตัวเลข Kanit 600 กว้างเท่ากัน มีจุลภาค · ≥ 100,000 มีคำอ่านไทย",
+  "สรุปให้ ได้ ภาษี และยอดคงเหลือก่อนยืนยัน",
+  "เตือนส่วนต่างเกินครึ่ง · เตือนบัญชีใหม่ · เตือนขายต่อได้ 1 ครั้ง",
+  "ครั้งแรก: เกมไม่มีฝากของ ทีมงานไม่เคยขอของหรือรหัส",
+  "ป้ายทีมงานเฉพาะ ตั้งชื่อคล้ายไม่ได้ · ลิงก์ของในแชทจากเซิร์ฟ",
+  "ประวัติการค้า 30 วัน พร้อมปุ่มแจ้งโกง",
+  "สีเตือนคู่ไอคอนเสมอ"
+ ],
+ "server": {
+  "db": "PostgreSQL ความจริงเดียว · ตลาดอยู่ใน API (Fastify) · แลกของอยู่ในเซิร์ฟเกม commit ผ่านฟังก์ชันฐานข้อมูลเดียวกัน",
+  "currency_ledger": {
+   "double_entry": true,
+   "append_only": true,
+   "partition": "รายเดือน",
+   "retain_years": 5,
+   "columns": [
+    "entry_id",
+    "tx_id",
+    "leg",
+    "server_id",
+    "account_kind(char|escrow|treasury|mint|burn)",
+    "account_id",
+    "currency(tael|gold_paid|gold_bound)",
+    "amount",
+    "balance_after",
+    "reason_code",
+    "sub_reason",
+    "ref_kind",
+    "ref_id",
+    "idem_key",
+    "created_at"
+   ],
+   "invariants": [
+    "ผลรวมขาต่อ tx ต่อสกุล = 0",
+    "UNIQUE(idem_key, leg)",
+    "ห้าม UPDATE/DELETE"
+   ],
+   "wallet": "wallet(char_id, currency, balance) + wallet_hold(char_id, currency, amount, release_at, kind)",
+   "spend_order": "ทองผูกก่อนทอง"
+  },
+  "tables": [
+   "item_instance",
+   "item_ledger",
+   "trade_session",
+   "trade_daily",
+   "market_listing",
+   "market_bid",
+   "market_fill",
+   "market_box",
+   "lottery_draw",
+   "ref_price_daily",
+   "ally_storage",
+   "ally_storage_log",
+   "rmt_signal",
+   "gm_audit"
+  ],
+  "item_instance_fields": [
+   "item_uid",
+   "template_id",
+   "owner_kind",
+   "owner_id",
+   "qty",
+   "bind_state",
+   "trade_count",
+   "origin_code",
+   "origin_ref",
+   "hold_until",
+   "version",
+   "enh",
+   "gems"
+  ],
+  "escrow": {
+   "listing": "ของไป escrow ตอนลง",
+   "bid": "ตำลึงเต็มจำนวนไป escrow:market",
+   "reserve": "ตำลึงเต็มราคาไป escrow:publicity",
+   "trade": "ไม่ย้ายก่อน commit"
+  },
+  "trade_commit_steps": [
+   "ล็อกแถวเรียงตาม char_id",
+   "ตรวจ version สถานะ ช่วงพัก",
+   "ตรวจระดับ เพดาน PIN",
+   "อ่านราคากลาง คำนวณ V G ภาษี",
+   "ตรวจยอดที่ให้ได้",
+   "เขียน ledger",
+   "ย้ายของ ปรับ bind trade_count version hold เขียน item_ledger",
+   "บวก trade_daily บันทึก trade_session",
+   "commit แล้วแจ้งลูกข่าย · ขั้นใดไม่ผ่าน ย้อนทั้งหมด"
+  ],
+  "idempotency": {
+   "request_id_redis_minutes": 10,
+   "db_unique": "UNIQUE(idem_key, leg)",
+   "keys": {
+    "trade": "session_id + commit",
+    "buy": "request_id",
+    "nightly": "ชื่องาน + วันที่",
+    "grant": "grant_key"
+   }
+  },
+  "reconciliation": [
+   {
+    "check": "ผลรวม ledger ต่อสกุล = 0",
+    "every": "ชั่วโมง"
+   },
+   {
+    "check": "wallet = ผลรวม ledger",
+    "every": "ชั่วโมง"
+   },
+   {
+    "check": "item_uid อยู่ที่เดียว",
+    "every": "ชั่วโมง"
+   },
+   {
+    "check": "ของใน escrow = รายการเปิด",
+    "every": "ชั่วโมง"
+   },
+   {
+    "check": "ธุรกรรม > 10 เท่าของ p99.9",
+    "every": "ทันที"
+   }
+  ],
+  "kill_switch_seconds": 10,
+  "rollback_policy": [
+   {
+    "case": "เซิร์ฟล่มกลางธุรกรรม",
+    "do": "ไม่ต้องทำ transaction เดียว",
+    "dont": "ไม่ย้อนเซิร์ฟ"
+   },
+   {
+    "case": "บั๊กให้เกินโดยไม่ตั้งใจ",
+    "do": "ดึงเฉพาะที่ยังอยู่ ที่ใช้แล้วไม่ตามหรือรับซื้อคืนตามมูลค่า",
+    "dont": "ไม่ลบเงินคนไม่เกี่ยว"
+   },
+   {
+    "case": "ช่องโหว่ใช้โดยตั้งใจ",
+    "do": "ปิดฟีเจอร์ 10 วิ · R_REVERSE · ยึด · โทษขั้น 3–4",
+    "dont": "ไม่คืนค่าฐานข้อมูลทั้งเซิร์ฟ"
+   },
+   {
+    "case": "chargeback",
+    "do": "ตามข้อ chargeback"
+   },
+   {
+    "case": "บัญชีถูกขโมย",
+    "do": "ตาม hacked_account",
+    "dont": "ไม่เสกของใหม่"
+   },
+   {
+    "case": "ฐานข้อมูลเสียหาย",
+    "do": "คืนจากสำรอง ชดเชยด้วย grant_key เท่ากันทุกบัญชี"
+   }
+  ],
+  "gm_tools": [
+   {
+    "tool": "ดูบัญชี",
+    "need": "สิทธิ์ GM"
+   },
+   {
+    "tool": "ตามรอยของ",
+    "need": "สิทธิ์ GM"
+   },
+   {
+    "tool": "ล็อก/ปลดล็อกการค้า",
+    "need": "2FA เหตุผล"
+   },
+   {
+    "tool": "ย้อนธุรกรรม",
+    "need": "2FA เหตุผล · ≥ 1,000,000 ยืนยันซ้ำ"
+   },
+   {
+    "tool": "ยึด",
+    "need": "2FA เหตุผล"
+   },
+   {
+    "tool": "แก้ราคากลาง ±30%/วัน",
+    "need": "2FA เหตุผล ประกาศ"
+   },
+   {
+    "tool": "ปิดฟีเจอร์ 10 วิ และสวิตช์รายประเทศ"
+   },
+   {
+    "tool": "ยกเลิกรายการหมู่"
+   },
+   {
+    "tool": "ทางการรับซื้อ: เปิด ปิด เลือกของ ≤ 5 ชนิด ตั้งงบ · ดูรายชื่อแนะนำ · ไม่มีเปิดอัตโนมัติ",
+    "need": "2FA · เหตุผล · ประกาศในหน้าตลาด · งบรวม ≤ 0.5% ของก๊อก 7 วันต่อสัปดาห์"
+   },
+   {
+    "tool": "คิวสัญญาณ"
+   },
+   {
+    "tool": "แจกของผ่าน grant service",
+    "need": "grant_key · ห้ามเขียนฐานข้อมูลตรง"
+   }
+  ],
+  "gm_audit_weekly_digest": "Discord",
+  "nightly": [
+   "05:00 ล้าง trade_daily ปล่อยช่วงพัก",
+   "คำนวณราคากลาง",
+   "สัญญาณ RMT ล็อกอัตโนมัติ ย้อนของพัก",
+   "ทางการรับซื้อ (ถ้า GM เปิด: คำสั่งรับซื้อจากงบ GM ตัดที่ 0.5% ของก๊อก 7 วัน · จันทร์คำนวณรายชื่อแนะนำ ไม่เปิดเอง)",
+   "econ_daily และ KPI"
+  ]
+ },
+ "ledger_codes_new": [
+  {
+   "code": "K_GIFT_FEE",
+   "kind": "sink"
+  },
+  {
+   "code": "K_CONFISCATE",
+   "kind": "sink"
+  },
+  {
+   "code": "T_ESCROW",
+   "kind": "transfer"
+  },
+  {
+   "code": "R_REVERSE",
+   "kind": "reversal"
+  },
+  {
+   "code": "F_NPC_BUYBACK:material_floor",
+   "kind": "faucet",
+   "replaces": "F_NPC_BUYBACK:granary",
+   "note": "ขายวัตถุดิบเทรดได้ให้ NPC ที่ราคาพื้นทุกชนิด ≤ 1 × S(L) ต่อวัน · ป้ายเดียวกับ npc 12.8"
+  },
+  {
+   "code": "F_NPC_BUYBACK:official",
+   "kind": "faucet"
+  }
+ ],
+ "item_ledger_codes": [
+  "I_DROP",
+  "I_NPC_BUY",
+  "I_NPC_SELL",
+  "I_LIST",
+  "I_UNLIST",
+  "I_FILL",
+  "I_TRADE",
+  "I_ALLY_IN",
+  "I_ALLY_OUT",
+  "I_BIND",
+  "I_USE",
+  "I_DESTROY_OFFICIAL",
+  "I_CONFISCATE",
+  "I_REVERSE"
+ ],
+ "kpis": [
+  {
+   "id": "T1",
+   "name_th": "ปริมาณซื้อขาย ÷ S(เลเวลกลาง) ต่อคนต่อวัน เฉลี่ย 7 วัน",
+   "expected": 0.2,
+   "range": [
+    0.09,
+    0.24
+   ],
+   "target": [
+    0.1,
+    0.4
+   ],
+   "yellow": "< 0.07 หรือ > 0.6",
+   "red": "< 0.05",
+   "window_days": 7,
+   "pre_r1_expected": 0.79,
+   "source": "sim.r1",
+   "r2": {
+    "expected": 0.05,
+    "range_7d_d21_90": [
+     0.01,
+     0.15
+    ],
+    "day60": [
+     0.07,
+     0.11
+    ],
+    "median_d21_90": {
+     "design_70_22_8": 0.035,
+     "package_70_22_8": 0.053,
+     "package_70_25_5": 0.058
+    },
+    "days_below_red_of_70": [
+     30,
+     51
+    ],
+    "threshold_status": "ยังใช้เกณฑ์รอบ 1 · เสนอแสดงอย่างเดียวจนเบต้าปิด (md ข้อ 23)"
+   }
+  },
+  {
+   "id": "T2",
+   "name_th": "ตัวดูดการค้า ÷ ก๊อก เฉลี่ย 7 วัน",
+   "expected_pct": 0.2,
+   "range_pct": [
+    0.1,
+    0.3
+   ],
+   "target_pct": [
+    0.1,
+    0.4
+   ],
+   "yellow": "< 0.07%",
+   "red": "< 0.05%",
+   "mean90_pct": [
+    0.14,
+    0.23
+   ],
+   "window_days": 7,
+   "pre_r1_expected_pct": 0.99,
+   "source": "sim.r1",
+   "action": "ไม่แก้ด้วยการขึ้นภาษี (rates_r1)",
+   "r2": {
+    "expected_pct": 0.1,
+    "mean90_pct": [
+     0.06,
+     0.08
+    ],
+    "day60_pct": [
+     0.09,
+     0.14
+    ],
+    "range_7d_d21_90_pct": [
+     0.0,
+     0.18
+    ],
+    "days_below_red_of_70": [
+     20,
+     44
+    ],
+    "threshold_status": "ยังใช้เกณฑ์รอบ 1 · เสนอแสดงอย่างเดียวจนเบต้าปิด (md ข้อ 23)"
+   }
+  },
+  {
+   "id": "T3",
+   "name_th": "ขายที่ขอบกรอบ",
+   "target": "≤ 15%",
+   "yellow": "> 25%",
+   "red": "> 40%"
+  },
+  {
+   "id": "T4",
+   "name_th": "ให้เปล่า ÷ ปริมาณ",
+   "target": "≤ 10%",
+   "yellow": "> 20%",
+   "red": "> 35%"
+  },
+  {
+   "id": "T5",
+   "name_th": "บัญชีชนเพดาน ÷ ผู้เล่นรายวัน",
+   "target": "≤ 1%",
+   "yellow": "> 3%",
+   "red": "> 6%"
+  },
+  {
+   "id": "T6",
+   "name_th": "ย้อนช่วงพัก ÷ ธุรกรรมที่พัก ต่อสัปดาห์",
+   "target": "0",
+   "yellow": "> 0.5%",
+   "red": "> 2%"
+  },
+  {
+   "id": "T7",
+   "name_th": "แจ้งโกงต่อ 1,000 ครั้งแลกของ",
+   "target": "≤ 2",
+   "yellow": "> 5",
+   "red": "> 10"
+  },
+  {
+   "id": "T8",
+   "name_th": "ของที่ราคากลางขยับเต็ม 10% 3 วันติด",
+   "target": "≤ 5%",
+   "yellow": "> 10%",
+   "red": "> 20%"
+  },
+  {
+   "id": "T9",
+   "name_th": "ผู้จองต่อรายการประกาศ",
+   "target": [
+    1,
+    10
+   ],
+   "yellow": "> 20"
+  },
+  {
+   "id": "T10",
+   "name_th": "ขายวัตถุดิบล้นให้ NPC (F_NPC_BUYBACK:material_floor) ÷ ก๊อก เฉลี่ย 7 วัน",
+   "expected_pct": 0.5,
+   "range_pct": [
+    0.4,
+    0.6
+   ],
+   "design_pct": [
+    1.5,
+    1.7
+   ],
+   "target_pct": "≤ 0.7",
+   "yellow": "> 1.0%",
+   "red": "> 1.5%",
+   "window_days": 7,
+   "action": "ดูชนิดที่ขาย NPC มากสุด บอกโมดูลดรอปลดส่วนแบ่ง หรือ GM เปิดทางการรับซื้อ (≤ 0.5% ของก๊อกต่อสัปดาห์)",
+   "new_r1": true,
+   "r2": {
+    "expected_pct": 0.1,
+    "mean90_pct": 0.07,
+    "range_7d_d21_90_pct": [
+     0.0,
+     0.13
+    ],
+    "design_pct_before_D10_D16": 0.38
+   }
+  },
+  {
+   "id": "11_revised",
+   "name_th": "ซื้อขาย ÷ ก๊อก (แก้ spine KPI 11 ตาม balance_r2 S10)",
+   "formula": "ตำลึงที่เปลี่ยนมือต่อวัน (ตลาด แลกของ กระดาน) ÷ ก๊อกเฉลี่ย 7 วัน",
+   "expected_pct": [
+    2.1,
+    4.7
+   ],
+   "range_pct_all_12_scenarios": [
+    2.0,
+    7.5
+   ],
+   "package_70_25_5_pct": [
+    2.2,
+    7.5
+   ],
+   "target_pct": [
+    2,
+    8
+   ],
+   "yellow": "< 1.5% หรือ > 12% นาน 7 วัน",
+   "red": "< 1%",
+   "window_days": 7,
+   "from_day": 21,
+   "board_share_day60": 0.65,
+   "market_only_pct_F": [
+    0.02,
+    2.62
+   ],
+   "action": "ต่ำ: ดู T1 (ตลาด) และ spine KPI 6 (กระดาน) · สูง: ตรวจการปั่นและสัญญาณ RMT",
+   "source": "sim r2 วันที่ 21–90 หลังชุดแก้ 70/22/8 (design/sim/out/r2_changes_70_22_8.json)",
+   "spine_adopted": "balance_r2 S10 (แทน S8)",
+   "velocity_info": {
+    "name_th": "ความเร็วเงิน (แสดงอย่างเดียว ไม่เตือน)",
+    "formula": "ตำลึงที่เปลี่ยนมือต่อวัน ÷ เงินในระบบ",
+    "r2_pct_d21_90": {
+     "design_70_22_8": [
+      0.8,
+      4.6
+     ],
+     "package_70_22_8": [
+      1.0,
+      4.3
+     ],
+     "package_70_25_5": [
+      1.0,
+      4.6
+     ]
+    },
+    "r2_reason": "เงินในระบบโตจาก 0.5 เป็น 2.7 วันของรายได้ ขณะที่ซื้อขายคงที่ราว 2–3% ของก๊อก (balance_r2 F29)",
+    "r1": {
+     "name_th": "ความเร็วเงิน (แก้ spine KPI 11)",
+     "expected_pct": 3.1,
+     "range_pct": [
+      1.8,
+      3.8
+     ],
+     "target_pct": [
+      1.5,
+      6
+     ],
+     "yellow": "< 1.2% หรือ > 10%",
+     "red": "< 0.8%",
+     "design_pct": [
+      0.4,
+      0.8
+     ],
+     "pre_r1_expected_pct": 2.09,
+     "source": "sim.r1 วันที่ 21–90 หลังชุดแก้ 70/22/8 (70/25/5: 1.9–3.9%)",
+     "spine_adopted": "balance_r1 S8"
+    }
+   }
+  }
+ ],
+ "codex": [
+  {
+   "topic": "ค้าข้ามก๊ก",
+   "tag": "ประวัติศาสตร์",
+   "team_src": "三國志 吳主傳 嘉禾四年"
+  },
+  {
+   "topic": "แถวแผง",
+   "tag": "ประวัติศาสตร์",
+   "team_src": "二年律令 □市律 แผ่น 260–261"
+  },
+  {
+   "topic": "คุ้มครองพ่อค้า",
+   "tag": "ประวัติศาสตร์",
+   "team_src": "三國志 倉慈傳"
+  },
+  {
+   "topic": "ขายเชื่อ",
+   "tag": "ประวัติศาสตร์ + อนุมาน",
+   "team_src": "居延 271.1"
+  },
+  {
+   "topic": "รางวัลคนแจ้ง",
+   "tag": "ประวัติศาสตร์",
+   "team_src": "史記 平準書 · 漢書 食貨志下"
+  },
+  {
+   "topic": "ภาษีเมืองหลวง",
+   "tag": "ประวัติศาสตร์ + แต่งใหม่",
+   "team_src": "史記 齊悼惠王世家 · 漢書 食貨志上"
+  },
+  {
+   "topic": "ช่วงประกาศและจับฉลาก",
+   "tag": "แต่งใหม่"
+  },
+  {
+   "topic": "ของผูกตัว",
+   "tag": "แต่งใหม่"
+  }
+ ],
+ "sheets": [
+  "bind_rules",
+  "item_ref_start",
+  "market_params",
+  "trade_params",
+  "trust_tiers (+cols)",
+  "holds",
+  "stall_squares",
+  "rmt_signals",
+  "penalty_ladder",
+  "tax_rates (+gift_fee)",
+  "official_buyback (GM: enabled · weekly_cap_pct_F 0.5 · max_items 5 · price_pct 70 · ตัด budget_share และ trigger)",
+  "econ_kpi (+T1–T10, แถว 11 = S10 ซื้อขาย ÷ ก๊อก, ความเร็วเงินแสดงอย่างเดียว)"
+ ],
+ "build_order": [
+  {
+   "phase": 1,
+   "build": "item_instance (item_uid bind_state trade_count version) · ledger บัญชีคู่ · ขาย NPC · จดหมายระบบ grant_key · กระทบยอดรายชั่วโมง"
+  },
+  {
+   "phase": 2,
+   "build": "แลกของ · ระดับบัญชี · เพดาน · ช่วงพัก · ประวัติการค้า · GM ขั้นต่ำ"
+  },
+  {
+   "phase": 3,
+   "build": "ตลาดกลาง · คลังของพันธมิตร · งานกลางคืน สัญญาณ RMT · แดชบอร์ด"
+  },
+  {
+   "phase": 4,
+   "build": "แผงร้าน · ช่วงประกาศและจับฉลาก · สวิตช์รายประเทศ · กระดานวันที่ 4"
+  },
+  {
+   "phase": "หลังเปิด",
+   "build": "ทางการรับซื้อ (เครื่องมือ GM เปิดด้วยมือ) · รายงานเศรษฐกิจรายเดือน"
+  },
+  {
+   "phase": 5,
+   "build": "ภาษีเมืองหลวง 0–5%"
+  }
+ ],
+ "merge_and_region": {
+  "merge": [
+   "ยกเลิกรายการ คำสั่งรับซื้อ การจอง คืนของและเงิน ค่าลงขายไม่คืน",
+   "ราคากลาง = VWAP 7 วันของสองเซิร์ฟ",
+   "ที่ตั้งแผงว่าง",
+   "เพดานรายวันล้าง ช่วงพักนับต่อ",
+   "คลังของพันธมิตรตามพันธมิตร"
+  ],
+  "region_switch": "ตลาด แลกของ แผง กระดาน ปิดแยกต่อประเทศ"
+ },
+ "deviations_from_spine": [
+  {
+   "id": 1,
+   "spine": "ภาษีการค้า 1/2/3/4/5% ของรายได้ · วันที่ 60 = 4.24% ของก๊อก",
+   "module": "อัตราไม่แก้ · แบบจำลองรอบ 1: 0.1–0.3% ของก๊อก (เฉลี่ย 90 วัน 0.14% ตามแบบ · 0.22–0.23% หลังชุดแก้) · ส่วนต่างกับ spine 3.9–4.1 จุด = 2.6–2.8 ล้าน/วัน · ค่าเดิม 0.99% (0.72–2.14%) เป็นขอบบนฝั่งผลิต",
+   "proposal": "balance_r1 รับแล้ว: S3 งบภาษีการค้า 0/0.7/1/1/1% · S4 งบอัปเกรด +1/+1.3/+2/+3/+4 จุด · ส่วนต่างที่เหลือ 0.7–0.9 จุดไม่ต้องย้ายเพิ่ม (แบบจำลองคิดภาษีจากตลาดจริงและผ่านสมดุลแล้ว) · ไม่แก้ด้วยภาษีเพราะ +1 จุด < 0.03% ของก๊อก",
+   "note_r2": "รอบ 2: ราว 0.1% ของก๊อก (เฉลี่ย 90 วัน 0.06–0.08%) ส่วนต่างกับ spine ราว 4.1 จุด"
+  },
+  {
+   "id": 2,
+   "spine": "KPI 11 ความเร็วเงิน 5.7–15.9% เป้า 5–20%",
+   "module": "รอบ 2: ซื้อขาย ÷ ก๊อกเฉลี่ย 7 วัน เป้า 2–8% เหลือง < 1.5% หรือ > 12% นาน 7 วัน แดง < 1% ค่าคาด 2.1–4.7% (balance_r2 S10 แทน S8) · ความเร็วเงินแสดงอย่างเดียว · รอบ 1: ค่าคาดหลังชุดแก้รอบ 1 1.8–3.8% (ตามแบบ 0.4–0.8% · ค่าเดิม 2.09%) · เป้าใหม่ 1.5–6% เหลือง < 1.2% แดง < 0.8% (balance_r1 S8)",
+   "note_r1": "ค่าขึ้นเพราะเงินในระบบลดจาก 8.0 เหลือ 1.5 วันของรายได้ ไม่ใช่เพราะซื้อขายมากขึ้น",
+   "note_r2": "ความเร็วเงิน 0.8–4.6% ไม่ผ่านทั้ง 5–20% และ 1.5–6% เพราะเงินในระบบโตจาก 0.5 เป็น 2.7 วัน (balance_r2 F29)"
+  },
+  {
+   "id": 3,
+   "spine": "แลกของ 10% ของตำลึง + 2% แลกของกับของ",
+   "module": "เพิ่มค่าให้เปล่า 10% ของส่วนต่าง"
+  },
+  {
+   "id": 4,
+   "spine": "เพดานนับตำลึงที่ให้",
+   "module": "เพิ่มเพดานให้สุทธิและรับสุทธิ 5,000/50,000/500,000"
+  },
+  {
+   "id": 5,
+   "spine": "ช่วงรอเฉพาะทองก่อนกระดาน",
+   "module": "เพิ่มพักตำลึงจากกระดาน 72 ชม. · พักของฟรีจากระดับ 0–1 24 ชม. · ล็อก 72 ชม. หลังเปลี่ยนรหัสผ่านหรืออีเมล"
+  },
+  {
+   "id": 6,
+   "spine": "อุปกรณ์ดรอป +0 เทรดได้",
+   "module": "ส้มขายต่อได้ 1 ครั้ง"
+  },
+  {
+   "id": 7,
+   "spine": "ภาษีแลกของ 10%",
+   "module": "เฟส 5 = อัตราตลาดรวมของวันนั้น"
+  },
+  {
+   "id": 8,
+   "spine": "ไม่ระบุคำสั่งรับซื้อ",
+   "module": "ไม่มีค่าวางคำสั่ง ค้าง 5/10/20 ใหม่ 30/วัน"
+  },
+  {
+   "id": 9,
+   "spine": "เพดานต่อขั้นความหายากไม่มีตัวเลข",
+   "module": "เพดาน 2/3/3/5 เท่า · ราคากลางเริ่มต้นอุปกรณ์ 0.1/0.2/0.4/1.0/6.0 × S"
+  },
+  {
+   "id": 10,
+   "spine": "ทางการรับซื้อหลังเปิด · 7.2 ภาษีการค้า 10% เป็นงบรับซื้อ · KPI 8 ลง = เปิดทางการรับซื้อ",
+   "module": "รอบ 2: เครื่องมือ GM เปิดด้วยมือ ไม่เปิดอัตโนมัติ · งบไม่ผูกภาษีการค้า ≤ 0.5% ของก๊อกต่อสัปดาห์ · ภาษีการค้าทำลายทั้งหมด · รอบ 1: คันโยกตาม KPI 8 · งบวันที่ 60 ราว 10,000–14,000/วัน (รอบ 1 · เดิม 46,352)",
+   "note_r2": "งบตามสูตรเฉลี่ย 2,400–3,200/วัน ปิดแล้วดัชนีเท่าเดิม · งบ 300,000/วันก็ไม่ผ่าน (balance_r2 F33 T4)"
+  },
+  {
+   "id": 11,
+   "spine": "คลังพันธมิตร = ตำลึงจากภาษี",
+   "module": "บนจอ: คลังเงินพันธมิตร (ตำลึง) · คลังของพันธมิตร (ของบอส)"
+  },
+  {
+   "id": 12,
+   "spine": "รหัส ledger 12.2",
+   "module": "เพิ่ม K_GIFT_FEE K_CONFISCATE T_ESCROW R_REVERSE และย่อย F_NPC_BUYBACK: material_floor (แทน granary) · official"
+  },
+  {
+   "id": 13,
+   "spine": "คันโยก 12.3 ภาษีการค้า 9% → 10% = ตัวดูด +0.4",
+   "module": "แบบจำลองรอบ 1: +1 จุดได้ราว 0.02% ของก๊อก (< 0.03%) · ใช้กันปั่นเท่านั้น"
+  },
+  {
+   "id": 14,
+   "spine": "9.2 NPC รับซื้อวัตถุดิบขั้นต้น 20% ไม่มีเพดาน ไม่แยกป้าย · งบก๊อกไม่มีหมวดนี้",
+   "module": "ขายวัตถุดิบเทรดได้ทุกชนิดให้ NPC ที่ราคาพื้น ≤ 1 × S(L)/ตัวละคร/วัน = F_NPC_BUYBACK:material_floor ก๊อกนอกงบ S(L) · ตามแบบ 1.5–1.7% ของก๊อก · หลัง drops D1 0.4–0.6% · KPI T10",
+   "note_r2": "รอบ 2 หลัง drops D10–D16 ราว 0.1% ของก๊อก (balance_r2 T6)"
+  }
+ ],
+ "owner_decisions_open": [
+  "ค่าให้เปล่า 10% ของส่วนต่าง",
+  "ส้มขายต่อได้ 1 ครั้ง",
+  "ยอมรับภาษีการค้าราว 0.1–0.3% (แบบจำลองรอบ 1) คงอัตราเดิม แล้วย้ายงบไปอัปเกรดตาม balance_r1 S3 S4 · รอบ 2 ราว 0.1%",
+  "ลานตลาด 3 เมือง 120 ที่",
+  "คลังของพันธมิตร: ฝากไม่ได้ รับแล้วผูก",
+  "ผู้เยาว์ต่ำกว่า 18 ปี สูงสุดระดับ 1",
+  "ค้าข้ามก๊กได้",
+  "โมดูลอุปกรณ์: ไม่มีบรรทัดสุ่มตอนดรอป",
+  "โมดูลดรอป: ของเทรดได้จากบอสและดันเจี้ยน 1 × S/วันที่ Lv ≥ 40 และ 0.5 × S ที่ Lv 20–39",
+  "วัตถุดิบขั้นกลางขึ้นไป: NPC รับซื้อ 10% ของราคากลางเริ่มต้น (trade 5.6 · แบบจำลองรอบ 1) หรือขายไม่ได้ (npc 6.1) · ตราเลื่อนชั้นเป็นราว 60% ของ material_floor หลังชุดแก้"
+ ],
+ "sim": {
+  "assumptions": {
+   "personas": {
+    "casual": {
+     "manual_h": 0,
+     "auto_h": 1.0,
+     "offline_h": 8,
+     "share": 0.7,
+     "income_ex_salary_xS": 6.32
+    },
+    "hardcore": {
+     "manual_h": 2.5,
+     "auto_h": 2.0,
+     "offline_h": 8,
+     "share": 0.25,
+     "income_ex_salary_xS": 9.62
+    },
+    "payer": {
+     "manual_h": 1.0,
+     "auto_h": 1.5,
+     "offline_h": 12,
+     "share": 0.05,
+     "income_ex_salary_xS": 9.48,
+     "board_tael_xS_from_Lv60": 3.357,
+     "board_cap_xS": 10
+    }
+   },
+   "tradable_farm_xS_per_manual_h": 0.3,
+   "auto_factor": 0.8,
+   "offline_materials": "bound",
+   "boss_loot_xS_per_day": {
+    "lt20": 0,
+    "20_39": 0.5,
+    "ge40": 1.0
+   },
+   "item_unit": "ชิ้นเทียบ = 0.01 × S(L)",
+   "items_per_hour": {
+    "manual": 30,
+    "auto": 24,
+    "offline_bound": 13
+   },
+   "boss_items_per_day": {
+    "20_39": 50,
+    "ge40": 100
+   },
+   "sell_share": {
+    "casual": 0.5,
+    "hardcore": 0.6,
+    "payer": 0.2
+   },
+   "tier0_below_Lv20_sales": 0,
+   "price_vs_ref": 1.0,
+   "payer_board_tael_to_market": 0.5,
+   "buyers_rest": "ตามสัดส่วนรายได้",
+   "channel_split": {
+    "market": 0.8,
+    "direct_trade": 0.2
+   },
+   "relist_rate": 0.25,
+   "seller_cost_market": "1% × 1.25 + 9%",
+   "buyer_cost_direct": "10%",
+   "swap_and_gift_fees": 0,
+   "official_buyback": "off · รอบ 2 ไม่มีสูตรงบ GM ตั้งเอง ≤ 0.5% ของก๊อกต่อสัปดาห์ (ก่อนรอบ 2: งบ 10% ของภาษี 9% ถ้าเปิด)",
+   "capital_tax": "0 ก่อนเฟส 5 · ตัวอย่าง 3%",
+   "buyer_demand_r1": "ข้อ 21.2–21.4 ไม่จำกัด (ขอบบน) · sim.r1 ซื้อเฉพาะวัตถุดิบที่อัปเกรดต้องใช้เกินที่ผลิตเอง ของเหลือขาย NPC ราคาพื้น ≤ 1 × S(L)/วัน"
+  },
+  "per_band_per_persona": {
+   "10": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 1200,
+     "income_ex_salary_incl_board": 7584,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 288,
+     "tradable_prod_farm_ref": 288,
+     "tradable_prod_boss_ref": 0,
+     "tradable_items_day": 24,
+     "sold": 0,
+     "bought": 0,
+     "sink_listing_fee": 0,
+     "sink_sale_tax": 0,
+     "sink_trade_tax": 0,
+     "sink_total": 0,
+     "sink_pct_income": 0.0,
+     "official_buyback_share_if_on": 0,
+     "capital_tax_3pct_extra": 0,
+     "net_transfer": 0,
+     "spine_target_sink": 76
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 1200,
+     "income_ex_salary_incl_board": 11544,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 1476,
+     "tradable_prod_farm_ref": 1476,
+     "tradable_prod_boss_ref": 0,
+     "tradable_items_day": 123,
+     "sold": 0,
+     "bought": 0,
+     "sink_listing_fee": 0,
+     "sink_sale_tax": 0,
+     "sink_trade_tax": 0,
+     "sink_total": 0,
+     "sink_pct_income": 0.0,
+     "official_buyback_share_if_on": 0,
+     "capital_tax_3pct_extra": 0,
+     "net_transfer": 0,
+     "spine_target_sink": 115
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 1200,
+     "income_ex_salary_incl_board": 11376,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 792,
+     "tradable_prod_farm_ref": 792,
+     "tradable_prod_boss_ref": 0,
+     "tradable_items_day": 66,
+     "sold": 0,
+     "bought": 0,
+     "sink_listing_fee": 0,
+     "sink_sale_tax": 0,
+     "sink_trade_tax": 0,
+     "sink_total": 0,
+     "sink_pct_income": 0.0,
+     "official_buyback_share_if_on": 0,
+     "capital_tax_3pct_extra": 0,
+     "net_transfer": 0,
+     "spine_target_sink": 114
+    }
+   },
+   "30": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 3200,
+     "income_ex_salary_incl_board": 20224,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 2368,
+     "tradable_prod_farm_ref": 768,
+     "tradable_prod_boss_ref": 1600,
+     "tradable_items_day": 74,
+     "sold": 1184,
+     "bought": 1468,
+     "sink_listing_fee": 12,
+     "sink_sale_tax": 85,
+     "sink_trade_tax": 29,
+     "sink_total": 126,
+     "sink_pct_income": 0.63,
+     "official_buyback_share_if_on": 9,
+     "capital_tax_3pct_extra": 37,
+     "net_transfer": -410,
+     "spine_target_sink": 404
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 3200,
+     "income_ex_salary_incl_board": 30784,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 5536,
+     "tradable_prod_farm_ref": 3936,
+     "tradable_prod_boss_ref": 1600,
+     "tradable_items_day": 173,
+     "sold": 3322,
+     "bought": 2235,
+     "sink_listing_fee": 33,
+     "sink_sale_tax": 239,
+     "sink_trade_tax": 45,
+     "sink_total": 317,
+     "sink_pct_income": 1.03,
+     "official_buyback_share_if_on": 24,
+     "capital_tax_3pct_extra": 93,
+     "net_transfer": 770,
+     "spine_target_sink": 616
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 3200,
+     "income_ex_salary_incl_board": 30336,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 3712,
+     "tradable_prod_farm_ref": 2112,
+     "tradable_prod_boss_ref": 1600,
+     "tradable_items_day": 116,
+     "sold": 742,
+     "bought": 2202,
+     "sink_listing_fee": 7,
+     "sink_sale_tax": 53,
+     "sink_trade_tax": 44,
+     "sink_total": 105,
+     "sink_pct_income": 0.35,
+     "official_buyback_share_if_on": 5,
+     "capital_tax_3pct_extra": 31,
+     "net_transfer": -1564,
+     "spine_target_sink": 607
+    }
+   },
+   "50": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 5200,
+     "income_ex_salary_incl_board": 32864,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 6448,
+     "tradable_prod_farm_ref": 1248,
+     "tradable_prod_boss_ref": 5200,
+     "tradable_items_day": 124,
+     "sold": 3224,
+     "bought": 3533,
+     "sink_listing_fee": 32,
+     "sink_sale_tax": 232,
+     "sink_trade_tax": 71,
+     "sink_total": 335,
+     "sink_pct_income": 1.02,
+     "official_buyback_share_if_on": 23,
+     "capital_tax_3pct_extra": 99,
+     "net_transfer": -644,
+     "spine_target_sink": 986
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 5200,
+     "income_ex_salary_incl_board": 50024,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 11596,
+     "tradable_prod_farm_ref": 6396,
+     "tradable_prod_boss_ref": 5200,
+     "tradable_items_day": 223,
+     "sold": 6958,
+     "bought": 5378,
+     "sink_listing_fee": 70,
+     "sink_sale_tax": 501,
+     "sink_trade_tax": 108,
+     "sink_total": 678,
+     "sink_pct_income": 1.36,
+     "official_buyback_share_if_on": 50,
+     "capital_tax_3pct_extra": 199,
+     "net_transfer": 902,
+     "spine_target_sink": 1501
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 5200,
+     "income_ex_salary_incl_board": 49296,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 8632,
+     "tradable_prod_farm_ref": 3432,
+     "tradable_prod_boss_ref": 5200,
+     "tradable_items_day": 166,
+     "sold": 1726,
+     "bought": 5300,
+     "sink_listing_fee": 17,
+     "sink_sale_tax": 124,
+     "sink_trade_tax": 106,
+     "sink_total": 248,
+     "sink_pct_income": 0.5,
+     "official_buyback_share_if_on": 12,
+     "capital_tax_3pct_extra": 73,
+     "net_transfer": -3821,
+     "spine_target_sink": 1479
+    }
+   },
+   "70": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 7200,
+     "income_ex_salary_incl_board": 45504,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 8928,
+     "tradable_prod_farm_ref": 1728,
+     "tradable_prod_boss_ref": 7200,
+     "tradable_items_day": 124,
+     "sold": 4464,
+     "bought": 4271,
+     "sink_listing_fee": 45,
+     "sink_sale_tax": 321,
+     "sink_trade_tax": 85,
+     "sink_total": 451,
+     "sink_pct_income": 0.99,
+     "official_buyback_share_if_on": 32,
+     "capital_tax_3pct_extra": 133,
+     "net_transfer": -258,
+     "spine_target_sink": 1820
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 7200,
+     "income_ex_salary_incl_board": 69264,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 16056,
+     "tradable_prod_farm_ref": 8856,
+     "tradable_prod_boss_ref": 7200,
+     "tradable_items_day": 223,
+     "sold": 9634,
+     "bought": 6501,
+     "sink_listing_fee": 96,
+     "sink_sale_tax": 694,
+     "sink_trade_tax": 130,
+     "sink_total": 920,
+     "sink_pct_income": 1.33,
+     "official_buyback_share_if_on": 69,
+     "capital_tax_3pct_extra": 270,
+     "net_transfer": 2213,
+     "spine_target_sink": 2771
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 7200,
+     "income_ex_salary_incl_board": 92427,
+     "board_tael_in": 24171,
+     "tradable_prod_ref": 11952,
+     "tradable_prod_farm_ref": 4752,
+     "tradable_prod_boss_ref": 7200,
+     "tradable_items_day": 166,
+     "sold": 2390,
+     "bought": 20760,
+     "sink_listing_fee": 24,
+     "sink_sale_tax": 172,
+     "sink_trade_tax": 415,
+     "sink_total": 611,
+     "sink_pct_income": 0.66,
+     "official_buyback_share_if_on": 17,
+     "capital_tax_3pct_extra": 182,
+     "net_transfer": -18981,
+     "spine_target_sink": 3697
+    }
+   },
+   "80": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 8200,
+     "income_ex_salary_incl_board": 51824,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 10168,
+     "tradable_prod_farm_ref": 1968,
+     "tradable_prod_boss_ref": 8200,
+     "tradable_items_day": 124,
+     "sold": 5084,
+     "bought": 4864,
+     "sink_listing_fee": 51,
+     "sink_sale_tax": 366,
+     "sink_trade_tax": 97,
+     "sink_total": 514,
+     "sink_pct_income": 0.99,
+     "official_buyback_share_if_on": 37,
+     "capital_tax_3pct_extra": 151,
+     "net_transfer": -294,
+     "spine_target_sink": 2073
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 8200,
+     "income_ex_salary_incl_board": 78884,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 18286,
+     "tradable_prod_farm_ref": 10086,
+     "tradable_prod_boss_ref": 8200,
+     "tradable_items_day": 223,
+     "sold": 10972,
+     "bought": 7404,
+     "sink_listing_fee": 110,
+     "sink_sale_tax": 790,
+     "sink_trade_tax": 148,
+     "sink_total": 1048,
+     "sink_pct_income": 1.33,
+     "official_buyback_share_if_on": 79,
+     "capital_tax_3pct_extra": 308,
+     "net_transfer": 2520,
+     "spine_target_sink": 3155
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 8200,
+     "income_ex_salary_incl_board": 105265,
+     "board_tael_in": 27529,
+     "tradable_prod_ref": 13612,
+     "tradable_prod_farm_ref": 5412,
+     "tradable_prod_boss_ref": 8200,
+     "tradable_items_day": 166,
+     "sold": 2722,
+     "bought": 23644,
+     "sink_listing_fee": 27,
+     "sink_sale_tax": 196,
+     "sink_trade_tax": 473,
+     "sink_total": 696,
+     "sink_pct_income": 0.66,
+     "official_buyback_share_if_on": 20,
+     "capital_tax_3pct_extra": 207,
+     "net_transfer": -21618,
+     "spine_target_sink": 4211
+    }
+   },
+   "90": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 9200,
+     "income_ex_salary_incl_board": 58144,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 11408,
+     "tradable_prod_farm_ref": 2208,
+     "tradable_prod_boss_ref": 9200,
+     "tradable_items_day": 124,
+     "sold": 5704,
+     "bought": 5457,
+     "sink_listing_fee": 57,
+     "sink_sale_tax": 411,
+     "sink_trade_tax": 109,
+     "sink_total": 577,
+     "sink_pct_income": 0.99,
+     "official_buyback_share_if_on": 41,
+     "capital_tax_3pct_extra": 170,
+     "net_transfer": -330,
+     "spine_target_sink": 2907
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 9200,
+     "income_ex_salary_incl_board": 88504,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 20516,
+     "tradable_prod_farm_ref": 11316,
+     "tradable_prod_boss_ref": 9200,
+     "tradable_items_day": 223,
+     "sold": 12310,
+     "bought": 8306,
+     "sink_listing_fee": 123,
+     "sink_sale_tax": 886,
+     "sink_trade_tax": 166,
+     "sink_total": 1176,
+     "sink_pct_income": 1.33,
+     "official_buyback_share_if_on": 89,
+     "capital_tax_3pct_extra": 345,
+     "net_transfer": 2828,
+     "spine_target_sink": 4425
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 9200,
+     "income_ex_salary_incl_board": 118102,
+     "board_tael_in": 30886,
+     "tradable_prod_ref": 15272,
+     "tradable_prod_farm_ref": 6072,
+     "tradable_prod_boss_ref": 9200,
+     "tradable_items_day": 166,
+     "sold": 3054,
+     "bought": 26527,
+     "sink_listing_fee": 31,
+     "sink_sale_tax": 220,
+     "sink_trade_tax": 531,
+     "sink_total": 781,
+     "sink_pct_income": 0.66,
+     "official_buyback_share_if_on": 22,
+     "capital_tax_3pct_extra": 232,
+     "net_transfer": -24254,
+     "spine_target_sink": 5905
+    }
+   },
+   "110": {
+    "casual": {
+     "name_th": "ฟรีเล่นน้อย",
+     "S": 11200,
+     "income_ex_salary_incl_board": 70784,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 13888,
+     "tradable_prod_farm_ref": 2688,
+     "tradable_prod_boss_ref": 11200,
+     "tradable_items_day": 124,
+     "sold": 6944,
+     "bought": 6643,
+     "sink_listing_fee": 69,
+     "sink_sale_tax": 500,
+     "sink_trade_tax": 133,
+     "sink_total": 702,
+     "sink_pct_income": 0.99,
+     "official_buyback_share_if_on": 50,
+     "capital_tax_3pct_extra": 207,
+     "net_transfer": -402,
+     "spine_target_sink": 3539
+    },
+    "hardcore": {
+     "name_th": "ฟรีขยัน",
+     "S": 11200,
+     "income_ex_salary_incl_board": 107744,
+     "board_tael_in": 0,
+     "tradable_prod_ref": 24976,
+     "tradable_prod_farm_ref": 13776,
+     "tradable_prod_boss_ref": 11200,
+     "tradable_items_day": 223,
+     "sold": 14986,
+     "bought": 10112,
+     "sink_listing_fee": 150,
+     "sink_sale_tax": 1079,
+     "sink_trade_tax": 202,
+     "sink_total": 1431,
+     "sink_pct_income": 1.33,
+     "official_buyback_share_if_on": 108,
+     "capital_tax_3pct_extra": 420,
+     "net_transfer": 3442,
+     "spine_target_sink": 5387
+    },
+    "payer": {
+     "name_th": "ผู้เติมเงิน",
+     "S": 11200,
+     "income_ex_salary_incl_board": 143776,
+     "board_tael_in": 37600,
+     "tradable_prod_ref": 18592,
+     "tradable_prod_farm_ref": 7392,
+     "tradable_prod_boss_ref": 11200,
+     "tradable_items_day": 166,
+     "sold": 3718,
+     "bought": 32294,
+     "sink_listing_fee": 37,
+     "sink_sale_tax": 268,
+     "sink_trade_tax": 646,
+     "sink_total": 951,
+     "sink_pct_income": 0.66,
+     "official_buyback_share_if_on": 27,
+     "capital_tax_3pct_extra": 283,
+     "net_transfer": -29526,
+     "spine_target_sink": 7189
+    }
+   }
+  },
+  "band_server_share": {
+   "10": {
+    "sink_pct_income": 0.0,
+    "volume_pct_income": 0.0,
+    "spine_target_pct": 1.0
+   },
+   "30": {
+    "sink_pct_income": 0.74,
+    "volume_pct_income": 7.3,
+    "spine_target_pct": 2.0
+   },
+   "50": {
+    "sink_pct_income": 1.1,
+    "volume_pct_income": 10.8,
+    "spine_target_pct": 3.0
+   },
+   "70": {
+    "sink_pct_income": 1.07,
+    "volume_pct_income": 10.5,
+    "spine_target_pct": 4.0
+   },
+   "80": {
+    "sink_pct_income": 1.07,
+    "volume_pct_income": 10.5,
+    "spine_target_pct": 4.0
+   },
+   "90": {
+    "sink_pct_income": 1.07,
+    "volume_pct_income": 10.5,
+    "spine_target_pct": 5.0
+   },
+   "110": {
+    "sink_pct_income": 1.07,
+    "volume_pct_income": 10.5,
+    "spine_target_pct": 5.0
+   }
+  },
+  "day60_per_persona": {
+   "casual": {
+    "name_th": "ฟรีเล่นน้อย",
+    "income_spine": 57824,
+    "sold": 5084,
+    "bought": 4911,
+    "sink_total": 515,
+    "sink_pct_income": 0.89,
+    "net_transfer": -342,
+    "spine_target_sink_4pct": 2313,
+    "items_sold": 62,
+    "items_bought": 60,
+    "items_prod_tradable": 124,
+    "items_prod_bound_offline": 106
+   },
+   "hardcore": {
+    "name_th": "ฟรีขยัน",
+    "income_spine": 86384,
+    "sold": 10972,
+    "bought": 7336,
+    "sink_total": 1046,
+    "sink_pct_income": 1.21,
+    "net_transfer": 2589,
+    "spine_target_sink_4pct": 3455,
+    "items_sold": 134,
+    "items_bought": 89,
+    "items_prod_tradable": 223,
+    "items_prod_bound_offline": 106
+   },
+   "payer": {
+    "name_th": "ผู้เติมเงิน",
+    "income_spine": 112530,
+    "sold": 2722,
+    "bought": 23321,
+    "sink_total": 690,
+    "sink_pct_income": 0.61,
+    "net_transfer": -21289,
+    "spine_target_sink_4pct": 4501,
+    "items_sold": 33,
+    "items_bought": 284,
+    "items_prod_tradable": 166,
+    "items_prod_bound_offline": 158
+   }
+  },
+  "day60_server_1000dau": {
+   "source": "แบบจำลองรอบ 1 หลังชุดแก้ 70/22/8 วันที่ 60 (design/sim/out/r1_changes_70_22_8.json)",
+   "faucet_F": 65754500,
+   "money_M": 98442559,
+   "days_income": 1.5,
+   "board_tael": 1366374,
+   "volume": 1990999,
+   "volume_per_dau": 1991,
+   "sink": 203082,
+   "sink_pct_F": 0.31,
+   "sink_pct_F_estimate": [
+    0.1,
+    0.3
+   ],
+   "sink_pct_F_mean90": 0.23,
+   "velocity": 0.0341,
+   "velocity_d21_90": [
+    0.018,
+    0.038
+   ],
+   "material_floor": 391170,
+   "material_floor_pct_F": 0.59,
+   "spine_trade_sink": 2816931,
+   "spine_pct_F": 4.24,
+   "spine_velocity": 0.0785,
+   "gap_pct_F": [
+    3.9,
+    4.1
+   ],
+   "gap_per_day": [
+    2600000,
+    2800000
+   ],
+   "official_buyback_if_on": 14335,
+   "official_items_destroyed_ref_value": 20479,
+   "capital_tax_3pct": 59730,
+   "capital_treasury_per_day": 29865
+  },
+  "scenarios_day60": {
+   "design_70_22_8": {
+    "volume_per_dau": 1426,
+    "sink_per_dau": 145,
+    "sink_pct_F": 0.22,
+    "sink_pct_F_mean90": 0.14,
+    "sink_pct_F_7d_d21_90": [
+     0.01,
+     0.31
+    ],
+    "volume_div_S_median_d21_90": 0.09,
+    "volume_div_S_day60": 0.17,
+    "volume_pct_F_mean90": 1.38,
+    "velocity": 0.0052,
+    "velocity_d21_90": [
+     0.004,
+     0.008
+    ],
+    "money_M": 532917347,
+    "days_income": 8.0,
+    "board_tael": 1366374,
+    "material_floor": 1110048,
+    "material_floor_pct_F_d21_90": [
+     1.4,
+     1.7
+    ],
+    "material_floor_pct_F_mean90": 1.54,
+    "official_buyback_if_on": 10265,
+    "official_items_destroyed_ref_value": 14664,
+    "capital_tax_3pct": 42770,
+    "capital_treasury_per_week": 149694,
+    "plus_1pt_all_channels_pct_F_mean90": 0.014
+   },
+   "package_70_22_8": {
+    "volume_per_dau": 1991,
+    "sink_per_dau": 203,
+    "sink_pct_F": 0.31,
+    "sink_pct_F_mean90": 0.23,
+    "sink_pct_F_7d_d21_90": [
+     0.05,
+     0.45
+    ],
+    "volume_div_S_median_d21_90": 0.17,
+    "volume_div_S_day60": 0.24,
+    "volume_pct_F_mean90": 2.24,
+    "velocity": 0.0341,
+    "velocity_d21_90": [
+     0.018,
+     0.038
+    ],
+    "money_M": 98442559,
+    "days_income": 1.5,
+    "board_tael": 1366374,
+    "material_floor": 391170,
+    "material_floor_pct_F_d21_90": [
+     0.3,
+     0.65
+    ],
+    "material_floor_pct_F_mean90": 0.54,
+    "official_buyback_if_on": 14335,
+    "official_items_destroyed_ref_value": 20479,
+    "capital_tax_3pct": 59730,
+    "capital_treasury_per_week": 209055,
+    "plus_1pt_all_channels_pct_F_mean90": 0.022
+   },
+   "package_70_25_5": {
+    "volume_per_dau": 1566,
+    "sink_per_dau": 160,
+    "sink_pct_F": 0.24,
+    "sink_pct_F_mean90": 0.22,
+    "sink_pct_F_7d_d21_90": [
+     0.05,
+     0.45
+    ],
+    "volume_div_S_median_d21_90": 0.19,
+    "volume_div_S_day60": 0.19,
+    "volume_pct_F_mean90": 2.14,
+    "velocity": 0.0269,
+    "velocity_d21_90": [
+     0.019,
+     0.039
+    ],
+    "money_M": 112059093,
+    "days_income": 1.7,
+    "board_tael": 1448820,
+    "material_floor": 410381,
+    "material_floor_pct_F_d21_90": [
+     0.3,
+     0.65
+    ],
+    "material_floor_pct_F_mean90": 0.54,
+    "official_buyback_if_on": 11275,
+    "official_items_destroyed_ref_value": 16107,
+    "capital_tax_3pct": 46979,
+    "capital_treasury_per_week": 164428,
+    "plus_1pt_all_channels_pct_F_mean90": 0.021
+   },
+   "spine_target": {
+    "volume_per_dau": 28169,
+    "sink_per_dau": 2817,
+    "sink_pct_F": 4.24,
+    "velocity": 0.0785
+   }
+  },
+  "gold_flows": {
+   "via_trade_module": {
+    "gold_paid": 0,
+    "gold_bound": 0
+   },
+   "board_reference_price": 195,
+   "casual": {
+    "tael_spent_on_board_day": 1156,
+    "gold_bound_received_day": 5
+   },
+   "hardcore": {
+    "tael_spent_on_board_day": 2592,
+    "gold_bound_received_day": 12
+   },
+   "payer": {
+    "gold_sold_day": 150,
+    "tael_received_day": 27529,
+    "held_hours": 72,
+    "spent_on_market_day": 13765
+   }
+  },
+  "flows_codes": [
+   {
+    "item": "ค่าลงขาย",
+    "kind": "sink",
+    "formula": "1% × 1.25 × ยอดขายผ่านตลาด",
+    "code": "K_MKT_LIST"
+   },
+   {
+    "item": "ภาษีการค้า",
+    "kind": "sink",
+    "formula": "9% × ยอดขายผ่านตลาด",
+    "code": "K_MKT_TAX"
+   },
+   {
+    "item": "ภาษีแลกของ",
+    "kind": "sink",
+    "formula": "10% × ตำลึงที่ให้ในแลกของ",
+    "code": "K_TRADE_TAX"
+   },
+   {
+    "item": "ค่าแลกของกับของ · ค่าให้เปล่า",
+    "kind": "sink",
+    "formula": "0 ในค่ากลาง",
+    "code": "K_SWAP_FEE · K_GIFT_FEE"
+   },
+   {
+    "item": "ภาษีเมืองหลวง",
+    "kind": "sink + transfer",
+    "formula": "อัตรา × (ขายผ่านตลาด + ตำลึงในแลกของ) แบ่งครึ่ง",
+    "code": "K_CITY_TAX_BURN · T_CITY_TAX_TREASURY"
+   },
+   {
+    "item": "ทางการรับซื้อ",
+    "kind": "faucet",
+    "formula": "งบที่ GM ตั้ง ≤ 0.5% × ก๊อก 7 วันต่อสัปดาห์ · 0 ในค่ากลาง (รอบ 2 · สูตรเดิม 10% × ภาษีการค้า 9% ยกเลิก)",
+    "code": "F_NPC_BUYBACK:official"
+   },
+   {
+    "item": "ขายวัตถุดิบล้นให้ NPC ที่ราคาพื้น (พ่อค้าหลวงและวัตถุดิบอื่น)",
+    "kind": "faucet (นอกงบ S(L))",
+    "formula": "ส่วนเกินที่ขายไม่ออก × ราคา NPC รับซื้อข้อ 5.6 ≤ 1 × S(L)/ตัวละคร/วัน · รอบ 1 วันที่ 60: 0.135 × S(80)/คน (ตามแบบ) · 0.048–0.050 × S(80) (หลังชุดแก้)",
+    "code": "F_NPC_BUYBACK:material_floor",
+    "pre_r1": "0 ในค่ากลาง (ผิด)",
+    "formula_r2": "รอบ 2 หลัง drops D10–D16 วันที่ 60: 0.007 × S(80)/คน (59,573/วันทั้งเซิร์ฟ)"
+   },
+   {
+    "item": "ยึดจาก RMT",
+    "kind": "sink",
+    "formula": "ไม่จำลอง",
+    "code": "K_CONFISCATE"
+   },
+   {
+    "item": "ซื้อขายระหว่างผู้เล่น",
+    "kind": "transfer",
+    "formula": "ตาราง per_band",
+    "code": "T_MKT_SALE · T_TRADE"
+   }
+  ],
+  "plug_into_spine_model": {
+   "file": "design/_judge/final_model.py",
+   "SHARES_trade": [
+    0,
+    0.007,
+    0.01,
+    0.01
+   ],
+   "ENDGAME_trade": 0.01,
+   "velocity_multiplier": 9.8,
+   "keep_balance_add_upg": [
+    0.01,
+    0.013,
+    0.02,
+    0.03
+   ],
+   "ENDGAME_add_upg": 0.04,
+   "gap_by_band_points": {
+    "1-20": 1.0,
+    "21-40": 1.3,
+    "41-60": 2.0,
+    "61-80": 3.0,
+    "cap": 4.0
+   },
+   "note_r1": "SHARES_trade และ ENDGAME_trade เดิม = งบ balance_r1 S3 · ค่าที่ตลาดทำได้จริงตามแบบจำลองรอบ 1 ราว 0.002 (0.001–0.003) ตั้งแต่ Lv 21 · keep_balance_add_upg รับแล้วเป็น S4 · velocity_multiplier 9.8 ใช้ต่อ (1 ÷ 0.102)",
+   "SHARES_trade_actual_r1": [
+    0,
+    0.002,
+    0.002,
+    0.002
+   ],
+   "ENDGAME_trade_actual_r1": 0.002,
+   "material_floor_faucet": "ใส่แยกจาก S(L): 0.4–0.6% ของก๊อกหลัง drops D1",
+   "gap_by_band_actual_r1_pct": {
+    "1-20": 0,
+    "21-40": [
+     0.1,
+     0.3
+    ],
+    "41-60": [
+     0.1,
+     0.3
+    ],
+    "61-80": [
+     0.1,
+     0.3
+    ],
+    "cap": [
+     0.1,
+     0.3
+    ]
+   },
+   "SHARES_trade_actual_r2": [
+    0,
+    0.001,
+    0.001,
+    0.001
+   ],
+   "ENDGAME_trade_actual_r2": 0.001,
+   "note_r2": "รอบ 2: ตลาดทำได้ราว 0.001 (เฉลี่ย 90 วัน 0.0006–0.0008) · material_floor ราว 0.1% ของก๊อก"
+  },
+  "r1": {
+   "source": "design/balance_r1.md · design/sim/sim.js · design/sim/out/{base_70_22_8, r1_changes_70_22_8, r1_changes_70_25_5}.json",
+   "package": "design/sim/r1_changes.json",
+   "trade_sink_pct_F": [
+    0.1,
+    0.3
+   ],
+   "trade_sink_pct_F_mean90": {
+    "design_70_22_8": 0.14,
+    "package_70_22_8": 0.23,
+    "package_70_25_5": 0.22
+   },
+   "trade_sink_pct_F_daily_d21_90_package": [
+    0.04,
+    0.53
+   ],
+   "tax_per_volume": 0.102,
+   "velocity_pct_d21_90": {
+    "design_70_22_8": [
+     0.4,
+     0.8
+    ],
+    "package_70_22_8": [
+     1.8,
+     3.8
+    ],
+    "package_70_25_5": [
+     1.9,
+     3.9
+    ],
+    "package_cash_buffer_1day": [
+     1.2,
+     2.3
+    ]
+   },
+   "velocity_driver": "เงินในระบบลดจาก 8.0 เหลือ 1.5 วันของรายได้ (balance_r1 S1) ไม่ใช่ปริมาณซื้อขาย",
+   "material_floor_pct_F": {
+    "design": [
+     1.5,
+     1.7
+    ],
+    "package": [
+     0.4,
+     0.6
+    ]
+   },
+   "plus_1pt_tax_pct_F": "< 0.03 (ราว 0.02)",
+   "swing_reason": "หินล้นจนราคาถึงพื้นวันที่ 15–30 แล้วกลับเป็นขาด · อัญมณีขาดจนแทบไม่มีของขาย · ตลาดไม่มีราคาสงวน (balance_r1 F22)",
+   "scenarios": "sim.scenarios_day60"
+  },
+  "pre_r1_supply_side": {
+   "note": "ค่าฝั่งผลิต (trade_calc.py) สมมติทุกชิ้นที่ลงขายมีคนซื้อที่ราคากลาง = ขอบบน · แทนด้วย sim.r1 ในรอบ 1",
+   "day60_server_1000dau": {
+    "faucet_F": 66493278,
+    "money_M": 377259000,
+    "board_tael": 1451830,
+    "volume": 6437820,
+    "volume_per_dau": 6438,
+    "sink": 656658,
+    "sink_pct_F": 0.99,
+    "velocity": 0.0209,
+    "spine_trade_sink": 2816931,
+    "spine_pct_F": 4.24,
+    "spine_velocity": 0.0785,
+    "gap_per_day": 2160273,
+    "gap_pct_F": 3.25,
+    "official_buyback_if_on": 46352,
+    "official_items_destroyed_ref_value": 66217,
+    "capital_tax_3pct": 193135,
+    "capital_treasury_per_day": 96567
+   },
+   "scenarios_day60": {
+    "low": {
+     "volume_per_dau": 4681,
+     "sink_per_dau": 477,
+     "sink_pct_F": 0.72,
+     "velocity": 0.0163,
+     "per_persona": {
+      "casual": {
+       "sales": 3660,
+       "buys": 3645,
+       "sink": 373,
+       "pct_income": 0.65
+      },
+      "hardcore": {
+       "sales": 8229,
+       "buys": 5446,
+       "sink": 784,
+       "pct_income": 0.91
+      },
+      "payer": {
+       "sales": 1225,
+       "buys": 15353,
+       "sink": 408,
+       "pct_income": 0.36
+      }
+     },
+     "params": {
+      "price": 0.9,
+      "sell": [
+       0.4,
+       0.5,
+       0.1
+      ],
+      "payer_mkt": 0.3,
+      "boss_x": 1.0
+     }
+    },
+    "mid": {
+     "volume_per_dau": 6438,
+     "sink_per_dau": 657,
+     "sink_pct_F": 0.99,
+     "velocity": 0.0209,
+     "per_persona": {
+      "casual": {
+       "sales": 5084,
+       "buys": 4911,
+       "sink": 515,
+       "pct_income": 0.89
+      },
+      "hardcore": {
+       "sales": 10972,
+       "buys": 7336,
+       "sink": 1046,
+       "pct_income": 1.21
+      },
+      "payer": {
+       "sales": 2722,
+       "buys": 23321,
+       "sink": 690,
+       "pct_income": 0.61
+      }
+     },
+     "params": {
+      "price": 1.0,
+      "sell": [
+       0.5,
+       0.6,
+       0.2
+      ],
+      "payer_mkt": 0.5,
+      "boss_x": 1.0
+     }
+    },
+    "high": {
+     "volume_per_dau": 13956,
+     "sink_per_dau": 1424,
+     "sink_pct_F": 2.14,
+     "velocity": 0.0408,
+     "per_persona": {
+      "casual": {
+       "sales": 11129,
+       "buys": 10980,
+       "sink": 1132,
+       "pct_income": 1.96
+      },
+      "hardcore": {
+       "sales": 23281,
+       "buys": 16403,
+       "sink": 2237,
+       "pct_income": 2.59
+      },
+      "payer": {
+       "sales": 6908,
+       "buys": 43390,
+       "sink": 1434,
+       "pct_income": 1.27
+      }
+     },
+     "params": {
+      "price": 1.3,
+      "sell": [
+       0.6,
+       0.8,
+       0.3
+      ],
+      "payer_mkt": 0.8,
+      "boss_x": 1.5
+     }
+    },
+    "spine_target": {
+     "volume_per_dau": 28169,
+     "sink_per_dau": 2817,
+     "sink_pct_F": 4.24,
+     "velocity": 0.0785
+    }
+   }
+  },
+  "basis": {
+   "per_band_per_persona": "ฝั่งผลิต ขอบบน ก่อนรอบ 1",
+   "band_server_share": "ฝั่งผลิต ขอบบน ก่อนรอบ 1",
+   "day60_per_persona": "ฝั่งผลิต ขอบบน ก่อนรอบ 1",
+   "day60_server_1000dau": "แบบจำลองรอบ 1",
+   "scenarios_day60": "แบบจำลองรอบ 1",
+   "r2": "แบบจำลองรอบ 2 (ใช้แทน day60_server_1000dau และ r1 ของรอบ 1 ใน md ข้อ 21.7)"
+  },
+  "r2": {
+   "source": "design/balance_r2.md · design/sim/sim.js · design/sim/out/{r2_design_70_22_8, r2_changes_70_22_8, r2_changes_70_25_5}.json",
+   "package": "design/sim/r2_changes.json (drops D10–D16)",
+   "market_model": "r2: เก็บไว้ใช้ 14 วันของความต้องการที่ Lv 80 · ขายส่วนเกิน ซื้อส่วนขาด · ราคากลาง ±10% เฉพาะวันที่ขายถึงเกณฑ์ 5.5",
+   "trade_sink_pct_F": 0.1,
+   "trade_sink_pct_F_mean90": {
+    "design_70_22_8": 0.06,
+    "package_70_22_8": 0.08,
+    "package_70_25_5": 0.08
+   },
+   "trade_sink_pct_F_day60": {
+    "design_70_22_8": 0.09,
+    "package_70_22_8": 0.11,
+    "package_70_25_5": 0.14
+   },
+   "trade_sink_pct_F_7d_d21_90": {
+    "design_70_22_8": [
+     0.02,
+     0.11
+    ],
+    "package_70_22_8": [
+     0.01,
+     0.15
+    ],
+    "package_70_25_5": [
+     0.02,
+     0.18
+    ]
+   },
+   "tax_per_volume": 0.102,
+   "market_volume_per_dau_day60": {
+    "design_70_22_8": 576,
+    "package_70_22_8": 737,
+    "package_70_25_5": 882
+   },
+   "market_volume_pct_F_mean90": {
+    "design_70_22_8": 0.55,
+    "package_70_22_8": 0.74,
+    "package_70_25_5": 0.83
+   },
+   "T1_7d_d21_90": {
+    "design_70_22_8": [
+     0.01,
+     0.09
+    ],
+    "package_70_22_8": [
+     0.01,
+     0.12
+    ],
+    "package_70_25_5": [
+     0.02,
+     0.15
+    ]
+   },
+   "turnover_S10_pct_d21_90": {
+    "design_70_22_8": [
+     2.0,
+     3.8
+    ],
+    "package_70_22_8": [
+     2.1,
+     4.7
+    ],
+    "package_70_25_5": [
+     2.2,
+     7.5
+    ],
+    "all_12_scenarios": [
+     2.0,
+     7.5
+    ]
+   },
+   "turnover_S10_used": [
+    2.0,
+    4.7
+   ],
+   "market_only_pct_F_d21_90": {
+    "design_70_22_8": [
+     0.02,
+     1.75
+    ],
+    "package_70_22_8": [
+     0.02,
+     2.62
+    ],
+    "package_70_25_5": [
+     0.02,
+     5.27
+    ]
+   },
+   "velocity_pct_d21_90": {
+    "design_70_22_8": [
+     0.8,
+     4.6
+    ],
+    "package_70_22_8": [
+     1.0,
+     4.3
+    ],
+    "package_70_25_5": [
+     1.0,
+     4.6
+    ]
+   },
+   "plus_1pt_all_channels_pct_F_mean90": {
+    "design_70_22_8": 0.006,
+    "package_70_22_8": 0.007,
+    "package_70_25_5": 0.008
+   },
+   "material_floor_pct_F_mean90": {
+    "design_70_22_8": 0.38,
+    "package_70_22_8": 0.07,
+    "package_70_25_5": 0.07
+   },
+   "material_floor_pct_F_used": 0.1,
+   "day60_server_1000dau": {
+    "source": "แบบจำลองรอบ 2 หลังชุดแก้ 70/22/8 วันที่ 60 (design/sim/out/r2_changes_70_22_8.json)",
+    "faucet_F": 65427020,
+    "faucet_F_7d_avg": 65335034,
+    "money_M": 96332481,
+    "days_income": 1.47,
+    "days_income_day90": 2.66,
+    "board_tael": 1366374,
+    "market_volume": 737302,
+    "volume_per_dau": 737,
+    "sink": 75122,
+    "sink_pct_F": 0.115,
+    "turnover_S10": 0.0322,
+    "board_share_of_turnover": 0.65,
+    "velocity": 0.0218,
+    "material_floor": 59573,
+    "material_floor_pct_F": 0.091,
+    "official_weekly_cap_0p5pct": 2286726,
+    "capital_tax_3pct": 22119,
+    "capital_treasury_per_week": 77417,
+    "gap_to_spine_pct_F": 4.1
+   },
+   "official_old_formula": "official_buyback.sim_r2_old_formula",
+   "price_step_tests": "price_controls.ref.move_r2",
+   "limits": "ตลาดไม่มีราคาสงวนจริงและไม่มีเพดานกระเป๋า · แลกของไม่ได้จำลอง (balance_r2 ข้อ 6) · วัดจริงในเบต้าปิด"
+  }
+ }
+}

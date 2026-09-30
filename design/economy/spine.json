@@ -1,0 +1,3132 @@
+{
+ "meta": {
+  "file": "spine.md",
+  "date": "2026-09-29",
+  "base_draft": "spine_sink",
+  "grafts": [
+   "spine_history",
+   "spine_player"
+  ],
+  "model": "design/_judge/final_model.py -> final_model_out.json · builder design/_judge/make_spine.py",
+  "provenance_tags": [
+   "ประวัติศาสตร์",
+   "อนุมาน",
+   "แต่งใหม่",
+   "เอกสาร",
+   "จำลอง"
+  ]
+ },
+ "scores": {
+  "criteria": [
+   "internal_consistency",
+   "fit_with_doc_numbers",
+   "inflation_safety_90d_and_merges",
+   "player_clarity_phone",
+   "historical_grounding",
+   "solo_dev_simplicity"
+  ],
+  "spine_player": [
+   6,
+   4,
+   5,
+   9,
+   6,
+   8
+  ],
+  "spine_sink": [
+   8,
+   7,
+   9,
+   7,
+   7,
+   6
+  ],
+  "spine_history": [
+   7,
+   8,
+   6,
+   6,
+   10,
+   7
+  ],
+  "totals": {
+   "spine_player": 38,
+   "spine_sink": 44,
+   "spine_history": 44
+  },
+  "tie_break": "ความสอดคล้องภายใน (sink 8 > history 7)",
+  "base": "spine_sink"
+ },
+ "units": {
+  "soft": {
+   "id": "tael",
+   "name_th": "ตำลึง",
+   "integer": true,
+   "wallet_cap": 999999999,
+   "tradable": "ได้ เสียภาษีทุกช่องทาง"
+  },
+  "cash": {
+   "id": "gold_paid",
+   "name_th": "ทอง",
+   "source": "เติมเงินบาทเท่านั้น",
+   "moves_between_players": "กระดานแลกทองเท่านั้น ครั้งเดียว",
+   "vip_points": true
+  },
+  "cash_bound": {
+   "id": "gold_bound",
+   "name_th": "ทองผูก",
+   "source": [
+    "โบนัสแพ็ก",
+    "โบนัสเติมครั้งแรก",
+    "ทองรายวันบัตรรายเดือน",
+    "กิจกรรม",
+    "ทองที่ซื้อจากกระดาน"
+   ],
+   "tradable": false,
+   "vip_points": false,
+   "usable": "ร้านทองทุกอย่าง ยกเว้นสินค้าที่ให้ทอง ทองผูก หรือแต้ม VIP",
+   "free_event_cap_per_month": 1500
+  },
+  "spend_order": "ทองผูกก่อน แล้วค่อยทอง",
+  "baht_to_gold": 10,
+  "rule": "ทองที่ลงกระดานได้ = บาทที่รับจริง × 10 เสมอ",
+  "rarity_ladder": [
+   "ขาว",
+   "เขียว",
+   "ฟ้า",
+   "ม่วง",
+   "ส้ม",
+   "แดง",
+   "ตำนาน"
+  ],
+  "display": {
+   "no_decimals": true,
+   "full_digits_below": 1000000,
+   "above": "1.25 ล้าน",
+   "forbidden_money_words": [
+    "บาท",
+    "ชั่ง"
+   ],
+   "icons": {
+    "tael": "สีเงิน",
+    "gold": "สีทอง",
+    "gold_bound": "สีทองมีกุญแจ"
+   }
+  }
+ },
+ "topup_packs": [
+  {
+   "baht": 29,
+   "gold": 290,
+   "bound_bonus": 0,
+   "bonus_pct": 0,
+   "first_time_bound": 290
+  },
+  {
+   "baht": 99,
+   "gold": 990,
+   "bound_bonus": 0,
+   "bonus_pct": 0,
+   "first_time_bound": 990
+  },
+  {
+   "baht": 299,
+   "gold": 2990,
+   "bound_bonus": 90,
+   "bonus_pct": 3,
+   "first_time_bound": 2990
+  },
+  {
+   "baht": 599,
+   "gold": 5990,
+   "bound_bonus": 300,
+   "bonus_pct": 5,
+   "first_time_bound": 5990
+  },
+  {
+   "baht": 1499,
+   "gold": 14990,
+   "bound_bonus": 1200,
+   "bonus_pct": 8,
+   "first_time_bound": 14990
+  },
+  {
+   "baht": 2999,
+   "gold": 29990,
+   "bound_bonus": 3000,
+   "bonus_pct": 10,
+   "first_time_bound": 29990
+  },
+  {
+   "baht": 5999,
+   "gold": 59990,
+   "bound_bonus": 6000,
+   "bonus_pct": 10,
+   "first_time_bound": 59990
+  }
+ ],
+ "first_topup_gift": {
+  "baht": 29,
+  "gives": "อาวุธม่วง + ขุนพล SR (ผูกตัว)",
+  "source": "เอกสาร m5zp5ngnhqs.8570",
+  "note": "ทองของแพ็ก 29 บาทนับรวมด้วย"
+ },
+ "cards": {
+  "monthly": {
+   "baht": 149,
+   "gold_now": 1490,
+   "bound_per_day": 60,
+   "days": 30,
+   "bound_total": 1800,
+   "total_value": 3290,
+   "value_x": 2.2,
+   "offline_hours": 12
+  },
+  "lifetime": {
+   "baht": 699,
+   "gold_now": 6990,
+   "perks": "บัฟถาวร + ช่องออโต้ (ผลออโต้ไม่เกิน 80% ของเล่นเอง)",
+   "offline_hours_extra": 0
+  }
+ },
+ "cash_shop_gold": {
+  "gacha_1": 300,
+  "gacha_10": 3000,
+  "gacha_pity_100": 30000,
+  "battle_pass": [
+   2990,
+   5990
+  ],
+  "vip1_paid_gold": 1000,
+  "vip15_paid_gold": 2000000,
+  "heroes_from_gacha": "ผูกตัว"
+ },
+ "value_function": {
+  "S": "100 × (L + 2)",
+  "meaning": "ตำลึงต่อชั่วโมงเล่นเอง (รวมโบนัสคอมโบเฉลี่ยแล้ว)",
+  "auto": 0.8,
+  "offline_of_auto": 0.55,
+  "offline_of_manual": 0.44,
+  "offline_cap_hours": {
+   "free": 8,
+   "monthly_card": 12
+  },
+  "offline_rule": "ต้องออนไลน์รวม ≥ 30 นาทีใน 24 ชม. ก่อนหน้า จึงได้ตำลึงออฟไลน์ (ไม่งั้นได้ EXP อย่างเดียว) · วัตถุดิบจากออฟไลน์ผูกตัว",
+  "daily_quests": {
+   "tael": "2 × S(L)",
+   "exp_h_eq": 1.5,
+   "minutes": 30
+  },
+  "main_story": "0.5 × S(l) ต่อเลเวลที่ขึ้น ครั้งเดียว",
+  "S_split": {
+   "coin_drops": 0.6,
+   "npc_junk_and_gear_buyback": 0.4
+  },
+  "tradable_materials_extra": "ราว 0.3 × S(L) ต่อชั่วโมงตามราคากลาง (ไม่ใช่เงินใหม่)",
+  "coin_drop_suggestion": "600 ตัวต่อชั่วโมง ดรอปเหรียญ 1 ใน 3 ตัว ก้อนละ 0.3 × (L+2) (Lv 10 = 4 · Lv 80 = 25)",
+  "court_buff": "+5% ใช้กับเหรียญที่มอนดรอปขณะเล่นเท่านั้น",
+  "G": "(L + 2) ÷ 12 ใช้กับราคาของ NPC ตามเลเวล"
+ },
+ "income_per_band_and_mode": {
+  "1-20": {
+   "manual_per_h": {
+    "start": 300,
+    "mid": 1200,
+    "end": 2200
+   },
+   "auto_per_h": {
+    "start": 240,
+    "mid": 960,
+    "end": 1760
+   },
+   "offline_per_h": {
+    "start": 132,
+    "mid": 528,
+    "end": 968
+   },
+   "offline_8h_mid": 4224,
+   "daily_quests_mid": 2400,
+   "phase": "launch"
+  },
+  "21-40": {
+   "manual_per_h": {
+    "start": 2300,
+    "mid": 3200,
+    "end": 4200
+   },
+   "auto_per_h": {
+    "start": 1840,
+    "mid": 2560,
+    "end": 3360
+   },
+   "offline_per_h": {
+    "start": 1012,
+    "mid": 1408,
+    "end": 1848
+   },
+   "offline_8h_mid": 11264,
+   "daily_quests_mid": 6400,
+   "phase": "launch"
+  },
+  "41-60": {
+   "manual_per_h": {
+    "start": 4300,
+    "mid": 5200,
+    "end": 6200
+   },
+   "auto_per_h": {
+    "start": 3440,
+    "mid": 4160,
+    "end": 4960
+   },
+   "offline_per_h": {
+    "start": 1892,
+    "mid": 2288,
+    "end": 2728
+   },
+   "offline_8h_mid": 18304,
+   "daily_quests_mid": 10400,
+   "phase": "launch"
+  },
+  "61-80": {
+   "manual_per_h": {
+    "start": 6300,
+    "mid": 7200,
+    "end": 8200
+   },
+   "auto_per_h": {
+    "start": 5040,
+    "mid": 5760,
+    "end": 6560
+   },
+   "offline_per_h": {
+    "start": 2772,
+    "mid": 3168,
+    "end": 3608
+   },
+   "offline_8h_mid": 25344,
+   "daily_quests_mid": 14400,
+   "phase": "launch"
+  },
+  "81-100": {
+   "manual_per_h": {
+    "start": 8300,
+    "mid": 9200,
+    "end": 10200
+   },
+   "auto_per_h": {
+    "start": 6640,
+    "mid": 7360,
+    "end": 8160
+   },
+   "offline_per_h": {
+    "start": 3652,
+    "mid": 4048,
+    "end": 4488
+   },
+   "offline_8h_mid": 32384,
+   "daily_quests_mid": 18400,
+   "phase": "patch"
+  },
+  "101-120": {
+   "manual_per_h": {
+    "start": 10300,
+    "mid": 11200,
+    "end": 12200
+   },
+   "auto_per_h": {
+    "start": 8240,
+    "mid": 8960,
+    "end": 9760
+   },
+   "offline_per_h": {
+    "start": 4532,
+    "mid": 4928,
+    "end": 5368
+   },
+   "offline_8h_mid": 39424,
+   "daily_quests_mid": 22400,
+   "phase": "patch"
+  }
+ },
+ "personas": {
+  "casual": {
+   "name_th": "ฟรีเล่นน้อย",
+   "online_h": 1.5,
+   "quests_h": 0.5,
+   "manual_farm_h": 0.0,
+   "auto_h": 1.0,
+   "offline_h": 8,
+   "day1_online_h": 3,
+   "merit_per_week": 6000,
+   "pay_baht_month": 0,
+   "buys_gold_share_of_income": 0.02,
+   "share_of_dau": 0.7
+  },
+  "hardcore": {
+   "name_th": "ฟรีขยัน",
+   "online_h": 5,
+   "quests_h": 0.5,
+   "manual_farm_h": 2.5,
+   "auto_h": 2.0,
+   "offline_h": 8,
+   "day1_online_h": 8,
+   "merit_per_week": 14000,
+   "pay_baht_month": 0,
+   "buys_gold_share_of_income": 0.03,
+   "share_of_dau": 0.25
+  },
+  "payer": {
+   "name_th": "ผู้เติมเงิน",
+   "online_h": 3,
+   "quests_h": 0.5,
+   "manual_farm_h": 1.0,
+   "auto_h": 1.5,
+   "offline_h": 12,
+   "day1_online_h": 5,
+   "merit_per_week": 10000,
+   "pay_baht_month": 1000,
+   "spend_split_baht": {
+    "monthly_card": 149,
+    "board_gold": 450,
+    "gacha_10": 300,
+    "other": 101
+   },
+   "sells_gold_per_day": 150,
+   "exp_potion": "×1.5 ขณะฟาร์ม",
+   "share_of_dau": 0.05
+  }
+ },
+ "level_pace": {
+  "unit": "ชม.เทียบเล่นเอง (EXP ที่ได้จากเล่นเอง 1 ชม.)",
+  "formula": {
+   "L1_59": "0.04 × 1.075^L",
+   "L60_79": "4.7 × 1.10^(L−60)",
+   "L80_up": "h(79) × 1.02^(L−79)"
+  },
+  "exp_suggestion": "EXP ต่อชั่วโมงเล่นเอง = 10 × S(L) → EXP ต่อเลเวล = h(L) × 10 × S(L)",
+  "exp_per_day_h_eq": {
+   "casual": {
+    "day1": 7.12,
+    "normal": 5.82
+   },
+   "hardcore": {
+    "day1": 11.92,
+    "normal": 9.12
+   },
+   "payer": {
+    "day1": 12.78,
+    "normal": 10.08
+   }
+  },
+  "table": {
+   "1": {
+    "h_eq": 0.043,
+    "cum_h_eq": 0.0,
+    "exp_to_next": 129
+   },
+   "10": {
+    "h_eq": 0.082,
+    "cum_h_eq": 0.53,
+    "exp_to_next": 984
+   },
+   "20": {
+    "h_eq": 0.17,
+    "cum_h_eq": 1.69,
+    "exp_to_next": 3740
+   },
+   "30": {
+    "h_eq": 0.35,
+    "cum_h_eq": 4.1,
+    "exp_to_next": 11200
+   },
+   "40": {
+    "h_eq": 0.722,
+    "cum_h_eq": 9.05,
+    "exp_to_next": 30324
+   },
+   "45": {
+    "h_eq": 1.036,
+    "cum_h_eq": 13.24,
+    "exp_to_next": 48692
+   },
+   "50": {
+    "h_eq": 1.488,
+    "cum_h_eq": 19.26,
+    "exp_to_next": 77376
+   },
+   "55": {
+    "h_eq": 2.136,
+    "cum_h_eq": 27.9,
+    "exp_to_next": 121752
+   },
+   "59": {
+    "h_eq": 2.852,
+    "cum_h_eq": 37.45,
+    "exp_to_next": 173972
+   },
+   "60": {
+    "h_eq": 4.7,
+    "cum_h_eq": 40.31,
+    "exp_to_next": 291400
+   },
+   "65": {
+    "h_eq": 7.569,
+    "cum_h_eq": 69.0,
+    "exp_to_next": 507123
+   },
+   "70": {
+    "h_eq": 12.191,
+    "cum_h_eq": 115.21,
+    "exp_to_next": 877752
+   },
+   "75": {
+    "h_eq": 19.633,
+    "cum_h_eq": 189.64,
+    "exp_to_next": 1511741
+   },
+   "79": {
+    "h_eq": 28.745,
+    "cum_h_eq": 280.75,
+    "exp_to_next": 2328345
+   },
+   "80": {
+    "h_eq": 29.32,
+    "cum_h_eq": 309.5,
+    "exp_to_next": 2404240
+   },
+   "85": {
+    "h_eq": 32.371,
+    "cum_h_eq": 462.08,
+    "exp_to_next": 2816277
+   },
+   "90": {
+    "h_eq": 35.741,
+    "cum_h_eq": 630.54,
+    "exp_to_next": 3288172
+   },
+   "95": {
+    "h_eq": 39.46,
+    "cum_h_eq": 816.54,
+    "exp_to_next": 3827620
+   },
+   "100": {
+    "h_eq": 43.567,
+    "cum_h_eq": 1021.89,
+    "exp_to_next": 4443834
+   },
+   "110": {
+    "h_eq": 53.109,
+    "cum_h_eq": 1498.94,
+    "exp_to_next": 5948208
+   },
+   "120": {
+    "h_eq": 64.739,
+    "cum_h_eq": 2080.46,
+    "exp_to_next": 7898158
+   }
+  },
+  "patch_days": {
+   "80-90": {
+    "h_eq": 321.0,
+    "casual": 56,
+    "hardcore": 36,
+    "payer": 32
+   },
+   "90-100": {
+    "h_eq": 391.4,
+    "casual": 68,
+    "hardcore": 43,
+    "payer": 39
+   },
+   "100-110": {
+    "h_eq": 477.1,
+    "casual": 82,
+    "hardcore": 53,
+    "payer": 48
+   },
+   "110-120": {
+    "h_eq": 581.5,
+    "casual": 100,
+    "hardcore": 64,
+    "payer": 58
+   }
+  }
+ },
+ "level_by_day": {
+  "casual": {
+   "1": 36,
+   "2": 44,
+   "3": 49,
+   "4": 53,
+   "5": 56,
+   "6": 58,
+   "7": 60,
+   "10": 63,
+   "14": 66,
+   "21": 70,
+   "28": 73,
+   "30": 74,
+   "35": 75,
+   "42": 77,
+   "45": 78,
+   "53": 80,
+   "60": 80,
+   "75": 80,
+   "90": 80
+  },
+  "hardcore": {
+   "1": 43,
+   "2": 51,
+   "3": 56,
+   "4": 59,
+   "5": 61,
+   "6": 63,
+   "7": 64,
+   "10": 67,
+   "14": 71,
+   "21": 75,
+   "28": 78,
+   "30": 78,
+   "35": 80,
+   "42": 80,
+   "45": 80,
+   "53": 80,
+   "60": 80,
+   "75": 80,
+   "90": 80
+  },
+  "payer": {
+   "1": 44,
+   "2": 52,
+   "3": 57,
+   "4": 60,
+   "5": 62,
+   "6": 64,
+   "7": 65,
+   "10": 68,
+   "14": 72,
+   "21": 76,
+   "28": 79,
+   "30": 79,
+   "35": 80,
+   "42": 80,
+   "45": 80,
+   "53": 80,
+   "60": 80,
+   "75": 80,
+   "90": 80
+  }
+ },
+ "first_day_at_level": {
+  "casual": {
+   "10": 1,
+   "20": 1,
+   "25": 1,
+   "30": 1,
+   "35": 1,
+   "40": 2,
+   "45": 3,
+   "50": 4,
+   "55": 5,
+   "60": 7,
+   "65": 12,
+   "70": 20,
+   "75": 33,
+   "80": 53
+  },
+  "hardcore": {
+   "10": 1,
+   "20": 1,
+   "25": 1,
+   "30": 1,
+   "35": 1,
+   "40": 1,
+   "45": 2,
+   "50": 2,
+   "55": 3,
+   "60": 5,
+   "65": 8,
+   "70": 13,
+   "75": 21,
+   "80": 34
+  },
+  "payer": {
+   "10": 1,
+   "20": 1,
+   "25": 1,
+   "30": 1,
+   "35": 1,
+   "40": 1,
+   "45": 2,
+   "50": 2,
+   "55": 3,
+   "60": 4,
+   "65": 7,
+   "70": 12,
+   "75": 19,
+   "80": 31
+  }
+ },
+ "rank_first_day": {
+  "casual": {
+   "4": 1,
+   "5": 2,
+   "6": 9,
+   "7": 26,
+   "8": 49,
+   "9": 79
+  },
+  "hardcore": {
+   "5": 1,
+   "6": 4,
+   "7": 11,
+   "8": 21,
+   "9": 34
+  },
+  "payer": {
+   "5": 1,
+   "6": 5,
+   "7": 16,
+   "8": 30,
+   "9": 47
+  }
+ },
+ "nobility_gate_day": {
+  "casual": {
+   "9": 3,
+   "10": 14,
+   "11": 38,
+   "12": 73
+  },
+  "hardcore": {
+   "9": 2,
+   "10": 6,
+   "11": 16,
+   "12": 31
+  },
+  "payer": {
+   "9": 2,
+   "10": 9,
+   "11": 23,
+   "12": 44
+  }
+ },
+ "nobility_buy_day": {
+  "casual": {
+   "9": 6,
+   "10": 20,
+   "11": 43,
+   "12": 88
+  },
+  "hardcore": {
+   "9": 4,
+   "10": 13,
+   "11": 29,
+   "12": 60
+  },
+  "payer": {
+   "9": 4,
+   "10": 10,
+   "11": 23,
+   "12": 45
+  }
+ },
+ "nobility_buy_day_old_doc_costs": {
+  "note": "แบบจำลองเดียวกัน 200 วัน ราคากระดาน 190",
+  "casual": {
+   "9": 12,
+   "10": 36,
+   "11": 81,
+   "12": 168
+  },
+  "hardcore": {
+   "9": 8,
+   "10": 25,
+   "11": 55,
+   "12": 116
+  },
+  "payer": {
+   "9": 6,
+   "10": 18,
+   "11": 41,
+   "12": 84
+  }
+ },
+ "persona_income_by_day": {
+  "casual": {
+   "1": {
+    "L": 36,
+    "tier": 4,
+    "dq": 5483,
+    "manual": 1371,
+    "auto": 4386,
+    "offline": 9649,
+    "story": 36750,
+    "salary": 0,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 57639,
+    "income": 57639,
+    "running": {
+     "cons": 4035,
+     "upg": 25937,
+     "trade": 1153,
+     "travel": 4035,
+     "ally": 2882
+    },
+    "spent": 0,
+    "bal": 19597
+   },
+   "2": {
+    "L": 44,
+    "tier": 5,
+    "dq": 8532,
+    "manual": 0,
+    "auto": 3413,
+    "offline": 15016,
+    "story": 17000,
+    "salary": 1350,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 45311,
+    "income": 45311,
+    "running": {
+     "cons": 2719,
+     "upg": 19031,
+     "trade": 1359,
+     "travel": 2719,
+     "ally": 2719
+    },
+    "spent": 0,
+    "bal": 36362
+   },
+   "3": {
+    "L": 49,
+    "tier": 5,
+    "dq": 9763,
+    "manual": 0,
+    "auto": 3905,
+    "offline": 17183,
+    "story": 12250,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 45601,
+    "income": 45601,
+    "running": {
+     "cons": 2736,
+     "upg": 19152,
+     "trade": 1368,
+     "travel": 2736,
+     "ally": 2736
+    },
+    "spent": 0,
+    "bal": 53234
+   },
+   "5": {
+    "L": 56,
+    "tier": 5,
+    "dq": 11252,
+    "manual": 0,
+    "auto": 4501,
+    "offline": 19803,
+    "story": 8550,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 46605,
+    "income": 46605,
+    "running": {
+     "cons": 2796,
+     "upg": 19574,
+     "trade": 1398,
+     "travel": 2796,
+     "ally": 2796
+    },
+    "spent": 357,
+    "bal": 87196
+   },
+   "7": {
+    "L": 60,
+    "tier": 5,
+    "dq": 12216,
+    "manual": 0,
+    "auto": 4887,
+    "offline": 21501,
+    "story": 6150,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 47254,
+    "income": 47254,
+    "running": {
+     "cons": 2835,
+     "upg": 19847,
+     "trade": 1418,
+     "travel": 2835,
+     "ally": 2835
+    },
+    "spent": 576,
+    "bal": 20542
+   },
+   "10": {
+    "L": 63,
+    "tier": 6,
+    "dq": 12924,
+    "manual": 0,
+    "auto": 5170,
+    "offline": 22747,
+    "story": 3250,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 48091,
+    "income": 48091,
+    "running": {
+     "cons": 2405,
+     "upg": 18756,
+     "trade": 1924,
+     "travel": 2405,
+     "ally": 2885
+    },
+    "spent": 836,
+    "bal": 75390
+   },
+   "14": {
+    "L": 66,
+    "tier": 6,
+    "dq": 13600,
+    "manual": 0,
+    "auto": 5440,
+    "offline": 23936,
+    "story": 0,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 46976,
+    "income": 46976,
+    "running": {
+     "cons": 2349,
+     "upg": 18321,
+     "trade": 1879,
+     "travel": 2349,
+     "ally": 2819
+    },
+    "spent": 940,
+    "bal": 151355
+   },
+   "21": {
+    "L": 70,
+    "tier": 6,
+    "dq": 14400,
+    "manual": 0,
+    "auto": 5760,
+    "offline": 25344,
+    "story": 0,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 49504,
+    "income": 49504,
+    "running": {
+     "cons": 2475,
+     "upg": 19307,
+     "trade": 1980,
+     "travel": 2475,
+     "ally": 2970
+    },
+    "spent": 985,
+    "bal": 39203
+   },
+   "30": {
+    "L": 74,
+    "tier": 7,
+    "dq": 15141,
+    "manual": 0,
+    "auto": 6056,
+    "offline": 26648,
+    "story": 3800,
+    "salary": 5000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 56645,
+    "income": 56645,
+    "running": {
+     "cons": 2832,
+     "upg": 22092,
+     "trade": 2266,
+     "travel": 2832,
+     "ally": 3399
+    },
+    "spent": 1126,
+    "bal": 224960
+   },
+   "45": {
+    "L": 78,
+    "tier": 7,
+    "dq": 16000,
+    "manual": 0,
+    "auto": 6400,
+    "offline": 28160,
+    "story": 0,
+    "salary": 5000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 55560,
+    "income": 55560,
+    "running": {
+     "cons": 2778,
+     "upg": 21668,
+     "trade": 2222,
+     "travel": 2778,
+     "ally": 3334
+    },
+    "spent": 1107,
+    "bal": 48507
+   },
+   "60": {
+    "L": 80,
+    "tier": 8,
+    "dq": 16400,
+    "manual": 0,
+    "auto": 6560,
+    "offline": 28864,
+    "story": 0,
+    "salary": 6000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 57824,
+    "income": 57824,
+    "running": {
+     "cons": 2891,
+     "upg": 22551,
+     "trade": 2313,
+     "travel": 2891,
+     "ally": 3469
+    },
+    "spent": 1156,
+    "bal": 385710
+   },
+   "75": {
+    "L": 80,
+    "tier": 8,
+    "dq": 16400,
+    "manual": 0,
+    "auto": 6560,
+    "offline": 28864,
+    "story": 0,
+    "salary": 6000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 57824,
+    "income": 57824,
+    "running": {
+     "cons": 2891,
+     "upg": 22551,
+     "trade": 2313,
+     "travel": 2891,
+     "ally": 3469
+    },
+    "spent": 1156,
+    "bal": 723990
+   },
+   "90": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 0,
+    "auto": 6560,
+    "offline": 28864,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 59324,
+    "income": 59324,
+    "running": {
+     "cons": 2966,
+     "upg": 29662,
+     "trade": 2966,
+     "travel": 2966,
+     "ally": 4746,
+     "endg": 7119
+    },
+    "spent": 1186,
+    "bal": 37854
+   }
+  },
+  "hardcore": {
+   "1": {
+    "L": 43,
+    "tier": 5,
+    "dq": 6659,
+    "manual": 14984,
+    "auto": 7991,
+    "offline": 11721,
+    "story": 51450,
+    "salary": 0,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 92805,
+    "income": 92805,
+    "running": {
+     "cons": 5568,
+     "upg": 38978,
+     "trade": 2784,
+     "travel": 5568,
+     "ally": 5568
+    },
+    "spent": 0,
+    "bal": 34338
+   },
+   "2": {
+    "L": 51,
+    "tier": 5,
+    "dq": 9846,
+    "manual": 12308,
+    "auto": 7877,
+    "offline": 17329,
+    "story": 19800,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 69660,
+    "income": 69660,
+    "running": {
+     "cons": 4180,
+     "upg": 29257,
+     "trade": 2090,
+     "travel": 4180,
+     "ally": 4180
+    },
+    "spent": 0,
+    "bal": 60112
+   },
+   "3": {
+    "L": 56,
+    "tier": 5,
+    "dq": 11049,
+    "manual": 13811,
+    "auto": 8839,
+    "offline": 19446,
+    "story": 14000,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 69646,
+    "income": 69646,
+    "running": {
+     "cons": 4179,
+     "upg": 29251,
+     "trade": 2089,
+     "travel": 4179,
+     "ally": 4179
+    },
+    "spent": 0,
+    "bal": 85881
+   },
+   "5": {
+    "L": 61,
+    "tier": 6,
+    "dq": 12451,
+    "manual": 15564,
+    "auto": 9961,
+    "offline": 21914,
+    "story": 6250,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 70141,
+    "income": 70141,
+    "running": {
+     "cons": 3507,
+     "upg": 27355,
+     "trade": 2806,
+     "travel": 3507,
+     "ally": 4208
+    },
+    "spent": 807,
+    "bal": 38782
+   },
+   "7": {
+    "L": 64,
+    "tier": 6,
+    "dq": 13099,
+    "manual": 16374,
+    "auto": 10479,
+    "offline": 23054,
+    "story": 3300,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 70307,
+    "income": 70307,
+    "running": {
+     "cons": 3515,
+     "upg": 27420,
+     "trade": 2812,
+     "travel": 3515,
+     "ally": 4218
+    },
+    "spent": 1286,
+    "bal": 94750
+   },
+   "10": {
+    "L": 67,
+    "tier": 6,
+    "dq": 13800,
+    "manual": 17249,
+    "auto": 11040,
+    "offline": 24287,
+    "story": 3450,
+    "salary": 4000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 73826,
+    "income": 73826,
+    "running": {
+     "cons": 3691,
+     "upg": 28792,
+     "trade": 2953,
+     "travel": 3691,
+     "ally": 4430
+    },
+    "spent": 1925,
+    "bal": 179019
+   },
+   "14": {
+    "L": 71,
+    "tier": 7,
+    "dq": 14467,
+    "manual": 18084,
+    "auto": 11574,
+    "offline": 25462,
+    "story": 3650,
+    "salary": 5000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 78237,
+    "income": 78237,
+    "running": {
+     "cons": 3912,
+     "upg": 30512,
+     "trade": 3129,
+     "travel": 3912,
+     "ally": 4694
+    },
+    "spent": 2347,
+    "bal": 45817
+   },
+   "21": {
+    "L": 75,
+    "tier": 8,
+    "dq": 15303,
+    "manual": 19128,
+    "auto": 12242,
+    "offline": 26933,
+    "story": 3850,
+    "salary": 5000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 82456,
+    "income": 82456,
+    "running": {
+     "cons": 4123,
+     "upg": 32158,
+     "trade": 3298,
+     "travel": 4123,
+     "ally": 4947
+    },
+    "spent": 2461,
+    "bal": 256560
+   },
+   "30": {
+    "L": 78,
+    "tier": 8,
+    "dq": 16000,
+    "manual": 20000,
+    "auto": 12800,
+    "offline": 28160,
+    "story": 0,
+    "salary": 6000,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 82960,
+    "income": 82960,
+    "running": {
+     "cons": 4148,
+     "upg": 32354,
+     "trade": 3318,
+     "travel": 4148,
+     "ally": 4978
+    },
+    "spent": 2475,
+    "bal": 40430
+   },
+   "45": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 20500,
+    "auto": 13120,
+    "offline": 28864,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 86384,
+    "income": 86384,
+    "running": {
+     "cons": 4319,
+     "upg": 33690,
+     "trade": 3455,
+     "travel": 4319,
+     "ally": 5183
+    },
+    "spent": 2582,
+    "bal": 532269
+   },
+   "60": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 20500,
+    "auto": 13120,
+    "offline": 28864,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 86384,
+    "income": 86384,
+    "running": {
+     "cons": 4319,
+     "upg": 33690,
+     "trade": 3455,
+     "travel": 4319,
+     "ally": 5183
+    },
+    "spent": 2592,
+    "bal": 24699
+   },
+   "75": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 20500,
+    "auto": 13120,
+    "offline": 28864,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 86384,
+    "income": 86384,
+    "running": {
+     "cons": 4319,
+     "upg": 43192,
+     "trade": 4319,
+     "travel": 4319,
+     "ally": 6911,
+     "endg": 10366
+    },
+    "spent": 2590,
+    "bal": 180212
+   },
+   "90": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 20500,
+    "auto": 13120,
+    "offline": 28864,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 86384,
+    "income": 86384,
+    "running": {
+     "cons": 4319,
+     "upg": 43192,
+     "trade": 4319,
+     "travel": 4319,
+     "ally": 6911,
+     "endg": 10366
+    },
+    "spent": 2591,
+    "bal": 335718
+   }
+  },
+  "payer": {
+   "1": {
+    "L": 44,
+    "tier": 5,
+    "dq": 6825,
+    "manual": 6825,
+    "auto": 6825,
+    "offline": 18017,
+    "story": 53750,
+    "salary": 0,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 92241,
+    "income": 92241,
+    "running": {
+     "cons": 5534,
+     "upg": 38741,
+     "trade": 2767,
+     "travel": 5534,
+     "ally": 5534
+    },
+    "spent": 0,
+    "bal": 34129
+   },
+   "2": {
+    "L": 52,
+    "tier": 5,
+    "dq": 10054,
+    "manual": 5027,
+    "auto": 6033,
+    "offline": 26544,
+    "story": 20200,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 70358,
+    "income": 70358,
+    "running": {
+     "cons": 4221,
+     "upg": 29550,
+     "trade": 2111,
+     "travel": 4221,
+     "ally": 4221
+    },
+    "spent": 0,
+    "bal": 60162
+   },
+   "3": {
+    "L": 57,
+    "tier": 5,
+    "dq": 11284,
+    "manual": 5642,
+    "auto": 6770,
+    "offline": 29790,
+    "story": 14250,
+    "salary": 2500,
+    "board_in": 0,
+    "gold_sold": 0,
+    "gross": 70237,
+    "income": 70237,
+    "running": {
+     "cons": 4214,
+     "upg": 29499,
+     "trade": 2107,
+     "travel": 4214,
+     "ally": 4214
+    },
+    "spent": 0,
+    "bal": 86149
+   },
+   "5": {
+    "L": 62,
+    "tier": 6,
+    "dq": 12618,
+    "manual": 6309,
+    "auto": 7571,
+    "offline": 33312,
+    "story": 6350,
+    "salary": 2500,
+    "board_in": 22208,
+    "gold_sold": 150,
+    "gross": 68661,
+    "income": 90868,
+    "running": {
+     "cons": 4543,
+     "upg": 35439,
+     "trade": 3635,
+     "travel": 4543,
+     "ally": 5452
+    },
+    "spent": 0,
+    "bal": 56809
+   },
+   "7": {
+    "L": 65,
+    "tier": 6,
+    "dq": 13284,
+    "manual": 6642,
+    "auto": 7970,
+    "offline": 35070,
+    "story": 3350,
+    "salary": 4000,
+    "board_in": 24484,
+    "gold_sold": 150,
+    "gross": 70317,
+    "income": 94801,
+    "running": {
+     "cons": 4740,
+     "upg": 36972,
+     "trade": 3792,
+     "travel": 4740,
+     "ally": 5688
+    },
+    "spent": 0,
+    "bal": 134761
+   },
+   "10": {
+    "L": 68,
+    "tier": 6,
+    "dq": 13987,
+    "manual": 6994,
+    "auto": 8392,
+    "offline": 36926,
+    "story": 3500,
+    "salary": 4000,
+    "board_in": 28343,
+    "gold_sold": 150,
+    "gross": 73800,
+    "income": 102143,
+    "running": {
+     "cons": 5107,
+     "upg": 39836,
+     "trade": 4086,
+     "travel": 5107,
+     "ally": 6129
+    },
+    "spent": 0,
+    "bal": 7396
+   },
+   "14": {
+    "L": 72,
+    "tier": 6,
+    "dq": 14660,
+    "manual": 7330,
+    "auto": 8796,
+    "offline": 38701,
+    "story": 3700,
+    "salary": 4000,
+    "board_in": 22915,
+    "gold_sold": 135,
+    "gross": 77186,
+    "income": 100101,
+    "running": {
+     "cons": 5005,
+     "upg": 39040,
+     "trade": 4004,
+     "travel": 5005,
+     "ally": 6006
+    },
+    "spent": 0,
+    "bal": 172521
+   },
+   "21": {
+    "L": 76,
+    "tier": 7,
+    "dq": 15501,
+    "manual": 7751,
+    "auto": 9301,
+    "offline": 40923,
+    "story": 3900,
+    "salary": 5000,
+    "board_in": 24130,
+    "gold_sold": 150,
+    "gross": 82376,
+    "income": 106505,
+    "running": {
+     "cons": 5325,
+     "upg": 41537,
+     "trade": 4260,
+     "travel": 5325,
+     "ally": 6390
+    },
+    "spent": 0,
+    "bal": 466255
+   },
+   "30": {
+    "L": 79,
+    "tier": 8,
+    "dq": 16200,
+    "manual": 8100,
+    "auto": 9720,
+    "offline": 42768,
+    "story": 0,
+    "salary": 5000,
+    "board_in": 25376,
+    "gold_sold": 150,
+    "gross": 81788,
+    "income": 107164,
+    "running": {
+     "cons": 5358,
+     "upg": 41794,
+     "trade": 4287,
+     "travel": 5358,
+     "ally": 6430
+    },
+    "spent": 0,
+    "bal": 359870
+   },
+   "45": {
+    "L": 80,
+    "tier": 8,
+    "dq": 16400,
+    "manual": 8200,
+    "auto": 9840,
+    "offline": 43296,
+    "story": 0,
+    "salary": 6000,
+    "board_in": 26783,
+    "gold_sold": 150,
+    "gross": 83736,
+    "income": 110519,
+    "running": {
+     "cons": 5526,
+     "upg": 43102,
+     "trade": 4421,
+     "travel": 5526,
+     "ally": 6631
+    },
+    "spent": 0,
+    "bal": 37844
+   },
+   "60": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 8200,
+    "auto": 9840,
+    "offline": 43296,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 27294,
+    "gold_sold": 150,
+    "gross": 85236,
+    "income": 112530,
+    "running": {
+     "cons": 5627,
+     "upg": 56265,
+     "trade": 5627,
+     "travel": 5627,
+     "ally": 9002,
+     "endg": 13504
+    },
+    "spent": 0,
+    "bal": 290198
+   },
+   "75": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 8200,
+    "auto": 9840,
+    "offline": 43296,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 27494,
+    "gold_sold": 150,
+    "gross": 85236,
+    "income": 112730,
+    "running": {
+     "cons": 5636,
+     "upg": 56365,
+     "trade": 5636,
+     "travel": 5636,
+     "ally": 9018,
+     "endg": 13528
+    },
+    "spent": 0,
+    "bal": 543627
+   },
+   "90": {
+    "L": 80,
+    "tier": 9,
+    "dq": 16400,
+    "manual": 8200,
+    "auto": 9840,
+    "offline": 43296,
+    "story": 0,
+    "salary": 7500,
+    "board_in": 27652,
+    "gold_sold": 150,
+    "gross": 85236,
+    "income": 112888,
+    "running": {
+     "cons": 5644,
+     "upg": 56444,
+     "trade": 5644,
+     "travel": 5644,
+     "ally": 9031,
+     "endg": 13547
+    },
+    "spent": 0,
+    "bal": 797450
+   }
+  }
+ },
+ "persona_cumulative_income": {
+  "casual": {
+   "1": 57639,
+   "3": 148550,
+   "7": 334806,
+   "14": 668717,
+   "30": 1498209,
+   "60": 3192247,
+   "90": 4943467
+  },
+  "hardcore": {
+   "1": 92805,
+   "3": 232111,
+   "7": 513252,
+   "14": 1038725,
+   "30": 2339698,
+   "60": 4929417,
+   "90": 7520937
+  },
+  "payer": {
+   "1": 92241,
+   "3": 232836,
+   "7": 604111,
+   "14": 1305964,
+   "30": 2982425,
+   "60": 6318379,
+   "90": 9700061
+  }
+ },
+ "sink_targets_pct": {
+  "bands": [
+   "1-20",
+   "21-40",
+   "41-60",
+   "61-80",
+   "cap_after_nobility"
+  ],
+  "consumables": [
+   10,
+   7,
+   6,
+   5,
+   5
+  ],
+  "upgrades": [
+   38,
+   45,
+   42,
+   39,
+   50
+  ],
+  "trade_tax": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "travel_services": [
+   8,
+   7,
+   6,
+   5,
+   5
+  ],
+  "alliance_donation": [
+   0,
+   5,
+   6,
+   6,
+   8
+  ],
+  "endgame": [
+   0,
+   0,
+   0,
+   0,
+   12
+  ],
+  "running_total": [
+   57,
+   66,
+   63,
+   59,
+   85
+  ],
+  "saving_for_nobility": [
+   43,
+   34,
+   37,
+   41,
+   0
+  ],
+  "free_saving": [
+   0,
+   0,
+   0,
+   0,
+   15
+  ]
+ },
+ "sink_realized_90d_pct": {
+  "casual": {
+   "total_income": 4943467,
+   "shares": {
+    "cons": 5.1,
+    "upg": 39.5,
+    "trade": 3.9,
+    "travel": 5.1,
+    "ally": 6.0,
+    "nobility": 37.4,
+    "buy_gold": 1.9,
+    "endg": 0.3
+   },
+   "end_balance": 37854,
+   "board_in_total": 0
+  },
+  "hardcore": {
+   "total_income": 7520937,
+   "shares": {
+    "cons": 5.0,
+    "upg": 42.9,
+    "trade": 4.3,
+    "travel": 5.0,
+    "ally": 6.7,
+    "nobility": 24.6,
+    "buy_gold": 2.8,
+    "endg": 4.1
+   },
+   "end_balance": 335718,
+   "board_in_total": 0
+  },
+  "payer": {
+   "total_income": 9700061,
+   "shares": {
+    "cons": 5.0,
+    "upg": 44.8,
+    "trade": 4.5,
+    "travel": 5.0,
+    "ally": 7.0,
+    "nobility": 19.1,
+    "buy_gold": 0.0,
+    "endg": 6.3
+   },
+   "end_balance": 797450,
+   "board_in_total": 2284295
+  }
+ },
+ "taxes": {
+  "market_listing_fee": {
+   "pct": 1,
+   "min": 10,
+   "refund": false,
+   "range": [
+    0.5,
+    2
+   ],
+   "payer": "ผู้ขาย",
+   "goes": "ทำลาย"
+  },
+  "market_sale_tax": {
+   "pct": 9,
+   "range": [
+    6,
+    12
+   ],
+   "payer": "ผู้ขาย",
+   "goes": "ทำลาย (หลังเปิดทางการรับซื้อ 10% ของยอดเป็นงบรับซื้อแล้วทำลายของ)"
+  },
+  "market_total_pct": 10,
+  "stall": "หน้าร้านของตลาดกลาง ภาษีเดียวกัน ไม่มีค่าเช่า",
+  "direct_trade_tael": {
+   "pct": 10,
+   "range": [
+    8,
+    14
+   ],
+   "rule": "บวกเพิ่มจากยอด ผู้ให้จ่าย ห้ามต่ำกว่าภาษีตลาด",
+   "goes": "ทำลาย"
+  },
+  "direct_trade_swap": {
+   "pct_of_reference": 2,
+   "min": 50,
+   "waived_below_reference": 1000,
+   "range": [
+    1,
+    4
+   ],
+   "payer": "ผู้เริ่มแลก",
+   "goes": "ทำลาย"
+  },
+  "city_npc_surcharge": {
+   "range": [
+    0,
+    10
+   ],
+   "step": 2,
+   "change": "วันละครั้ง 05:00",
+   "payer": "ผู้ซื้อร้าน NPC ในเมืองศึก",
+   "owner_share": 0.5,
+   "weekly_cap": {
+    "provincial": 500000,
+    "small": 200000
+   },
+   "rest": "ทำลาย",
+   "cities_at_launch": 7
+  },
+  "capital_market_surcharge": {
+   "range": [
+    0,
+    5
+   ],
+   "from_phase": 5,
+   "payer": "ผู้ขายในตลาดกลาง",
+   "owner_share": 0.5,
+   "weekly_cap": 3000000,
+   "market_max_total_pct": 15
+  },
+  "board_fee": {
+   "pct_each_side": 6,
+   "on": "สิ่งที่ฝั่งนั้นได้รับ",
+   "range_each_side": [
+    5,
+    8.5
+   ],
+   "round_trip_pct": 11.64,
+   "goes": "ทำลายทั้งตำลึงและทอง"
+  },
+  "max_tax_per_sale": 5000000,
+  "rounding": "ปัดเศษลง แสดง \"คุณจะได้รับ X\" ก่อนกด",
+  "treasury_rule": "คลังพันธมิตรใช้ได้เฉพาะเลเวล เทค ร้าน และงานเลี้ยงนอกสงคราม · ห้ามถอน ห้ามแจก ห้ามแปลงเป็นเสบียงศึก เครื่องตีเมือง หรือเทคสงคราม"
+ },
+ "price_controls": {
+  "reference": "ราคาเฉลี่ยถ่วงปริมาณ 24 ชม. เมื่อขายได้ ≥ 5 ครั้ง",
+  "ref_move_per_day_pct": 10,
+  "band_pct": [
+   70,
+   130
+  ],
+  "floor": "เงินที่ผู้ขายได้หลังภาษี ≥ ราคาที่ NPC รับซื้อ",
+  "ceiling": "เพดานตายตัวต่อขั้นความหายาก · ตั้งรับซื้อที่เพดานหลายคนให้จับฉลาก",
+  "listing_hours": 48,
+  "new_listings_per_day": 30,
+  "active_listings": {
+   "tier1": 10,
+   "tier2": 20
+  },
+  "material_band": {
+   "npc_floor_pct_of_ref_start": 20,
+   "ref_start_x_floor": 5,
+   "npc_ceiling_x_ref_start": 2,
+   "basic_tier_only": true,
+   "example": {
+    "item": "หินตีบวกขั้นต้น",
+    "floor": 20,
+    "ref_start": 100,
+    "npc_ceiling": 200
+   }
+  }
+ },
+ "trust_tiers": [
+  {
+   "tier": 0,
+   "name_th": "ใหม่",
+   "condition": "Lv < 20 หรือบัญชีอายุ < 48 ชม.",
+   "market": "ซื้ออย่างเดียว",
+   "give_tael_per_day": 0,
+   "board": "ใช้ไม่ได้"
+  },
+  {
+   "tier": 1,
+   "name_th": "ทั่วไป",
+   "condition": "Lv ≥ 20 และบัญชี ≥ 2 วัน",
+   "market": "ลงขาย 10 รายการ",
+   "give_tael_per_day": 50000,
+   "board": "ตั้งแต่ Lv 30 และบัญชี ≥ 3 วัน: ซื้อ ≤ 1,000 ทองต่อวัน · ขาย ≤ 1,000 ทองต่อวัน"
+  },
+  {
+   "tier": 2,
+   "name_th": "ยืนยัน",
+   "condition": "Lv ≥ 40 และบัญชี ≥ 7 วัน และ (OTP หรือเคยเติมที่ผ่านมาแล้ว > 7 วัน)",
+   "market": "ลงขาย 20 รายการ",
+   "give_tael_per_day": 500000,
+   "pin_above_per_trade": 200000,
+   "board": "ซื้อ ≤ 3,000 ทองต่อวัน · ขาย ≤ 5,000 ทองต่อวัน"
+  },
+  {
+   "tier": "lock",
+   "name_th": "ล็อก",
+   "condition": "ธง RMT · chargeback · เปลี่ยนการผูกบัญชีไม่ถึง 72 ชม.",
+   "market": "ปิด",
+   "give_tael_per_day": 0,
+   "board": "ปิด"
+  }
+ ],
+ "exchange_board": {
+  "name_th": "กระดานแลกทอง",
+  "type": "สมุดคำสั่งของผู้เล่น ระบบไม่สร้างทองหรือตำลึง",
+  "open_server_day": 4,
+  "quote": "ตำลึงต่อ 1 ทอง (จำนวนเต็ม)",
+  "lot_gold": 10,
+  "order_gold": [
+   10,
+   5000
+  ],
+  "open_price": 150,
+  "open_derivation": "S(50) ÷ 35 = 148.6 → 150 · 35 ทอง = 3.5 บาทต่อชั่วโมงเล่นเอง อยู่ระหว่างสมอค่าแรง (50) กับสมดุลจำลอง (19–42)",
+  "guide_after_day_21": "S(เลเวลกลาง) ÷ 42",
+  "expected_path": {
+   "4": 150,
+   "5": 158,
+   "6": 165,
+   "7": 174,
+   "8": 182,
+   "10": 201,
+   "12": 201,
+   "14": 181,
+   "21": 171,
+   "30": 180,
+   "45": 190,
+   "60": 194,
+   "90": 196
+  },
+  "ref": "ราคาเฉลี่ยถ่วงปริมาณ 24 ชม. เมื่อจับคู่ ≥ 20 ครั้ง ขยับ ≤ ±5% ต่อวัน",
+  "order_band_pct": 15,
+  "open_orders_per_side": 5,
+  "order_life_h": 48,
+  "fee": {
+   "pct_each_side": 6,
+   "round_trip_pct": 11.64
+  },
+  "sellable": "ทองจากเงินจริงที่พ้นช่วงรอ",
+  "bought_becomes": "ทองผูก (ขายต่อไม่ได้)",
+  "hold_hours": {
+   "promptpay_truemoney_bank_rabbit": 72,
+   "card": 168,
+   "account_younger_than_7_days": 168
+  },
+  "seller_tael_cap": {
+   "per_day": "10 × S(L)",
+   "per_week": "40 × S(L)",
+   "at_Lv80": {
+    "day": 82000,
+    "week": 328000
+   }
+  },
+  "whale_max_ratio": 1.54,
+  "chargeback": "ล็อกบัญชี หักทองจนติดลบได้ ดึงตำลึงที่ได้คืน ย้อนการจับคู่ใน 7 วันเท่าที่ทำได้",
+  "kill_switch_seconds": 10,
+  "region_switch": true,
+  "cash_out": false,
+  "gacha_pull_cost_manual_hours_day60": 7.6
+ },
+ "war_firewall": {
+  "war_supply_sources": {
+   "alliance_daily_task": 10,
+   "transport_run": 20,
+   "cap_per_person_per_week": 100
+  },
+  "donation_gives": "EXP พันธมิตรและแต้มพันธมิตรเท่านั้น",
+  "alliance_level_exp": {
+   "L2": 1000,
+   "L3": 2000,
+   "L4": 5000,
+   "L5": 10000,
+   "L6": 15000,
+   "L7": 20000,
+   "L8": 25000,
+   "L9": 30000,
+   "L10": 50000,
+   "total": 158000,
+   "tael_total": 15800000
+  },
+  "rules": [
+   "ตำลึงซื้อความดีความชอบ เสบียงศึก เครื่องตีเมือง ไม่ได้ทุกทาง",
+   "คลังพันธมิตรแปลงเป็นของสงครามไม่ได้",
+   "ของสงคราม ยศ ความดีความชอบ ขุนพลกาชา ม้า ผูกตัว",
+   "ห้องศึกนับพลังส่วนเกินเพดาน 30% (เอกสาร)"
+  ]
+ },
+ "anchor_prices": [
+  {
+   "id": "millet_sack",
+   "name_th": "ข้าวฟ่าง 1 กระสอบ",
+   "price": 100,
+   "npc_buy": 10,
+   "unit": "กระสอบ (ราว 20 ลิตร)",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "ข้าวฟ่าง 1 石 ราว 100 เหรียญ (居延 77–195 · 合校 167.2 = 110)"
+  },
+  {
+   "id": "troop_supply_pack",
+   "name_th": "เสบียงทหาร 1 ห่อ",
+   "price": 50,
+   "npc_buy": null,
+   "unit": "ห่อ (ครึ่งกระสอบ)",
+   "rule": "คงที่ ผูกตัว",
+   "tag": "อนุมาน",
+   "why": "ครึ่งของข้าว 1 กระสอบ · เบี้ยหวัดจ่าย 1 ห่อต่อ 1 斛 = ครึ่งข้าวของ 斛 × 100 พอดี"
+  },
+  {
+   "id": "salt",
+   "name_th": "เกลือ 1 ถัง",
+   "price": 12,
+   "npc_buy": 1,
+   "unit": "ถัง (ราว 2 ลิตร)",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "เกลือ 100–150 ต่อ 石 · 1 ถัง = 1/10 石"
+  },
+  {
+   "id": "dried_meat",
+   "name_th": "เนื้อตากแห้ง 1 ห่อ",
+   "price": 10,
+   "npc_buy": 1,
+   "unit": "ห่อ (ราว 220 กรัม)",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "เนื้อ 3–12 ต่อชั่งจีน (敦 1701 ≈ 12) ใช้ค่าบนปัดสิบ"
+  },
+  {
+   "id": "wine_jar",
+   "name_th": "เหล้า 1 ไห",
+   "price": 15,
+   "npc_buy": 1,
+   "unit": "ไห (ราว 2 ลิตร)",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "เหล้า 100–150 ต่อ 石 ที่ชายแดน · 1 ไห = 1/10 石"
+  },
+  {
+   "id": "roast_chicken",
+   "name_th": "ไก่ย่าง",
+   "price": 40,
+   "npc_buy": 4,
+   "unit": "ตัว",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "ไก่ 36–40 ต่อตัว (懸泉 · 居新 EPT51:223)"
+  },
+  {
+   "id": "fried_cake",
+   "name_th": "ขนมทอดน้ำมัน",
+   "price": 60,
+   "npc_buy": 6,
+   "unit": "ชิ้น",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "敦 14 「膏餅一，直六十」"
+  },
+  {
+   "id": "march_ration",
+   "name_th": "อาหารบำรุงเดินทัพ (บัฟ 30 นาที)",
+   "price": "60 × G(L)",
+   "examples": {
+    "10": 60,
+    "40": 210,
+    "70": 360,
+    "80": 410
+   },
+   "npc_buy": null,
+   "unit": "ห่อ",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "แต่งใหม่",
+   "why": "ฐาน = ขนมทอดน้ำมัน 60 ที่ Lv 10 แล้วคูณ G(L)"
+  },
+  {
+   "id": "salve",
+   "name_th": "ยาสมานแผล ขั้น n",
+   "price": "5 × n (n = ปัดขึ้น L ÷ 20)",
+   "examples": {
+    "1": 5,
+    "2": 10,
+    "3": 15,
+    "4": 20,
+    "5": 25
+   },
+   "npc_buy": null,
+   "unit": "ขวด",
+   "rule": "ตามขั้น ผูกตัว",
+   "tag": "อนุมาน",
+   "why": "ใช้ราว 20 ขวดต่อชั่วโมงที่ต่อสู้ = 100n ≈ 6–8% ของ S(L) · ระดับราคาของกินเล็กแบบเนื้อ 3–12"
+  },
+  {
+   "id": "linen_bolt",
+   "name_th": "ผ้าป่าน 1 พับ",
+   "price": 500,
+   "npc_buy": 50,
+   "unit": "พับ",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "ผ้าป่าน 350–750 ต่อพับ (EPT53:52 = 500)"
+  },
+  {
+   "id": "silk_bolt",
+   "name_th": "ผ้าไหมเนื้อแน่น 1 พับ",
+   "price": 620,
+   "npc_buy": 62,
+   "unit": "พับ",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "敦 1970A 618 ปัดสิบ"
+  },
+  {
+   "id": "tanned_hide",
+   "name_th": "หนังฟอก",
+   "price": 150,
+   "npc_buy": 15,
+   "unit": "แผ่น",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์",
+   "why": "敦 635 「革一直百五十」"
+  },
+  {
+   "id": "linen_robe",
+   "name_th": "เสื้อคลุมผ้าป่าน (แฟชั่น ไม่มีค่าพลัง)",
+   "price": 1100,
+   "npc_buy": null,
+   "unit": "ตัว",
+   "rule": "คงที่ ผูกตัว",
+   "tag": "ประวัติศาสตร์",
+   "why": "居新 EPT59:31 เสื้อคลุม 1,100"
+  },
+  {
+   "id": "soldier_sword",
+   "name_th": "ดาบทหาร (ขาว)",
+   "price": "700 × G(L)",
+   "examples": {
+    "10": 700,
+    "40": 2450,
+    "70": 4200,
+    "80": 4780
+   },
+   "npc_buy": "10%",
+   "unit": "เล่ม",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "ประวัติศาสตร์ + แต่งใหม่",
+   "why": "居延 271.1 「貰賣劍一直七百」 · G(L) = (L+2) ÷ 12 ทำให้ Lv 10 = ราคาจริง"
+  },
+  {
+   "id": "soldier_spear",
+   "name_th": "ทวนทหาร (ขาว)",
+   "price": "500 × G(L)",
+   "examples": {
+    "10": 500,
+    "70": 3000
+   },
+   "npc_buy": "10%",
+   "unit": "เล่ม",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "อนุมาน",
+   "why": "ไม่มีราคาทวนในบันทึก ใช้เหล็กน้อยกว่าดาบ"
+  },
+  {
+   "id": "soldier_bow",
+   "name_th": "ธนูทหาร (ขาว)",
+   "price": "700 × G(L)",
+   "examples": {
+    "10": 700,
+    "70": 4200
+   },
+   "npc_buy": "10%",
+   "unit": "คัน",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "อนุมาน",
+   "why": "ธนู 550–900 มาจากบทความประชาชน ยังไม่ยืนยัน จึงใช้ราคาดาบ"
+  },
+  {
+   "id": "hide_shield",
+   "name_th": "โล่หนัง (ขาว)",
+   "price": "380 × G(L)",
+   "examples": {
+    "10": 380,
+    "70": 2280
+   },
+   "npc_buy": "10%",
+   "unit": "ใบ",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "ประวัติศาสตร์",
+   "why": "อัตราทางการสมัยฉิน โล่ 384 ปัดสิบ"
+  },
+  {
+   "id": "iron_helmet",
+   "name_th": "หมวกเหล็ก (ขาว)",
+   "price": "50 × G(L)",
+   "examples": {
+    "10": 50,
+    "70": 300
+   },
+   "npc_buy": "10%",
+   "unit": "ใบ",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "ประวัติศาสตร์",
+   "why": "敦 2453A 「瞀一直五十」"
+  },
+  {
+   "id": "official_armor",
+   "name_th": "เกราะแผ่นทางการ (ขาว ขายที่คลังอาวุธทางการ)",
+   "price": "1,340 × G(L)",
+   "examples": {
+    "10": 1340,
+    "70": 8040
+   },
+   "npc_buy": "10%",
+   "unit": "ชุด",
+   "rule": "ตามเลเวล ผูกตัว",
+   "tag": "ประวัติศาสตร์",
+   "why": "อัตราทางการสมัยฉิน เกราะ 1,344 ปัดสิบ · ยุคฮั่นเกราะเป็นของหลวง (史記 周勃世家)"
+  },
+  {
+   "id": "frontier_warhorse",
+   "name_th": "ม้าศึกต่างถิ่น (ตลาดม้าชายแดน วันพุธ)",
+   "price": "50,000 + ตราม้าถิ่น 20",
+   "npc_buy": null,
+   "unit": "ตัว",
+   "rule": "คงที่ ผูกตัว",
+   "tag": "อนุมาน",
+   "why": "ม้าธรรมดาราว 5,000 (九章 5,454 · CSSN 5,500) × 10 = ¼ ของราคาหลวงยามศึก 200,000"
+  },
+  {
+   "id": "gold_ingot",
+   "name_th": "ทองคำแท่งพระราชทาน",
+   "price": null,
+   "npc_buy": 10000,
+   "unit": "แท่ง (1 ชั่งจีน ราว 220 กรัม)",
+   "rule": "รางวัลเควสหลัก ขาย NPC",
+   "tag": "ประวัติศาสตร์",
+   "why": "「黃金重一斤，直錢萬」 · ใช้แทนคำว่า ทองพันตำลึง ในเนื้อเรื่อง"
+  },
+  {
+   "id": "old_coin_string",
+   "name_th": "พวงเหรียญเก่า",
+   "price": null,
+   "npc_buy": 100,
+   "unit": "พวง (100 เหรียญ)",
+   "rule": "ของดรอป ขาย NPC",
+   "tag": "ประวัติศาสตร์",
+   "why": "1 เหรียญ = 1 ตำลึง"
+  },
+  {
+   "id": "debased_coin_string",
+   "name_th": "พวงเหรียญเล็กไร้ขอบ",
+   "price": null,
+   "npc_buy": 10,
+   "unit": "พวง (100 เหรียญ)",
+   "rule": "ของดรอปแผนที่ลกเอี๋ยง ขาย NPC",
+   "tag": "ประวัติศาสตร์ + แต่งใหม่",
+   "why": "เหรียญเล็กที่ตั๋งโต๊ะหลอมปี ค.ศ. 190 (เรื่องจริง) · อัตรา 10% เป็นของเกม"
+  },
+  {
+   "id": "relay_horse",
+   "name_th": "ม้าเร็ว",
+   "price": "0.04 × S(L) × (ประตูที่ผ่าน + 1)",
+   "examples": {
+    "Lv10_ในภูมิภาค": 48,
+    "Lv70_ข้าม1ประตู": 576
+   },
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "ตามเลเวล",
+   "tag": "อนุมาน",
+   "why": "ค่าจ้างแบกเกลือ 100 ลี้ = 40 (九章) ≈ ค่า Lv 10 ในภูมิภาค"
+  },
+  {
+   "id": "revive_here",
+   "name_th": "ฟื้นคืนชีพที่จุดล้ม",
+   "price": "0.1 × S(L)",
+   "examples": {
+    "50": 520,
+    "80": 820
+   },
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "ตามเลเวล · กลับเมืองฟรี",
+   "tag": "แต่งใหม่",
+   "why": "10% ของชั่วโมงเล่นเอง"
+  },
+  {
+   "id": "warehouse_use",
+   "name_th": "ฝากหรือถอนคลังส่วนตัว",
+   "price": 30,
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "คงที่",
+   "tag": "อนุมาน (เกมอ้างอิง)",
+   "why": "เกมอ้างอิงเก็บ 30 ต่อครั้ง (ref_3k)"
+  },
+  {
+   "id": "respec_book",
+   "name_th": "ตำราล้างสาย (เกินครั้งฟรีของสัปดาห์)",
+   "price": "2 × S(L)",
+   "examples": {
+    "50": 10400,
+    "80": 16400
+   },
+   "npc_buy": null,
+   "unit": "เล่ม",
+   "rule": "ตามเลเวล",
+   "tag": "แต่งใหม่",
+   "why": "= เงินเควสรายวัน 1 วัน"
+  },
+  {
+   "id": "kingdom_move",
+   "name_th": "ป้ายย้ายก๊ก",
+   "price": "20 × S(L)",
+   "examples": {
+    "50": 104000,
+    "80": 164000
+   },
+   "npc_buy": null,
+   "unit": "ใบ",
+   "rule": "ตามเลเวล + บทลงโทษเดิม",
+   "tag": "แต่งใหม่",
+   "why": "ราว 2 วันของรายได้ ย้ายเล่น ๆ ไม่ได้"
+  },
+  {
+   "id": "bag_expand",
+   "name_th": "ขยายกระเป๋า 10 ช่อง ครั้งที่ n",
+   "price": "20,000 × n (n = 1–10)",
+   "examples": {
+    "1": 20000,
+    "10": 200000,
+    "รวม": 1100000
+   },
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "คงที่",
+   "tag": "แต่งใหม่",
+   "why": "ตัวดูดครั้งเดียวที่ผู้เล่นเลือกเอง"
+  },
+  {
+   "id": "alliance_found",
+   "name_th": "ตั้งพันธมิตร",
+   "price": 100000,
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "คงที่",
+   "tag": "ประวัติศาสตร์ + เกมอ้างอิง",
+   "why": "ทรัพย์ครัวเรือนชั้นกลางฮั่นราว 100,000 · เกมอ้างอิงตั้งกองทัพ 100,000"
+  },
+  {
+   "id": "alliance_donate",
+   "name_th": "บริจาคพันธมิตร",
+   "price": "1 × S(L) ต่อครั้ง ไม่เกิน 4 ครั้งต่อสัปดาห์",
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "ได้ EXP พันธมิตร 1 ต่อ 100 ตำลึง + แต้มพันธมิตร 25 · ไม่ได้เสบียงศึก",
+   "tag": "แต่งใหม่",
+   "why": "ดูข้อ 7"
+  },
+  {
+   "id": "enhance_fee",
+   "name_th": "ค่าตีบวกไป +n (n ≤ 10)",
+   "price": "0.05 × n × S(Lv ของ)",
+   "examples": {
+    "Lv50_+5": 1300,
+    "ต่อชิ้น_+1ถึง+10": "2.75 × S"
+   },
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "ตามเลเวลของ",
+   "tag": "แต่งใหม่",
+   "why": "+11 ถึง +20 ให้โมดูลตีบวกตั้งในงบข้อ 5"
+  },
+  {
+   "id": "troop_train",
+   "name_th": "ค่าฝึกทหาร +1 เลเวล",
+   "price": "1 × S(เลเวลทหารใหม่)",
+   "examples": {
+    "10": 1200,
+    "80": 8200,
+    "รวม_1ถึง80": 339700
+   },
+   "npc_buy": null,
+   "unit": "เลเวล",
+   "rule": "ตามเลเวล",
+   "tag": "แต่งใหม่",
+   "why": "เอกสารบอกแค่ว่าใช้เงิน"
+  },
+  {
+   "id": "noble9",
+   "name_th": "ค่าเลื่อนบรรดาศักดิ์ขั้น 9",
+   "price": 100000,
+   "npc_buy": null,
+   "unit": "ครั้ง",
+   "rule": "คงที่",
+   "tag": "แต่งใหม่ (สเกล) + ประวัติศาสตร์ (เรื่องเล่า)",
+   "why": "เอกสาร 200,000 ÷ 2 · ฮั่นขายยศทหารขั้นละ 170,000 ใช้เล่าใน codex"
+  }
+ ],
+ "npc_buyback": {
+  "npc_goods_pct": 10,
+  "junk_total_per_manual_hour": "0.4 × S(L)",
+  "gear_x_S_item_level": {
+   "ขาว": 0.02,
+   "เขียว": 0.04,
+   "ฟ้า": 0.08,
+   "ม่วง": 0.2,
+   "ส้ม": 0.6,
+   "แดง": null,
+   "ตํานาน": null
+  },
+  "salary_supply_packs": "ขายไม่ได้"
+ },
+ "big_numbers": [
+  {
+   "item": "เบี้ยหวัด",
+   "doc": "斛 × 100 ครึ่งเงินครึ่งเสบียง",
+   "decision": "คง",
+   "new": "斛 × 50 ตำลึง + 斛 × 1 ห่อเสบียงทหาร (ผูกตัว เก็บได้ 7 วันของเบี้ยหวัด)"
+  },
+  {
+   "item": "ที่นั่ง S1–S9",
+   "doc": "200–350 斛",
+   "decision": "คง",
+   "new": "10,000–17,500 ตำลึงต่อวัน"
+  },
+  {
+   "item": "ศักดินา",
+   "doc": "ครัวเรือน × 10",
+   "decision": "คง + เติมขั้น 13",
+   "new": "ขั้น 13 = 2,000 · 14 = 5,000 · 15 = 15,000 · 16 = 30,000 (เปิดหลัง Lv 85)"
+  },
+  {
+   "item": "ศักดินาอ๋อง",
+   "doc": "10,000 ครัวเรือน = 100,000/วัน",
+   "decision": "ลด",
+   "new": "จ่ายจริง 1,500 ครัวเรือน = 15,000/วัน ช่วงเปิดไทย · ป้ายยังเขียน ครองแคว้น 10,000 ครัวเรือน · ต่อยอด = max(1,500, 1.5 × ครัวเรือนของขั้นโหวสูงสุดที่เปิด)"
+  },
+  {
+   "item": "ค่าเลื่อนบรรดาศักดิ์ 9–14",
+   "doc": "200,000 / 500,000 / 1,000,000 / 2,000,000 / 4,000,000 / 8,000,000",
+   "decision": "หารสอง",
+   "new": [
+    100000,
+    250000,
+    500000,
+    1000000,
+    2000000,
+    4000000
+   ]
+  },
+  {
+   "item": "เพดานบริจาค 100 ต่อสัปดาห์",
+   "doc": "ไม่มีหน่วย ให้เสบียงศึก",
+   "decision": "ระบุใหม่",
+   "new": "เสบียงศึกจากการเล่น ≤ 100 ต่อคนต่อสัปดาห์ · บริจาคตำลึง 4 × S(L) ต่อสัปดาห์ ได้แต่ EXP/แต้มพันธมิตร"
+  },
+  {
+   "item": "ไหมสายตรา",
+   "doc": "ของขาย เร่งขั้น 9–12",
+   "decision": "ตัดผลเร่ง",
+   "new": "เหลือลายปักแต่งตัว"
+  },
+  {
+   "item": "บัฟราชสำนัก ตำลึง +5%",
+   "doc": "24 ชม. สัปดาห์ละ 2 ครั้ง",
+   "decision": "คง จำกัดฐาน",
+   "new": "ใช้กับเหรียญที่มอนดรอปขณะเล่นเท่านั้น"
+  },
+  {
+   "item": "ออฟไลน์บัตรรายเดือน",
+   "doc": "12–24 ชม.",
+   "decision": "เลือกค่าเดียว",
+   "new": 12
+  },
+  {
+   "item": "ตลาดประมูล 10–20% เฉพาะวัตถุดิบ",
+   "doc": "ตัดทิ้งได้ ไม่อยู่ในเฟส",
+   "decision": "ย้ายเข้าก่อนเปิดไทย",
+   "new": "ตลาดกลาง 1% + 9% · แลกของ 10%"
+  },
+  {
+   "item": "ภาษีตลาด 5% ของเสนาบดีสูงสุด",
+   "doc": "ไม่มีรายละเอียด",
+   "decision": "ระบุ",
+   "new": "ภาษีเมืองหลวง 0–5% เฟส 5 ผู้ครองได้ครึ่ง เพดาน 3,000,000/สัปดาห์"
+  },
+  {
+   "item": "ซ่อม",
+   "doc": "อยู่ในตารางสกุลเงิน",
+   "decision": "ตัด",
+   "new": "เกมไม่มีความทนทาน"
+  },
+  {
+   "item": "ค่าประกาศศึกและเครื่องตีเมือง",
+   "doc": "500–2,000 · 30–250 เสบียงศึก",
+   "decision": "คง",
+   "new": "ไม่ใช่ตำลึง"
+  }
+ ],
+ "doc_target_checks": {
+  "mid_player_salary_vs_quests_Lv75": 32.5,
+  "S9_vs_quests_Lv80": 106.7,
+  "king_total_vs_quests_Lv80": 137.2,
+  "target_mid": [
+   25,
+   35
+  ],
+  "target_top": [
+   100,
+   150
+  ]
+ },
+ "server_sim": {
+  "dau": 1000,
+  "mix": "70/25/5",
+  "joins": "วันละ 100 คน วันที่ 1–10",
+  "speed_mult": [
+   0.8,
+   0.9,
+   1.0,
+   1.1,
+   1.2
+  ],
+  "summary": {
+   "cum_ratio_90": 1.092,
+   "r7_d15": [
+    0.887,
+    1.27
+   ],
+   "r14_d15": [
+    0.925,
+    1.215
+   ],
+   "r7_d1_14": [
+    1.194,
+    1.552
+   ],
+   "max_days_income": 8.06,
+   "days_income_d90": 6.78,
+   "M_d90": 457247851
+  },
+  "mix_day60_pct_of_faucet": {
+   "faucet": {
+    "dq": 24.5,
+    "manual": 8.3,
+    "auto": 12.5,
+    "offline": 44.2,
+    "story": 0.3,
+    "salary": 9.4,
+    "seat": 0.6,
+    "king": 0.1
+   },
+   "sink": {
+    "cons": 5.1,
+    "upg": 41.5,
+    "trade": 4.2,
+    "travel": 5.1,
+    "ally": 6.4,
+    "nobility": 34.6,
+    "board": 0.1,
+    "endg": 2.2
+   }
+  },
+  "offline_share_pct": {
+   "7": 33.7,
+   "14": 41.9,
+   "30": 43.8,
+   "60": 44.2,
+   "90": 43.8
+  },
+  "selected_days": {
+   "1": {
+    "dau": 100,
+    "Lmed": 38,
+    "P": 150,
+    "peq": null,
+    "guide": 95,
+    "N": 1.579,
+    "fill_b": 1.0,
+    "F": 6888516,
+    "K": 4474125,
+    "r7": 1.54,
+    "r14": 1.54,
+    "M_per_dau": 24144,
+    "days_income": 0.35,
+    "velocity": 0.67,
+    "gini": 0.163
+   },
+   "3": {
+    "dau": 300,
+    "Lmed": 45,
+    "P": 150,
+    "peq": null,
+    "guide": 112,
+    "N": 1.339,
+    "fill_b": 1.0,
+    "F": 17371813,
+    "K": 11678601,
+    "r7": 1.521,
+    "r14": 1.521,
+    "M_per_dau": 41476,
+    "days_income": 1.03,
+    "velocity": 0.383,
+    "gini": 0.263
+   },
+   "4": {
+    "dau": 400,
+    "Lmed": 48,
+    "P": 150,
+    "peq": 664,
+    "guide": 119,
+    "N": 1.261,
+    "fill_b": 0.226,
+    "F": 22658434,
+    "K": 16857574,
+    "r7": 1.448,
+    "r14": 1.448,
+    "M_per_dau": 45609,
+    "days_income": 1.24,
+    "velocity": 0.359,
+    "gini": 0.281
+   },
+   "5": {
+    "dau": 500,
+    "Lmed": 50,
+    "P": 158,
+    "peq": 411,
+    "guide": 124,
+    "N": 1.27,
+    "fill_b": 0.383,
+    "F": 28029671,
+    "K": 21760666,
+    "r7": 1.392,
+    "r14": 1.392,
+    "M_per_dau": 49026,
+    "days_income": 1.41,
+    "velocity": 0.346,
+    "gini": 0.297
+   },
+   "7": {
+    "dau": 700,
+    "Lmed": 54,
+    "P": 174,
+    "peq": 285,
+    "guide": 133,
+    "N": 1.306,
+    "fill_b": 0.61,
+    "F": 38843120,
+    "K": 33216914,
+    "r7": 1.288,
+    "r14": 1.288,
+    "M_per_dau": 50868,
+    "days_income": 1.56,
+    "velocity": 0.356,
+    "gini": 0.337
+   },
+   "10": {
+    "dau": 1000,
+    "Lmed": 58,
+    "P": 201,
+    "peq": 231,
+    "guide": 143,
+    "N": 1.406,
+    "fill_b": 0.869,
+    "F": 55917082,
+    "K": 45416943,
+    "r7": 1.22,
+    "r14": 1.249,
+    "M_per_dau": 61846,
+    "days_income": 1.58,
+    "velocity": 0.32,
+    "gini": 0.378
+   },
+   "14": {
+    "dau": 1000,
+    "Lmed": 64,
+    "P": 181,
+    "peq": 163,
+    "guide": 157,
+    "N": 1.153,
+    "fill_b": 1.0,
+    "F": 56017049,
+    "K": 47447899,
+    "r7": 1.195,
+    "r14": 1.221,
+    "M_per_dau": 96378,
+    "days_income": 1.81,
+    "velocity": 0.236,
+    "gini": 0.343
+   },
+   "21": {
+    "dau": 1000,
+    "Lmed": 69,
+    "P": 171,
+    "peq": 172,
+    "guide": 169,
+    "N": 1.013,
+    "fill_b": 0.995,
+    "F": 59143694,
+    "K": 52100855,
+    "r7": 1.182,
+    "r14": 1.188,
+    "M_per_dau": 158853,
+    "days_income": 2.74,
+    "velocity": 0.159,
+    "gini": 0.303
+   },
+   "30": {
+    "dau": 1000,
+    "Lmed": 73,
+    "P": 180,
+    "peq": 181,
+    "guide": 179,
+    "N": 1.005,
+    "fill_b": 0.994,
+    "F": 62176461,
+    "K": 53680933,
+    "r7": 1.073,
+    "r14": 1.115,
+    "M_per_dau": 200680,
+    "days_income": 3.28,
+    "velocity": 0.132,
+    "gini": 0.36
+   },
+   "45": {
+    "dau": 1000,
+    "Lmed": 78,
+    "P": 190,
+    "peq": 191,
+    "guide": 190,
+    "N": 1.0,
+    "fill_b": 0.996,
+    "F": 65387810,
+    "K": 65976995,
+    "r7": 1.07,
+    "r14": 1.16,
+    "M_per_dau": 333763,
+    "days_income": 5.15,
+    "velocity": 0.084,
+    "gini": 0.345
+   },
+   "60": {
+    "dau": 1000,
+    "Lmed": 80,
+    "P": 194,
+    "peq": 194,
+    "guide": 195,
+    "N": 0.993,
+    "fill_b": 1.0,
+    "F": 66493278,
+    "K": 65996428,
+    "r7": 1.025,
+    "r14": 1.05,
+    "M_per_dau": 377259,
+    "days_income": 5.68,
+    "velocity": 0.079,
+    "gini": 0.386
+   },
+   "75": {
+    "dau": 1000,
+    "Lmed": 80,
+    "P": 195,
+    "peq": 195,
+    "guide": 195,
+    "N": 1.0,
+    "fill_b": 0.999,
+    "F": 67091128,
+    "K": 70619512,
+    "r7": 1.173,
+    "r14": 1.191,
+    "M_per_dau": 532334,
+    "days_income": 7.95,
+    "velocity": 0.058,
+    "gini": 0.32
+   },
+   "90": {
+    "dau": 1000,
+    "Lmed": 80,
+    "P": 196,
+    "peq": 196,
+    "guide": 195,
+    "N": 1.006,
+    "fill_b": 1.0,
+    "F": 67483600,
+    "K": 66849361,
+    "r7": 0.966,
+    "r14": 0.925,
+    "M_per_dau": 457248,
+    "days_income": 6.78,
+    "velocity": 0.073,
+    "gini": 0.438
+   }
+  }
+ },
+ "kpis": [
+  {
+   "id": "fs7_early",
+   "name_th": "ตำลึงเข้า:ออก 7 วัน (วันที่ 1–14)",
+   "formula": "ก๊อก 7 วัน ÷ ตัวดูด 7 วัน",
+   "baseline": [
+    1.194,
+    1.552
+   ],
+   "target": "≤ 1.60",
+   "yellow": "> 1.70 นาน 3 วัน",
+   "red": "> 1.90"
+  },
+  {
+   "id": "fs7",
+   "name_th": "ตำลึงเข้า:ออก 7 วัน (วันที่ 15 ขึ้นไป)",
+   "formula": "เหมือนบน",
+   "baseline": [
+    0.887,
+    1.27
+   ],
+   "target": "0.95–1.20",
+   "yellow": "> 1.30 หรือ < 0.85 นาน 3 วัน",
+   "red": "> 1.45 หรือ < 0.75 นาน 3 วัน"
+  },
+  {
+   "id": "fs30",
+   "name_th": "ตำลึงเข้า:ออก สะสม 30 วัน",
+   "formula": "ก๊อก 30 วัน ÷ ตัวดูด 30 วัน",
+   "baseline": [
+    1.041,
+    1.171
+   ],
+   "target": "1.00–1.18",
+   "yellow": "> 1.20",
+   "red": "> 1.30"
+  },
+  {
+   "id": "days_of_income",
+   "name_th": "เงินในระบบ (วันของรายได้)",
+   "formula": "ตำลึงทั้งหมดของผู้เล่น active 7 วัน + เงินค้างในตลาด ÷ ก๊อกเฉลี่ย 7 วัน",
+   "baseline": 8.06,
+   "target": "≤ 9",
+   "yellow": "> 10",
+   "red": "> 12"
+  },
+  {
+   "id": "board_N",
+   "name_th": "ราคากระดานเทียบเส้นคาด",
+   "formula": "ราคาอ้างอิง ÷ เส้นคาด (วันที่ 4–20 ใช้ตารางข้อ 6.3 · วันที่ 21 ขึ้นไปใช้ S(เลเวลกลาง) ÷ 42)",
+   "baseline": [
+    0.99,
+    1.01
+   ],
+   "target": "0.85–1.20",
+   "yellow": "นอก 0.80–1.25 นาน 3 วัน หรือขยับ > 20% ใน 7 วัน",
+   "red": "นอก 0.65–1.50"
+  },
+  {
+   "id": "board_fill",
+   "name_th": "สภาพคล่องกระดาน",
+   "formula": "% ตำลึงที่ตั้งซื้อทองแล้วได้ของใน 24 ชม.",
+   "baseline": "23–100% (วันที่ 4–10) · ≥ 99% (วันที่ 21 ขึ้นไป)",
+   "target": "≥ 60% หลังวันที่ 14",
+   "yellow": "< 40% นาน 7 วัน",
+   "red": "< 20%"
+  },
+  {
+   "id": "paid_gold_sold",
+   "name_th": "ทองที่ขายบนกระดาน ÷ ทองที่เติม (30 วัน)",
+   "formula": "ทองที่จับคู่ขาย ÷ ทองจากเงินจริงที่เติม",
+   "baseline": 0.45,
+   "target": "20–50%",
+   "yellow": "> 60% หรือ < 10%",
+   "red": "> 75%"
+  },
+  {
+   "id": "price_index",
+   "name_th": "ดัชนีราคาตะกร้า 10 รายการ",
+   "formula": "Σ น้ำหนัก × ราคากลางวันนี้ ÷ ราคากลางฐาน (ฐาน = สัปดาห์ที่ 2)",
+   "baseline": null,
+   "target": "±5% ต่อสัปดาห์",
+   "yellow": "±10% ต่อสัปดาห์ หรือ ±25% ใน 30 วัน",
+   "red": "±20% ต่อสัปดาห์"
+  },
+  {
+   "id": "gini_wealth",
+   "name_th": "Gini ความมั่งคั่ง",
+   "formula": "ตำลึง + ของเทรดได้ตามราคากลาง ของผู้เล่น active 7 วัน Lv ≥ 20",
+   "baseline": [
+    0.28,
+    0.44
+   ],
+   "target": "≤ 0.60",
+   "yellow": "> 0.70 นาน 7 วัน",
+   "red": "> 0.78"
+  },
+  {
+   "id": "top1_share",
+   "name_th": "ส่วนแบ่งคนรวยสุด 1%",
+   "formula": "ความมั่งคั่งของ 1% บนสุด ÷ ทั้งหมด",
+   "baseline": null,
+   "target": "≤ 15%",
+   "yellow": "> 20%",
+   "red": "> 30%"
+  },
+  {
+   "id": "velocity",
+   "name_th": "ความเร็วเงิน",
+   "formula": "ตำลึงที่เปลี่ยนมือต่อวัน (ตลาด แลกของ กระดาน) ÷ เงินในระบบ",
+   "baseline": [
+    0.057,
+    0.159
+   ],
+   "target": "5–20% หลังวันที่ 21",
+   "yellow": "< 4% หรือ > 40%",
+   "red": "< 2%"
+  },
+  {
+   "id": "offline_share",
+   "name_th": "ส่วนแบ่งก๊อกออฟไลน์",
+   "formula": "ตำลึงออฟไลน์ ÷ ก๊อกทั้งหมด",
+   "baseline": {
+    "7": 33.7,
+    "14": 41.9,
+    "30": 43.8,
+    "60": 44.2,
+    "90": 43.8
+   },
+   "target": "≤ 46%",
+   "yellow": "> 50%",
+   "red": "> 55% (สัญญาณบัญชีฟาร์ม)"
+  },
+  {
+   "id": "upgrade_share",
+   "name_th": "อัปเกรดในตัวดูดทั้งหมด",
+   "formula": "ตำลึงที่ทำลายจากตีบวกและอัปเกรด ÷ ตัวดูดทั้งหมด",
+   "baseline": [
+    0.4,
+    0.48
+   ],
+   "target": "≥ 35%",
+   "yellow": "< 25%",
+   "red": "< 20%"
+  },
+  {
+   "id": "basics_cost",
+   "name_th": "ค่าของจำเป็น",
+   "formula": "(ยา 2 ชม. + อาหาร 2 + ม้าเร็ว 2 ครั้ง) ÷ รายได้มัธยฐานของคนฟรี Lv 40+",
+   "baseline": [
+    0.033,
+    0.042
+   ],
+   "target": "≤ 5%",
+   "yellow": "> 10%",
+   "red": "> 15%"
+  },
+  {
+   "id": "poverty_trap",
+   "name_th": "กับดักความจน",
+   "formula": "% คนฟรี Lv 40+ ที่มีตำลึงไม่พอซื้อของจำเป็น 1 วัน",
+   "baseline": null,
+   "target": "≤ 5%",
+   "yellow": "> 10%",
+   "red": "> 15%"
+  },
+  {
+   "id": "whale_gap",
+   "name_th": "ช่องว่างวาฬ",
+   "formula": "ตำลึงต่อวันมัธยฐานของผู้จ่าย 1% บน (รวมกระดาน) ÷ มัธยฐานคนฟรีขยัน",
+   "baseline": 1.54,
+   "target": "≤ 1.6",
+   "yellow": "> 2.0",
+   "red": "> 2.5"
+  },
+  {
+   "id": "ledger_diff",
+   "name_th": "กระทบยอด ledger",
+   "formula": "ยอดคงเหลือ − ผลรวม ledger",
+   "baseline": 0,
+   "target": "0",
+   "yellow": "—",
+   "red": "ต่างแม้ 1 รายการ: ปิดฟีเจอร์ที่เกี่ยวทันที"
+  },
+  {
+   "id": "rmt_flags",
+   "name_th": "สัญญาณ RMT 5 แบบ",
+   "formula": "ดูข้อ 11.2",
+   "baseline": 0,
+   "target": "0",
+   "yellow": "1 บัญชี",
+   "red": "เป็นกลุ่มบัญชี"
+  }
+ ],
+ "levers": [
+  {
+   "lever": "ออฟไลน์ 55% → 50% ของออโต้",
+   "effect_pct_of_faucet": -4.0,
+   "notice": "7 วัน",
+   "note": "ยังอยู่ในกรอบ 50–60% ของเอกสาร"
+  },
+  {
+   "lever": "ค่าอัปเกรด +10%",
+   "effect_pct_of_faucet": 4.2,
+   "notice": "3 วัน",
+   "note": "ถ้าผู้เล่นอัปเท่าเดิม"
+  },
+  {
+   "lever": "เควสรายวัน 2.0 → 1.8 × S(L)",
+   "effect_pct_of_faucet": -2.5,
+   "notice": "7 วัน",
+   "note": "กระทบคนเล่นน้อยมาก ใช้ท้าย ๆ"
+  },
+  {
+   "lever": "กิจกรรมตัวดูด 7 วัน (ของแต่งราคาตำลึง)",
+   "effect_pct_of_faucet": "+3 ถึง +5 ในสัปดาห์นั้น",
+   "notice": "ทันที",
+   "note": "ใช้ก่อนเสมอ ผู้เล่นเลือกเอง"
+  },
+  {
+   "lever": "ราคาของสิ้นเปลือง +10%",
+   "effect_pct_of_faucet": 0.5,
+   "notice": "3 วัน",
+   "note": "กระทบคนเล่นน้อย"
+  },
+  {
+   "lever": "ภาษีการค้า 9% → 10%",
+   "effect_pct_of_faucet": 0.4,
+   "notice": "7 วัน พร้อมเหตุผล",
+   "note": "ผลน้อย ใช้กันปั่นมากกว่า"
+  },
+  {
+   "lever": "ค่าธรรมเนียมกระดาน 6% → 7% ต่อฝั่ง",
+   "effect_pct_of_faucet": 0.02,
+   "notice": "7 วัน",
+   "note": "คุมการปั่นกระดาน ไม่ใช่เงินเฟ้อ"
+  }
+ ],
+ "merge_rules": {
+  "max_price_index_gap_pct": 20,
+  "max_days_income_gap": 3,
+  "on_merge": [
+   "ยกเลิกรายการตลาดและกระดาน คืนของและเงินค้าง ค่าธรรมเนียมไม่คืน",
+   "ราคากลางใหม่ = เฉลี่ยถ่วงปริมาณ 7 วันของสองเซิร์ฟ",
+   "ราคาอ้างอิงกระดานใหม่ = ถ่วงปริมาณของสองเซิร์ฟ",
+   "ล้างที่นั่ง เจ้าเมือง คลังเสบียงศึก (เอกสาร)",
+   "บรรดาศักดิ์ที่ซื้อแล้วคงไว้",
+   "ใช้เกณฑ์ KPI ช่วงเปิดเซิร์ฟ 7 วัน",
+   "เทศกาลรวมแผ่นดิน 7 วัน ขายของแต่งราคาตำลึง"
+  ],
+  "cap_wallet_note": "กระเป๋าเกิน 999,999,999 เป็นสัญญาณผิดปกติ"
+ },
+ "sheets": [
+  "econ_curve",
+  "econ_level_pace",
+  "currency",
+  "topup_packs",
+  "econ_sink_target",
+  "tax_rates",
+  "price_controls",
+  "trust_tiers",
+  "board_params",
+  "npc_prices",
+  "material_band",
+  "salary",
+  "rank_noble",
+  "econ_kpi"
+ ],
+ "owner_decisions_open": [
+  "ศักดินาอ๋อง 15,000 (ป้ายยังเป็น 10,000 ครัวเรือน)",
+  "ค่าเลื่อนบรรดาศักดิ์หารสอง",
+  "ตัดผลเร่งของไหมสายตรา",
+  "บริจาคตำลึงไม่ให้เสบียงศึก",
+  "ของตีบวก ใส่อัญมณี หรือสวมแล้ว ผูกตัว",
+  "ย้ายตลาดกลาง แลกของ กระดานแลกทอง เข้าก่อนเปิดไทย",
+  "เปลี่ยนชื่อกลไกคอมโบ หน้าต่างทอง เป็น จังหวะเรือง",
+  "ทนายไทยตรวจกระดานแลกทอง (e-money และการพนัน) ก่อนเปิด"
+ ]
+}
