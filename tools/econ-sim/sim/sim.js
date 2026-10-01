@@ -1141,6 +1141,17 @@ function writeRun(sc, res, summary, t0) {
 }
 function main() {
   const args = process.argv.slice(2); const get = (k) => { const i = args.indexOf('--' + k); return i >= 0 ? args[i + 1] : null; };
+  { // stop on unknown or mistyped options instead of silently running the round-2 set
+    const withValue = ['--one', '--params', '--tag'], flags = ['--r3', '--recalib'];
+    for (let i = 0; i < args.length; i++) {
+      if (withValue.includes(args[i])) { i++; continue; }
+      if (!flags.includes(args[i])) {
+        console.error('ไม่รู้จักคำสั่ง "' + args[i] + '" (พิมพ์ผิดหรือมีตัวอักษรเกิน)\n' +
+          'ใช้ได้: node sim.js · node sim.js --r3 · node sim.js --one <ชื่อฉาก> · node sim.js --params <ไฟล์.json> --tag <ชื่อ> · node sim.js --recalib');
+        process.exit(1);
+      }
+    }
+  }
   if (!DROPS || !NPCJ) { console.error('cannot read drops.json / npc.json from ' + DESIGN); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });
   const pn = getProjNeed(args.includes('--recalib'));
