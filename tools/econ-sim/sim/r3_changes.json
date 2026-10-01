@@ -1,14 +1,56 @@
 {
-  "_note": "Round-3 owner decisions (tab 07 sections 18–19, 2026-09-30 / 2026-10-01). Deep-merged on top of r2_changes.json. Values marked as starting values in the tabs; persona rates below are behavioural assumptions, not design numbers.",
+  "_note": "Round-3 owner decisions (tab 07 sections 18–19, 2026-09-30 / 2026-10-01). Deep-merged on top of r2_changes.json. Values marked as starting values in the tabs; persona rates below are behavioural assumptions, not design numbers. Inn prices halved after the first round-3 run (0.04/0.02 x S put the essentials basket at 4.8% and 5.6% at double use, limit 5%). Inn rates, deaths per day and silk per week are guesses to be measured in closed beta; r3_inn2x doubles the inn rates as a sensitivity.",
   "spine": {
     "kingFief": 1000000,
     "throneAutoShare": 0.9,
-    "silk": { "fromLv": 30, "cut": 0.05, "maxCut": 0.20, "perWeek": { "casual": 1, "hardcore": 2, "payer": 1.5, "whale": 2 } },
-    "deathPen": { "frac": 0.01, "perDay": { "casual": 1, "hardcore": 2, "payer": 1, "whale": 2 }, "exempt": ["payer", "whale"] }
+    "silk": {
+      "fromLv": 30,
+      "cut": 0.05,
+      "maxCut": 0.2,
+      "perWeek": {
+        "casual": 1,
+        "hardcore": 2,
+        "payer": 1.5,
+        "whale": 2
+      }
+    },
+    "deathPen": {
+      "frac": 0.01,
+      "perDay": {
+        "casual": 1,
+        "hardcore": 2,
+        "payer": 1,
+        "whale": 2
+      },
+      "exempt": [
+        "payer",
+        "whale"
+      ]
+    }
   },
   "npc": {
-    "inn": { "minLv": 10, "scrollS": 0.04, "restS": 0.02,
-      "scrollsPerDay": { "casual": 1, "hardcore": 2, "payer": 0, "whale": 0 },
-      "restsPerDay": { "casual": 1, "hardcore": 2, "payer": 0, "whale": 0 } }
+    "inn": {
+      "minLv": 10,
+      "scrollS": 0.02,
+      "restS": 0.01,
+      "scrollsPerDay": {
+        "casual": 1,
+        "hardcore": 2,
+        "payer": 0,
+        "whale": 0
+      },
+      "restsPerDay": {
+        "casual": 1,
+        "hardcore": 2,
+        "payer": 0,
+        "whale": 0
+      },
+      "freeHorsePerDay": {
+        "casual": 0,
+        "hardcore": 0,
+        "payer": 3,
+        "whale": 3
+      }
+    }
   }
 }

@@ -1,21 +1,20 @@
 [
  {
   "scenario": "r3_main_70_22_8",
-  "cumRatio": 1.032,
+  "cumRatio": 1.034,
   "failsAsWritten": [
    "board_N",
    "price_index",
    "velocity"
   ],
   "failsWithProposals": [
-   "price_index_S9",
-   "turnover_S10"
+   "price_index_S9"
   ],
-  "ms_ms": 8931
+  "ms_ms": 10451
  },
  {
   "scenario": "r3_main_70_25_5",
-  "cumRatio": 1.033,
+  "cumRatio": 1.034,
   "failsAsWritten": [
    "price_index",
    "velocity"
@@ -23,11 +22,11 @@
   "failsWithProposals": [
    "price_index_S9"
   ],
-  "ms_ms": 8246
+  "ms_ms": 8587
  },
  {
   "scenario": "r3_auto3_70_22_8",
-  "cumRatio": 1.037,
+  "cumRatio": 1.038,
   "failsAsWritten": [
    "board_N",
    "price_index",
@@ -36,21 +35,20 @@
   "failsWithProposals": [
    "price_index_S9"
   ],
-  "ms_ms": 8555
+  "ms_ms": 8595
  },
  {
   "scenario": "r3_fief_only_70_22_8",
-  "cumRatio": 1.032,
+  "cumRatio": 1.034,
   "failsAsWritten": [
    "board_N",
    "price_index",
    "velocity"
   ],
   "failsWithProposals": [
-   "price_index_S9",
-   "turnover_S10"
+   "price_index_S9"
   ],
-  "ms_ms": 8994
+  "ms_ms": 9764
  },
  {
   "scenario": "r3_fief_keepall_70_22_8",
@@ -67,6 +65,19 @@
    "gini",
    "top1"
   ],
-  "ms_ms": 7821
+  "ms_ms": 8602
+ },
+ {
+  "scenario": "r3_inn2x_70_22_8",
+  "cumRatio": 1.034,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 6325
  }
 ]
