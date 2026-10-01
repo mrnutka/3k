@@ -1,0 +1,72 @@
+[
+ {
+  "scenario": "r3_main_70_22_8",
+  "cumRatio": 1.032,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9",
+   "turnover_S10"
+  ],
+  "ms_ms": 8931
+ },
+ {
+  "scenario": "r3_main_70_25_5",
+  "cumRatio": 1.033,
+  "failsAsWritten": [
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 8246
+ },
+ {
+  "scenario": "r3_auto3_70_22_8",
+  "cumRatio": 1.037,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9"
+  ],
+  "ms_ms": 8555
+ },
+ {
+  "scenario": "r3_fief_only_70_22_8",
+  "cumRatio": 1.032,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9",
+   "turnover_S10"
+  ],
+  "ms_ms": 8994
+ },
+ {
+  "scenario": "r3_fief_keepall_70_22_8",
+  "cumRatio": 1.071,
+  "failsAsWritten": [
+   "board_N",
+   "price_index",
+   "gini",
+   "top1",
+   "velocity"
+  ],
+  "failsWithProposals": [
+   "price_index_S9",
+   "gini",
+   "top1"
+  ],
+  "ms_ms": 7821
+ }
+]

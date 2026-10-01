@@ -32,10 +32,18 @@
 //   payers list 150 paid gold per day, upgrade budget = spine share of income (38/45/42/39/50%),
 //   endgame budget = spine 12% after nobility 12 (6% cosmetics + 6% city restoration)
 //
+// Round 3 additions (owner decisions 2026-09-30 / 2026-10-01, tab 07 sections 18–19), all off by default so r2 runs reproduce:
+//   * spine.throneAutoShare: share of the king's daily fief destroyed into the throne fund (K_THRONE) the moment it is paid
+//   * spine.silk: silk ribbons earned by play only (perWeek by persona, from fromLv); each piece cuts the merit needed for
+//     nobility tiers 9–12 by `cut`, at most maxCut per tier; pieces are consumed only when they are needed to meet the gate
+//   * spine.deathPen: deaths to monsters per day by persona lose `frac` of the current level's EXP (never below the level start);
+//     personas in `exempt` hold the lifetime card
+//   * npc.inn: return scrolls (K_TRAVEL) and inn rests (K_SERVICE) bought per day by persona, priced as a share of S(L)
 // Usage:
 //   node sim.js                       -> runs the 12 round-2 scenarios, writes out/r2_*.json, out/tables_r2_*.md, out/summary_r2.json
 //   node sim.js --one r2_changes      -> scenarios whose name starts with the prefix
 //   node sim.js --params x.json --tag t   -> custom overrides deep-merged on r2_design (DEFAULTS + SPINE_R1)
+//   node sim.js --r3                  -> runs the 5 round-3 scenarios (r3_changes.json on top of r2_changes.json), writes out/r3_*.json, out/tables_r3_*.md, out/summary_r3.json
 //   node sim.js --recalib             -> recompute sim/r2_projneed.json (projected need used by the holding rule)
 // =====================================================================================
 const fs = require('fs');
@@ -148,6 +156,7 @@ const DEFAULTS = {
       [7, 30000, 60, 100], [8, 50000, 70, 120], [9, 75000, 80, 150], [10, 105000, 90, 165], [11, 140000, 100, 180]],
     seats: [[1, 4, 200], [2, 4, 220], [3, 4, 250], [4, 4, 280], [5, 4, 300], [6, 1, 320], [7, 1, 330], [8, 1, 340], [9, 1, 350]],
     kingdoms: 3, kingFief: 15000, seatStartDay: 8, salaryPerHu: 50,
+    throneAutoShare: 0, silk: null, deathPen: null,   // round 3 (see header)
     nob: { 9: 100000, 10: 250000, 11: 500000, 12: 1000000 },
     nobReq: { 9: [45, 8000], 10: [55, 20000], 11: [65, 40000], 12: [75, 70000] },
     storyEarly: null,               // e.g. { maxLv: 40, rate: 0.3 } = main-story tael per level for levels <= maxLv
@@ -164,6 +173,7 @@ const DEFAULTS = {
     restorationCapS80PerWeek: J.restoration ? 7 : 0,               // <= 1 x S(80) per character per day
     matFloorCapS: 1.0,                                             // npc 3.9: NPC floor sales <= 1 x S(L) per day per character
     charmNpcPrice: 1000,                                           // upgrade 3.5 charm at the royal smithy
+    inn: null,                                                     // round 3: { minLv, scrollS, restS, scrollsPerDay: {persona}, restsPerDay: {persona} }
   },
   drops: { stoneMode: 'flat100', maneLv: 60, manesPerDay: { casual: 0, hardcore: 6 / 7, payer: 0.556, whale: 6 / 7 },
     maneNeed: 40, legendFeeS: 5, storySeals: 4, storySealLv: 36, dismantleShare: 0.3, gearBuybackS: 0.10,
@@ -230,12 +240,12 @@ const ENH = [null, // upgrade 3.2 : fee (× S of item level), stone grade, stone
 const enhCap = Li => (Li <= 20 ? 10 : Li <= 40 ? 12 : Li <= 60 ? 15 : 20);
 const PROMO = [{ lv: 12, cS: 1, sL: 12, seals: 0 }, { lv: 36, cS: 3, sL: 36, seals: 1 }, { lv: 56, cS: 3, sL: 56, seals: 3 }, { lv: 72, cS: 3, sL: 72, seals: 6 }];
 const CATS = ['stone', 'grass', 'reroll', 'insig', 'seal', 'gem', 'set', 'iron', 'plunder'];
-const SINK_CODES = ['K_CONS', 'K_CITY_TAX', 'K_TRAVEL', 'K_SERVICE', 'K_ALLY_DONATE', 'K_TRADE_TAX', 'K_BOARD_FEE', 'K_NOBLE',
+const SINK_CODES = ['K_CONS', 'K_CITY_TAX', 'K_TRAVEL', 'K_SERVICE', 'K_ALLY_DONATE', 'K_TRADE_TAX', 'K_BOARD_FEE', 'K_NOBLE', 'K_THRONE',
   'K_ENH', 'K_TROOP', 'K_HORSE', 'K_GEM', 'K_REROLL', 'K_SET', 'K_BREAK', 'K_GRANARY', 'K_ENDGAME'];
 const FAUCET_CODES = ['F_DAILY', 'F_MOB_COIN', 'F_NPC_BUYBACK', 'F_OFFLINE', 'F_STORY', 'F_SALARY', 'F_SEAT', 'F_FIEF', 'F_MAT_FLOOR', 'F_OFFICIAL'];
 const UPG_CODES = ['K_ENH', 'K_TROOP', 'K_HORSE', 'K_GEM', 'K_REROLL', 'K_SET', 'K_BREAK', 'K_GRANARY'];
 const SINK_GROUP = { K_CONS: 'cons', K_CITY_TAX: 'cons', K_TRAVEL: 'travel', K_SERVICE: 'travel', K_ALLY_DONATE: 'ally', K_TRADE_TAX: 'trade',
-  K_BOARD_FEE: 'board', K_NOBLE: 'nobility', K_ENH: 'upg', K_TROOP: 'upg', K_HORSE: 'upg', K_GEM: 'upg', K_REROLL: 'upg', K_SET: 'upg',
+  K_BOARD_FEE: 'board', K_NOBLE: 'nobility', K_THRONE: 'nobility', K_ENH: 'upg', K_TROOP: 'upg', K_HORSE: 'upg', K_GEM: 'upg', K_REROLL: 'upg', K_SET: 'upg',
   K_BREAK: 'upg', K_GRANARY: 'upg', K_ENDGAME: 'endg' };
 const bandOf = L => (L <= 20 ? 0 : L <= 40 ? 1 : L <= 60 ? 2 : 3);
 
@@ -335,6 +345,11 @@ function run(P, tag) {
           const se = P.spine.storyEarly; story += (se && L <= se.maxLv ? se.rate : P.spine.story) * S(L); }
       }
       a.cum = c; a.L = L;
+      const dp = P.spine.deathPen;
+      if (dp && !(dp.exempt || []).includes(a.persona) && L < P.spine.cap) {   // round 3: EXP lost to monster deaths, never below the level start
+        const lose = (dp.perDay[a.persona] || 0) * dp.frac * h(L);
+        const after = Math.max(CUM[L], a.cum - lose); day.expLost = (day.expLost || 0) + (a.cum - after); a.cum = after;
+      }
       const Savg = farmS / expEq;
       const f = {};
       f.F_DAILY = P.spine.dqT * Savg * a.mult;
@@ -357,12 +372,14 @@ function run(P, tag) {
       f.F_SALARY = (pd >= 2 ? a.prevHu : 0) * P.spine.salaryPerHu;
       f.F_SEAT = pd >= 2 ? Math.max(0, salaryHu - a.prevHu) * P.spine.salaryPerHu : 0;
       f.F_FIEF = a.king ? P.spine.kingFief : 0;
+      if (P.spine.silk && L >= P.spine.silk.fromLv) a.silk = (a.silk || 0) + (P.spine.silk.perWeek[a.persona] || 0) / 7;   // round 3
       a.prevHu = hu; a.tier = tier; a.hu = hu;
       a.gross = sum(Object.values(f));
       a.fToday = f;
       a.bal += a.gross;
       for (const k of Object.keys(f)) day.F[k] += f[k];
       a.offlineToday = f.F_OFFLINE;
+      if (a.king && P.spine.throneAutoShare > 0) a.gross -= spend(a, day, 'K_THRONE', P.spine.throneAutoShare * f.F_FIEF);   // round 3: auto offering, destroyed before it reaches the purse (budgets use the net)
       if (a.rows) a.today = { d, pd, L, L0, merit, tier, f: Object.assign({}, f), k: {}, tin: 0, tout: 0, boardIn: 0, mktIn: 0, mktOut: 0, boardOut: 0 };
 
       // materials production (drops sim.persona_band, normal day at persona hours; scaled by speed; day 1 scaled by hours)
@@ -404,13 +421,16 @@ function run(P, tag) {
       const cityTax = P.npc.use.war_city_share_of_town_goods * P.npc.use.avg_city_tax * (goods - pedPart);
       const S_ = S(L);
       const tr = pu.trips_per_day;
-      const travel = L >= 20 ? 0.04 * S_ * (tr['0_gate'] * 1 + tr['1_gate'] * 2 + tr['2_gate'] * 3) : 0;
+      let travel = L >= 20 ? 0.04 * S_ * (tr['0_gate'] * 1 + tr['1_gate'] * 2 + tr['2_gate'] * 3) : 0;
+      const inn = P.npc.inn;
+      let innRest = 0;
+      if (inn && L >= inn.minLv) { travel += (inn.scrollsPerDay[a.persona] || 0) * inn.scrollS * S_; innRest = (inn.restsPerDay[a.persona] || 0) * inn.restS * S_; }   // round 3
       let service = pu.revive_per_day * 0.1 * S_ + (L >= 10 ? pu.warehouse_ops * 30 : 0) + (L >= 20 ? pu.mail_per_day * 0.04 * S_ : 0)
         + (L >= 30 ? 2 * S_ / pu.paid_respec_every_days : 0) + P.npc.use.rename_share_90d * 10 * S_ / 90 + P.npc.use.kingdom_move_share_90d * 20 * S_ / 90;
       let oneTime = 0;
       if (pu.bag_buys[String(pd)]) oneTime += 20000 * pu.bag_buys[String(pd)];
       if (pu.wh_buys[String(pd)]) oneTime += 10000 * pu.wh_buys[String(pd)];
-      spend(a, day, 'K_CONS', cons); spend(a, day, 'K_CITY_TAX', cityTax); spend(a, day, 'K_TRAVEL', travel); spend(a, day, 'K_SERVICE', service + oneTime);
+      spend(a, day, 'K_CONS', cons); spend(a, day, 'K_CITY_TAX', cityTax); spend(a, day, 'K_TRAVEL', travel); spend(a, day, 'K_SERVICE', service + oneTime + innRest);
       a.basket = 40 * 5 * n + 2 * (50 * kk + 10) + 2 * 0.04 * S_;
       // alliance donation (spine #31: 1 × S per donation, ≤ 4 per week, EXP + alliance points only)
       if (L >= P.alliance.minLv) {
@@ -513,10 +533,16 @@ function run(P, tag) {
       // nobility (spine 10): buy tiers in order when gate met and free balance allows
       const freeBal = () => a.bal - bucketSum(a);
       a.nobDep = a.nobDep || {};
+      // round 3: silk ribbons lower the merit gate of tiers 9–12 (consumed only when needed)
+      const silkNeed = (mr) => { const sk = P.spine.silk; if (a.meritTot >= mr) return 0; if (!sk) return Infinity;
+        const need = Math.ceil((mr - a.meritTot) / (mr * sk.cut) - 1e-9); const maxP = Math.round(sk.maxCut / sk.cut);
+        return need <= Math.min(maxP, Math.floor((a.silk || 0) + 1e-9)) ? need : Infinity; };
+      const gateOk = (lv, mr) => a.L >= lv && silkNeed(mr) !== Infinity;
+      const takeSilk = (mr) => { const n = silkNeed(mr); if (n > 0 && n !== Infinity) { a.silk -= n; a.silkUsed = (a.silkUsed || 0) + n; } };
       for (const s of [9, 10, 11, 12]) {
         if (a.nob.has(s)) continue;
         const [lv, mr] = P.spine.nobReq[s];
-        if (a.L >= lv && a.meritTot >= mr) { if (a.ms['gate' + s] === undefined) a.ms['gate' + s] = a.pd; }
+        if (gateOk(lv, mr)) { if (a.ms['gate' + s] === undefined) a.ms['gate' + s] = a.pd; }
         if (P.spine.nobInstall) {
           // installment deposits (proposal): from the level gate, pay toward the tier; destroyed on deposit, not refundable
           if (a.L < lv - P.spine.nobInstallLead) break;
@@ -524,11 +550,11 @@ function run(P, tag) {
           const x = Math.min(room, (P.spine.nobInstallShare ?? 1) * Math.max(0, freeBal() - P.spine.nobInstallBufferDays * a.gross));
           if (x > 0) { spend(a, day, 'K_NOBLE', x); a.nobDep[s] = dep + x; }
           const paid = (a.nobDep[s] || 0) >= P.spine.nob[s] - 1e-6;
-          if (paid && a.L >= lv && a.meritTot >= mr) { a.nob.add(s); a.ms['nob' + s] = a.pd; continue; }
+          if (paid && gateOk(lv, mr)) { takeSilk(mr); a.nob.add(s); a.ms['nob' + s] = a.pd; continue; }
           if (paid) continue; // fully prepaid, waiting for the gate: may start prepaying the next tier
           break;
         }
-        if (a.L >= lv && a.meritTot >= mr && freeBal() >= P.spine.nob[s]) { spend(a, day, 'K_NOBLE', P.spine.nob[s]); a.nob.add(s); a.ms['nob' + s] = a.pd; }
+        if (gateOk(lv, mr) && freeBal() >= P.spine.nob[s]) { takeSilk(mr); spend(a, day, 'K_NOBLE', P.spine.nob[s]); a.nob.add(s); a.ms['nob' + s] = a.pd; }
         else break;
       }
       a.endgame = a.L >= 80 && [9, 10, 11, 12].every(s => a.nob.has(s));
@@ -1130,11 +1156,24 @@ function main() {
       sens('r2_changes_buffer1_70_22_8', { spine: { nobInstallBufferDays: 1 } });
       sens('r2_changes_nos1s2_70_22_8', { spine: { nobInstall: false, prepayPatchTier: false } });
     }
+    if (args.includes('--r3')) {   // round 3: owner decisions of 2026-09-30 / 2026-10-01 on top of r2_changes
+      const r3 = loadOverrides('r3_changes.json');
+      const base = deepMerge(deepMerge(SPINE_R1, r2), r3);
+      const auto3 = { spine: { hours: Object.fromEntries(['casual', 'hardcore', 'payer', 'whale'].map(p => {
+        const h0 = DEFAULTS.spine.hours[p]; return [p, { d1: [h0.d1[0], h0.d1[1], 3], dn: [h0.dn[0], h0.dn[1], 3] }]; })) } };
+      list = [
+        scenario('r3_main_70_22_8', withPN(base)),
+        scenario('r3_main_70_25_5', withPN(deepMerge(base, MIX_SPINE))),
+        scenario('r3_auto3_70_22_8', withPN(deepMerge(base, auto3))),
+        scenario('r3_fief_only_70_22_8', withPN(deepMerge(deepMerge(SPINE_R1, r2), { spine: { kingFief: r3.spine.kingFief, throneAutoShare: r3.spine.throneAutoShare } }))),
+        scenario('r3_fief_keepall_70_22_8', withPN(deepMerge(deepMerge(SPINE_R1, r2), { spine: { kingFief: r3.spine.kingFief, throneAutoShare: 0 } }))),
+      ];
+    }
     const one = get('one'); if (one) list = list.filter(s => s.name.startsWith(one));
   }
   const summary = [];
   for (const sc of list) { const t0 = Date.now(); const res = run(sc.P, sc.name); writeRun(sc, res, summary, t0); }
-  fs.writeFileSync(path.join(OUT, get('params') ? 'summary_' + (get('tag') || 'custom') + '.json' : 'summary_r2.json'), JSON.stringify(summary, null, 1), 'utf8');
+  fs.writeFileSync(path.join(OUT, get('params') ? 'summary_' + (get('tag') || 'custom') + '.json' : args.includes('--r3') ? 'summary_r3.json' : 'summary_r2.json'), JSON.stringify(summary, null, 1), 'utf8');
 }
 if (require.main === module) main();
 module.exports = { run, DEFAULTS, SPINE_R1, MIX_SPINE, deepMerge, tables, failsOf, getProjNeed };
